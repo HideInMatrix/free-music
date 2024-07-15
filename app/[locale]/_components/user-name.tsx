@@ -1,17 +1,28 @@
-"use client";
+// "use client";
+import { getRequest } from "@/lib/customFetch";
 
-import { GetProfile } from "@/apis/userInfo";
-import { useCallback, useEffect } from "react";
+// import { useCallback, useEffect } from "react";
 
-export default function UserName() {
-  const loaderProfile = useCallback(async () => {
-    const result = await GetProfile();
+export default async function UserName() {
+  // 客户端请求方式
+  // const loaderProfile = useCallback(async () => {
+  //   const result = await getRequest(`/api/auth/profile`);
+  //   if (!result.error) {
+  //     console.log(result);
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   loaderProfile();
+  // }, []);
+
+  // 服务端请求方式
+  const result = await getRequest(`/api/auth/profile`);
+  if (!result.error) {
     console.log(result);
-  }, []);
+  }
 
-  useEffect(() => {
-    loaderProfile();
-  }, []);
+  const data = result.data as { name: string };
 
-  return <>userName组件</>;
+  return <>userName组件 {data.name}</>;
 }

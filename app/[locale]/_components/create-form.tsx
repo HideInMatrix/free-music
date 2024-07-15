@@ -1,9 +1,10 @@
 "use client";
-import { login } from "@/apis/userInfo";
+
 import { useState } from "react";
 import useAccessStore from "@/store/useUserAccessStore";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
+import { postRequest } from "@/lib/customFetch";
 
 export function CreateForm() {
   const [email, setEmail] = useState("");
@@ -21,11 +22,13 @@ export function CreateForm() {
 
     // 这里可以调用你的登录 API
     if (email && password) {
-      const res = (await login({ email, password })) as {
-        data: { token: string };
-      };
+      const res = (await postRequest("/api/auth/login", {
+        email,
+        password,
+      })) as any;
       setToken(res.data.token);
       router.push(`/${locale}`);
+      console.log("qingqiu", res.data.token);
     }
   };
 
