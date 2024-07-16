@@ -18,6 +18,8 @@ const rewrites = () => {
 const withNextIntl = createNextIntlPlugin("./i18n/i18n.ts");
 const nextConfig = {
   rewrites,
+  output: "export", // 静态输出页面
+  
 };
 
 export default withNextIntl(nextConfig);

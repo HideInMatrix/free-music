@@ -32,7 +32,7 @@ export default function UserName() {
 
   useEffect(() => {
     loaderProfile();
-  }, []);
+  });
 
   return <>userName组件 {data?.data.name}</>;
 }

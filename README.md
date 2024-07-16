@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js模板
 
-## Getting Started
+## 启动
 
-First, run the development server:
+```shell
+pnpm install 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 部署
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```shell
+// 修改next.config.mjs
+// 如何不写output的话就表明构建一个混合页面应用程序
+// 这个时候.next文件夹中构建出用于生产环境的应用程序
+// 如果你使用了 next/image则需要安装sharp
+pnpm install sharp
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+pnpm run build 
 
-## Learn More
+pnpm run start -p 8080 //不写端口默认就是3000
 
-To learn more about Next.js, take a look at the following resources:
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+如果你需要构建一个最小的node.js应用，包括node_modules。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```shell
+// 设置修改next.config.mjs，在nextConfig中加入 output: 'standalone',
+pnpm run build 
 
-## Deploy on Vercel
+// 你会在.next/standalone中看到生成的文件
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+node ./server.js
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+如果你需要一个纯静态的页面，也就是react/vue这种前后端分离的项目，那么修改next.config.mjs，在nextConfig中修改 output: 'export'
+同时如果用到了动态路由什么的记得按照错误提示修改，例如 /[local]/login is missing "generateStaticParams()"
+
+```shell
+pnpm run build
+
+// 生成的out文件夹丢到服务器上去，然后用nginx启动
+```
