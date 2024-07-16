@@ -2,19 +2,24 @@
  * @Author: HideInMatrix
  * @Date: 2024-07-15
  * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-07-15
+ * @LastEditTime: 2024-07-16
  * @Description: 请求封装
  * @FilePath: \nextjs-template\lib\customFetch.ts
  */
 
-import useAccessStore from "@/store/useUserAccessStore";
 import { redirect } from "next/navigation";
-import useSettingStore from "@/store/useSettingStore";
 import { isBrowser } from "@/utils";
-import { setCookies, getCookies } from "./setCookie";
+import { getCookies } from "./setCookie";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
-const backPreUrl = process.env.BACK_PRE_URL || "http://localhost:3000";
+const backPreUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : process.env.NEXT_PUBLIC_BACK_PRE_URL;
+const urlPreTag =
+  process.env.NODE_ENV === "development"
+    ? process.env.NEXT_PUBLIC_BACK_PRE_TAG
+    : "";
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -36,16 +41,8 @@ const apiClient = <T>(method: HttpMethod) => {
     const { signal } = controller;
     let token = "";
     let defaultLocale = "";
-    if (isBrowser) {
-      token = useAccessStore.getState().token;
-      setCookies("token", token);
-
-      defaultLocale = useSettingStore.getState().defaultLocale;
-      setCookies("defaultLocale", defaultLocale);
-    } else {
-      token = (await getCookies("token"))?.value || "";
-      defaultLocale = (await getCookies("defaultLocale"))?.value || "";
-    }
+    token = (await getCookies("NEXT_TOKEN")) || "";
+    defaultLocale = (await getCookies("NEXT_LOCAL")) || "zh";
 
     const config: FetchOptions = {
       method,
@@ -62,7 +59,7 @@ const apiClient = <T>(method: HttpMethod) => {
       config.body = JSON.stringify(data);
     }
 
-    const response = await fetch(`${backPreUrl}${url}`, config);
+    const response = await fetch(`${backPreUrl}${urlPreTag}${url}`, config);
 
     if (response.status === 401) {
       // 处理 401 状态码

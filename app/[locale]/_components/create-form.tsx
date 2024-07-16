@@ -5,11 +5,12 @@ import useAccessStore from "@/store/useUserAccessStore";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { postRequest } from "@/lib/customFetch";
+import { setCookies } from "@/lib/setCookie";
 
 export function CreateForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setToken, token } = useAccessStore();
+  const { setToken } = useAccessStore();
   const locale = useLocale();
   const router = useRouter();
 
@@ -22,13 +23,14 @@ export function CreateForm() {
 
     // 这里可以调用你的登录 API
     if (email && password) {
-      const res = (await postRequest("/api/auth/login", {
+      const res = (await postRequest("/auth/login", {
         email,
         password,
       })) as any;
+      // 关键信息一份存本地一份存线上
+      await setCookies("NEXT_TOKEN", res.data.token);
       setToken(res.data.token);
       router.push(`/${locale}`);
-      console.log("qingqiu", res.data.token);
     }
   };
 

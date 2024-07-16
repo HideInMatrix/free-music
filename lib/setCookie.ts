@@ -7,5 +7,5 @@ export async function setCookies(name: string, data: any) {
 }
 
 export async function getCookies(name: string) {
-  return cookies().get(name);
+  return cookies().get(name)?.value;
 }
