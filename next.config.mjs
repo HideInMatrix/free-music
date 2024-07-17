@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-import createNextIntlPlugin from "next-intl/plugin";
 
 const isProd = ["production"].includes(process.env.NODE_ENV);
 // 转发
@@ -8,18 +7,15 @@ const rewrites = () => {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:7000/:path*",
+        destination: "http://localhost:8001/:path*",
       },
     ];
   } else {
     return [];
   }
 };
-const withNextIntl = createNextIntlPlugin("./i18n/i18n.ts");
 const nextConfig = {
   rewrites,
-  output: "export", // 静态输出页面
-  
 };
 
-export default withNextIntl(nextConfig);
+export default nextConfig;

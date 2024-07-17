@@ -2,13 +2,13 @@
  * @Author: HideInMatrix
  * @Date: 2024-07-15
  * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-07-16
+ * @LastEditTime: 2024-07-17
  * @Description: 请求封装
- * @FilePath: \nextjs-template\lib\customFetch.ts
+ * @FilePath: /next.js-template/lib/customFetch.ts
  */
 
 import { redirect } from "next/navigation";
-import { isBrowser } from "@/utils";
+import { isBrowser } from "@/lib/utils";
 import { getCookies } from "./setCookie";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -42,7 +42,7 @@ const apiClient = <T>(method: HttpMethod) => {
     let token = "";
     let defaultLocale = "";
     token = (await getCookies("NEXT_TOKEN")) || "";
-    defaultLocale = (await getCookies("NEXT_LOCAL")) || "zh";
+    defaultLocale = (await getCookies("NEXT_LOCAL")) || "";
 
     const config: FetchOptions = {
       method,
@@ -64,9 +64,9 @@ const apiClient = <T>(method: HttpMethod) => {
     if (response.status === 401) {
       // 处理 401 状态码
       if (isBrowser) {
-        location.href = `/${defaultLocale}/login`;
+        location.href = `/login`;
       } else {
-        redirect(`/${defaultLocale}/login`);
+        redirect(`/login`);
       }
     }
 
