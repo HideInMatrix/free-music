@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 // export default async function UserName() {
 
-// 服务端请求方式
+// // 服务端请求方式
 //   const result = await getRequest(`/auth/profile`);
 // if (!result.error) {
 //   console.log(result);
