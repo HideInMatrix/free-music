@@ -2,6 +2,8 @@ import HeaderBarWrapper from "@/components/share/HeaderBar";
 import { cn } from "@/lib/utils";
 import { Viewport } from "next";
 import { Inter as FontSans } from "next/font/google";
+import "./globals.css";
+import Player from "@/components/share/player/Player";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -30,7 +32,9 @@ export default function LocaleLayout({
           "h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}>
-        <HeaderBarWrapper>{children}</HeaderBarWrapper>
+        <HeaderBarWrapper>
+          {children} <Player />
+        </HeaderBarWrapper>
       </body>
     </html>
   );

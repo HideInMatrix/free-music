@@ -5,6 +5,5 @@ export function middleware(req: NextRequest) {}
 
 // 配置中间件应用路径
 export const config = {
-  // 匹配国际化路径和API路径
-  matcher: ["/", "/api/:path*"],
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

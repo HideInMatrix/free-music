@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import Favicon from "@/public/favicon.ico";
+import Favicon from "@/app/favicon.ico";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -27,114 +27,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { SearchWrapper } from "../SearchWrapperDialog";
 
+interface Menu {
+  label: string;
+  key: string;
+  children?: Menu[];
+}
+
 export default function Header() {
-  const menus = [
-    {
-      label: "产品1",
-      key: "production",
-      children: [
-        {
-          type: "group",
-          label: "ChatGPT",
-          key: "chat-gpt",
-          children: [
-            { label: "For Everyone", key: "everyone" },
-            { label: "For Teams", key: "teams" },
-          ],
-        },
-        {
-          type: "group",
-          label: "API",
-          key: "api",
-          children: [{ label: "Price", key: "price" }],
-        },
-      ],
-    },
-    {
-      label: "产品2",
-      key: "production1",
-      children: [
-        {
-          type: "group",
-          label: "ChatGPT",
-          key: "chat-gpt",
-          children: [
-            { label: "For Everyone", key: "everyone" },
-            { label: "For Teams", key: "teams" },
-          ],
-        },
-        {
-          type: "group",
-          label: "API",
-          key: "api",
-          children: [{ label: "Price", key: "price" }],
-        },
-      ],
-    },
-    {
-      label: "产品3",
-      key: "production2",
-      children: [
-        {
-          type: "group",
-          label: "ChatGPT",
-          key: "chat-gpt",
-          children: [
-            { label: "For Everyone", key: "everyone" },
-            { label: "For Teams", key: "teams" },
-          ],
-        },
-        {
-          type: "group",
-          label: "API",
-          key: "api",
-          children: [{ label: "Price", key: "price" }],
-        },
-      ],
-    },
-    {
-      label: "产品4",
-      key: "production3",
-      children: [
-        {
-          type: "group",
-          label: "ChatGPT",
-          key: "chat-gpt",
-          children: [
-            { label: "For Everyone", key: "everyone" },
-            { label: "For Teams", key: "teams" },
-          ],
-        },
-        {
-          type: "group",
-          label: "API",
-          key: "api",
-          children: [{ label: "Price", key: "price" }],
-        },
-      ],
-    },
-    {
-      label: "产品5",
-      key: "production4",
-      children: [
-        {
-          type: "group",
-          label: "ChatGPT",
-          key: "chat-gpt",
-          children: [
-            { label: "For Everyone", key: "everyone" },
-            { label: "For Teams", key: "teams" },
-          ],
-        },
-        {
-          type: "group",
-          label: "API",
-          key: "api",
-          children: [{ label: "Price", key: "price" }],
-        },
-      ],
-    },
-  ];
+  const menus: Menu[] = [];
 
   return (
     <header className="flex translate-y-0 transition-all duration-700 justify-between w-full bg-white fixed h-12 z-20 max-w-[1920px] items-center border-b">
@@ -145,12 +45,13 @@ export default function Header() {
             alt="网站图标"
             width={28}
             height={28}
+            unoptimized
             className="cursor-pointer w-7 h-7 aspect-square"
           />
-          <div className="ml-2 min-w-max">XX官网</div>
+          <div className="ml-2 min-w-max">免费音乐</div>
         </Link>
 
-        <NavigationMenu className="ml-16 hidden lg:flex">
+        {/* <NavigationMenu className="ml-16 hidden lg:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/" legacyBehavior>
@@ -165,7 +66,7 @@ export default function Header() {
                 <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    {menu.children.map((child) => (
+                    {menu.children?.map((child) => (
                       <ListItemGroup item={child} key={child.key} />
                     ))}
                   </ul>
@@ -173,15 +74,15 @@ export default function Header() {
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
-        </NavigationMenu>
+        </NavigationMenu> */}
       </div>
       <SearchWrapper
         trigger={
-          <Button variant="ghost" size="icon" className="lg:mr-8 ml-auto">
+          <Button variant="ghost" size="icon" className="lg:mr-4 ml-auto">
             <Search />
           </Button>
         }></SearchWrapper>
-      <Drawer direction="right">
+      {/* <Drawer direction="right">
         <DrawerTrigger asChild>
           <Button variant="ghost" size="icon" className="lg:hidden">
             <AlignJustify />
@@ -196,7 +97,7 @@ export default function Header() {
             ))}
           </div>
         </DrawerContent>
-      </Drawer>
+      </Drawer> */}
     </header>
   );
 }

@@ -4,18 +4,32 @@ const isProd = ["production"].includes(process.env.NODE_ENV);
 // 转发
 const rewrites = () => {
   if (!isProd) {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "http://localhost:8001/:path*",
-      },
-    ];
+    return {
+      fallback: [
+        {
+          source: "/saavn/:path*",
+          destination: "https://saavn.dev/api/:path*",
+        },
+      ],
+    };
   } else {
-    return [];
+    return {};
   }
 };
 const nextConfig = {
   rewrites,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "c.saavncdn.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img1.koowo.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
