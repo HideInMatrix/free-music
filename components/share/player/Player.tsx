@@ -7,11 +7,11 @@ import MusicMode from "./MusicMode";
 import MusicPlayAction from "./MusicPlayAction";
 import { AudioProvider } from "./AudioProvider";
 import AudioVolume from "./AudioVolume";
+import MusicList from "./MusicList";
 
 type Props = {};
 
 const Player = (props: Props) => {
-  
   return (
     <AudioProvider musicSrc="https://aac.saavncdn.com/392/def9f6eb56e99c7619d9d46a62ef8b4e_96.mp4">
       <div className="items-center justify-start flex player h-24 px-4 mg:px-2 shadow-lg border-t">
@@ -33,11 +33,13 @@ const Player = (props: Props) => {
           <div className="grow hidden lg:block h-1"></div>
         </div>
         <MusicPlayAction></MusicPlayAction>
-        
+
         <div className="flex-1 px-[6px] justify-evenly flex">
           <MusicMode />
           <AudioVolume />
-          <ListMusic />
+          <MusicList>
+            <ListMusic />
+          </MusicList>
         </div>
       </div>
     </AudioProvider>

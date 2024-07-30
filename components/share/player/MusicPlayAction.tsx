@@ -8,7 +8,7 @@ const MusicPlayAction = () => {
   // console.log("MusicPlayAction render");
 
   return (
-    <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-1 px-[6px] h-full justify-evenly">
+    <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-auto px-[6px] h-full justify-evenly">
       <div className="flex items-center justify-center">
         <StepBack strokeWidth={1} className="w-9 h-9" />
         <MusicStatus />
