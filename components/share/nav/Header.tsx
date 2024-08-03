@@ -48,7 +48,7 @@ export default function Header() {
             unoptimized
             className="cursor-pointer w-7 h-7 aspect-square"
           />
-          <div className="ml-2 min-w-max">免费音乐</div>
+          <div className="ml-2 min-w-max">音乐地带</div>
         </Link>
 
         {/* <NavigationMenu className="ml-16 hidden lg:flex">

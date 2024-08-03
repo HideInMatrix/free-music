@@ -3,9 +3,15 @@ import { StepBack, StepForward } from "lucide-react";
 
 import MusicStatus from "./MusicStatus";
 import MusicProcess from "./MusicProcess";
+import { useSongStore } from "@/store/songStoreProvider";
 
 const MusicPlayAction = () => {
   // console.log("MusicPlayAction render");
+  const {defaultSong} = useSongStore();
+
+  const handleChangeSong = (type:string)=>{
+
+  }
 
   return (
     <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-auto px-[6px] h-full justify-evenly">

@@ -9,6 +9,8 @@ import {
   useState,
 } from "react";
 
+import { useSongStore } from "@/store/songStoreProvider";
+
 interface AudioContextProps {
   audioRef: React.RefObject<HTMLAudioElement>;
   playMode: string;
@@ -25,14 +27,9 @@ export const useAudio = () => {
   return context;
 };
 
-export const AudioProvider = ({
-  musicSrc,
-  children,
-}: {
-  musicSrc: string;
-  children: ReactNode;
-}) => {
+export const AudioProvider = ({ children }: { children: ReactNode }) => {
   // console.log("provider change");
+  const { defaultSong } = useSongStore();
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -40,9 +37,9 @@ export const AudioProvider = ({
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.src = musicSrc;
+      audioRef.current.src = defaultSong.url;
     }
-  }, [musicSrc]);
+  }, [defaultSong?.url]);
 
   const value = {
     audioRef,

@@ -40,7 +40,7 @@ const MusicProcess = () => {
         audioRef.current.onloadedmetadata = null;
       }
     };
-  }, [audioRef.current]);
+  }, [audioRef.current?.src]);
   return (
     <div className="flex items-center">
       <span className="w-10  grow">{formatTime(currentTime)}</span>

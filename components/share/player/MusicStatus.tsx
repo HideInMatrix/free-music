@@ -3,12 +3,14 @@ import { Pause, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
+import { useSongStore } from "@/store/songStoreProvider";
 
 const MusicStatus = () => {
   // console.log("music status render");
 
   const [musicStatus, setMusicStatus] = useState(false);
   const { audioRef, playMode } = useAudio();
+  const {defaultSong} = useSongStore()
 
   const handleMusicStatus = useCallback((value: boolean) => {
     setMusicStatus(value);
@@ -20,9 +22,10 @@ const MusicStatus = () => {
     if (audioRef.current) {
       audioRef.current.onended = () => {
         if (playMode == AudioMode.CIRCULATION) {
-          handleMusicStatus(true);
+
+          // handleMusicStatus(true);
         } else {
-          handleMusicStatus(false);
+          // handleMusicStatus(false);
         }
       };
     }
