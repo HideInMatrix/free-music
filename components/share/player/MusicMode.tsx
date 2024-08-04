@@ -53,6 +53,8 @@ const MusicMode = () => {
         let index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
+        console.log(index, defaultSongList);
+
         if (playMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
             index == defaultSongList.length
@@ -60,7 +62,7 @@ const MusicMode = () => {
               : setCurrentSong(defaultSongList[index + 1]);
           }
         } else if (playMode == AudioMode.ORDER) {
-          if (index !== -1 && index <= defaultSongList.length - 1) {
+          if (index !== -1 && index < defaultSongList.length - 1) {
             setCurrentSong(defaultSongList[index + 1]);
           } else {
             handleMusicStatus(false);
