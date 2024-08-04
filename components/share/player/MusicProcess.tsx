@@ -2,8 +2,6 @@
 
 import { Slider } from "@/components/ui/slider";
 import { useAudio } from "./AudioProvider";
-import { useEffect, useState } from "react";
-import { throttle } from "@/lib/utils";
 
 const formatTime = (seconds: number): string => {
   const minutes = Math.floor(seconds / 60);
@@ -14,33 +12,8 @@ const formatTime = (seconds: number): string => {
 };
 
 const MusicProcess = () => {
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const { audioRef } = useAudio();
-  useEffect(() => {
-    // console.log("MusicProcess render useEffect");
-    const timeupdate = throttle(() => {
-      if (audioRef.current) {
-        setCurrentTime(audioRef.current.currentTime);
-      }
-    }, 1000);
+  const { currentTime, duration } = useAudio();
 
-    if (audioRef.current) {
-      audioRef.current.ontimeupdate = timeupdate;
-      audioRef.current.onloadedmetadata = () => {
-        if (audioRef.current) {
-          setDuration(audioRef.current.duration);
-        }
-      };
-    }
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.ontimeupdate = null;
-        audioRef.current.onloadedmetadata = null;
-      }
-    };
-  }, [audioRef.current?.src]);
   return (
     <div className="flex items-center">
       <span className="w-10  grow">{formatTime(currentTime)}</span>

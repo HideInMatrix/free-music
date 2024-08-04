@@ -1,40 +1,11 @@
 "use client";
 import { Pause, Play } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
 import { useAudio } from "./AudioProvider";
-import { AudioMode } from "@/entity/enum";
-import { useSongStore } from "@/store/songStoreProvider";
 
 const MusicStatus = () => {
   // console.log("music status render");
+  const { musicStatus, handleMusicStatus } = useAudio();
 
-  const [musicStatus, setMusicStatus] = useState(false);
-  const { audioRef, playMode } = useAudio();
-  const {defaultSong} = useSongStore()
-
-  const handleMusicStatus = useCallback((value: boolean) => {
-    setMusicStatus(value);
-    value ? audioRef.current?.play() : audioRef.current?.pause();
-  }, []);
-
-  useEffect(() => {
-    // console.log("music status render useEffect");
-    if (audioRef.current) {
-      audioRef.current.onended = () => {
-        if (playMode == AudioMode.CIRCULATION) {
-
-          // handleMusicStatus(true);
-        } else {
-          // handleMusicStatus(false);
-        }
-      };
-    }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.onended = null;
-      }
-    };
-  }, [playMode]);
   return (
     <div
       onClick={() => {

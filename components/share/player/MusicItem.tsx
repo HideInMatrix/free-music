@@ -13,6 +13,7 @@ import { CloudDownload, Ellipsis, Files, Play, Trash } from "lucide-react";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/songStoreProvider";
 import { cn } from "@/lib/utils";
+import { useAudio } from "./AudioProvider";
 type Props = {
   onDeleted: Function;
   songInfo: Song;
