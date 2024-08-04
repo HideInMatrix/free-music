@@ -3,21 +3,27 @@ import { Slider } from "@/components/ui/slider";
 import { Volume2 } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { throttle } from "@/lib/utils";
+import { useEffect } from "react";
 type Props = {};
 
 const AudioVolume = (props: Props) => {
   const { audioRef } = useAudio();
-
+  const defaultVolume = 30;
   const handleValueCommit = throttle((value: number[]) => {
     if (audioRef.current) {
       audioRef.current.volume = value[0] / 100;
     }
   }, 100);
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = defaultVolume / 100;
+    }
+  }, []);
   return (
     <div className="flex">
       <Volume2 className="mr-1" />
       <Slider
-        defaultValue={[30]}
+        defaultValue={[defaultVolume]}
         step={1}
         max={100}
         className="w-[70px]"

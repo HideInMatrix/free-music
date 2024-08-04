@@ -1,4 +1,5 @@
 import { Song } from "@/entity/interface/song";
+import { createJSONStorage, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
 export type SongState = {
@@ -24,13 +25,21 @@ export const defaultInitSong: SongState = {
 };
 
 export const createSongStore = (initState: SongState = defaultInitSong) => {
-  return createStore<SongStore>()((set) => ({
-    ...initState,
-    setCurrentSong: (newVal) => {
-      set((state) => ({ defaultSong: (state.defaultSong = newVal) }));
-    },
-    setSongList: (newVal) => {
-      set(() => ({ defaultSongList: [...newVal] }));
-    },
-  }));
+  return createStore<SongStore>()(
+    persist(
+      (set) => ({
+        ...initState,
+        setCurrentSong: (newVal) => {
+          set((state) => ({ defaultSong: (state.defaultSong = newVal) }));
+        },
+        setSongList: (newVal) => {
+          set(() => ({ defaultSongList: [...newVal] }));
+        },
+      }),
+      {
+        name: "song-info",
+        storage: createJSONStorage(() => localStorage), // default localstorage
+      }
+    )
+  );
 };

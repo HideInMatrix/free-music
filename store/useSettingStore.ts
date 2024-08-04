@@ -23,7 +23,7 @@ const useSettingStore = create<SettingState>()(
     }),
     {
       name: "setting",
-      storage: createJSONStorage(() => sessionStorage), // default localstorage
+      storage: createJSONStorage(() => localStorage), // default localStorage
     }
   )
 );

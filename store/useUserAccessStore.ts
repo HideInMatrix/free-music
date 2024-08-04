@@ -14,7 +14,7 @@ const useAccessStore = create<AccessesState>()(
     }),
     {
       name: "token",
-      storage: createJSONStorage(() => sessionStorage), // default localstorage
+      storage: createJSONStorage(() => localStorage), // default localstorage
     }
   )
 );
