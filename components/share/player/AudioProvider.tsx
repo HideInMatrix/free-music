@@ -112,7 +112,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
               : setCurrentSong(defaultSongList[index + 1]);
           }
         } else if (playMode == AudioMode.ORDER) {
-          if (index !== -1 && index < defaultSongList.length - 1) {
+          if (index !== -1 && index <= defaultSongList.length - 1) {
             setCurrentSong(defaultSongList[index + 1]);
           } else {
             handleMusicStatus(false);
