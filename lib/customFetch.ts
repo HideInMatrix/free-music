@@ -2,7 +2,7 @@
  * @Author: HideInMatrix
  * @Date: 2024-07-15
  * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-07-26
+ * @LastEditTime: 2024-08-06
  * @Description: 请求封装
  * @FilePath: /free-music/lib/customFetch.ts
  */
@@ -16,6 +16,7 @@ interface ApiResponse {
   data?: any;
   error?: string;
   status?: number;
+  success?: boolean;
 }
 
 const apiClient = <T>(method: HttpMethod) => {

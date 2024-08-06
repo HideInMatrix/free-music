@@ -10,9 +10,8 @@ import {
   useState,
 } from "react";
 
-import { useSongStore } from "@/store/songStoreProvider";
+import { useSongStore } from "@/store/useSongStore";
 import { throttle } from "@/lib/utils";
-import { AudioMode } from "@/entity/enum";
 
 interface AudioContextProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -60,7 +59,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       if (audioRef.current) {
         setCurrentTime(audioRef.current.currentTime);
       }
-    }, 1000);
+    }, 200);
 
     if (audioRef.current) {
       audioRef.current.ontimeupdate = timeupdate;

@@ -3,38 +3,12 @@ import { StepBack, StepForward } from "lucide-react";
 
 import MusicStatus from "./MusicStatus";
 import MusicProcess from "./MusicProcess";
-import { Song } from "@/entity/interface/song";
 import { useCallback, useEffect } from "react";
-import { useSongStore } from "@/store/songStoreProvider";
+import { useSongStore } from "@/store/useSongStore";
 
 const MusicPlayAction = () => {
   // console.log("MusicPlayAction render");
-  const { setSongList, setCurrentSong, defaultSong, defaultSongList } =
-    useSongStore();
-  const musicList: Song[] = [
-    {
-      id: "1",
-      name: "珊瑚海",
-      artist: [{ id: "1", name: "周杰伦", image: [] }],
-      url: "https://aac.saavncdn.com/392/def9f6eb56e99c7619d9d46a62ef8b4e_96.mp4",
-    },
-    {
-      id: "2",
-      name: "稻香",
-      artist: [{ id: "1", name: "周杰伦", image: [] }],
-      url: "https://aac.saavncdn.com/088/95b9b8969e4700766d3900a0513b206e_96.mp4",
-    },
-    {
-      id: "3",
-      name: "听妈妈的话",
-      artist: [{ id: "1", name: "周杰伦", image: [] }],
-      url: "https://aac.saavncdn.com/162/7b2023add5e2938c1ffe013302cf6658_160.mp4",
-    },
-  ];
-
-  useEffect(() => {
-    setSongList(musicList);
-  }, []);
+  const { setCurrentSong, defaultSong, defaultSongList } = useSongStore();
 
   const handlePreSong = useCallback(() => {
     let index = defaultSongList.findIndex((item) => item.id == defaultSong.id);

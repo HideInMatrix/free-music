@@ -1,4 +1,4 @@
-import { useSongStore } from "@/store/songStoreProvider";
+import { useSongStore } from "@/store/useSongStore";
 import Image from "next/image";
 type Props = {};
 
@@ -18,7 +18,7 @@ const MusicInfo = (props: Props) => {
         <div className="overflow-hidden flex flex-col">
           <div className="font-bold text-base">{defaultSong.name}</div>
           <div className="text-sm mt-0.5">
-            {defaultSong.artist.map((item) => item.name).join("-")}
+            {defaultSong.artists?.map((item) => item.name).join("-")}
           </div>
         </div>
       </div>

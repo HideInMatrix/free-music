@@ -1,7 +1,7 @@
 
 import MusicItem from "./MusicItem";
 import MusicListInfo from "./MusicListInfo";
-import { useSongStore } from "@/store/songStoreProvider";
+import { useSongStore } from "@/store/useSongStore";
 
 
 type Props = {};

@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -13,6 +14,7 @@ export function SearchWrapper({ trigger }: { trigger: ReactNode }) {
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px] p-0">
         <DialogTitle className="hidden"></DialogTitle>
+        <DialogDescription className="hidden"></DialogDescription>
         <SearchCommand />
       </DialogContent>
     </Dialog>

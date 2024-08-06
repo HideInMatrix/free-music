@@ -3,7 +3,7 @@ import { Heart, Menu, Shuffle, RefreshCcw } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
 import { useEffect } from "react";
-import { useSongStore } from "@/store/songStoreProvider";
+import { useSongStore } from "@/store/useSongStore";
 // import { useState } from "react";
 
 const MusicMode = () => {
@@ -53,7 +53,7 @@ const MusicMode = () => {
         let index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
-        console.log(index, defaultSongList);
+        // console.log(index, defaultSongList)
 
         if (playMode == AudioMode.CIRCULATION) {
           if (index !== -1) {

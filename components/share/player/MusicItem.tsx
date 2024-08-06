@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CloudDownload, Ellipsis, Files, Play, Trash } from "lucide-react";
 import { Song } from "@/entity/interface/song";
-import { useSongStore } from "@/store/songStoreProvider";
+import { useSongStore } from "@/store/useSongStore";
 import { cn } from "@/lib/utils";
 import { useAudio } from "./AudioProvider";
 type Props = {
@@ -37,7 +37,7 @@ const MusicItem = ({ onDeleted, songInfo }: Props) => {
       <div className="overflow-hidden ml-2 flex-auto">
         <h1 className="text-sm">{songInfo.name}</h1>
         <span className="text-xs">
-          {songInfo.artist.map((item) => item.name).join("-")}
+          {songInfo.artists?.map((item) => item.name).join("-")}
         </span>
       </div>
       <DropdownMenu>

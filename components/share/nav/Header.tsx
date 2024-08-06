@@ -50,31 +50,6 @@ export default function Header() {
           />
           <div className="ml-2 min-w-max">音乐地带</div>
         </Link>
-
-        {/* <NavigationMenu className="ml-16 hidden lg:flex">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link href="/" legacyBehavior>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  首页
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-
-            {menus.map((menu) => (
-              <NavigationMenuItem key={menu.key}>
-                <NavigationMenuTrigger>{menu.label}</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    {menu.children?.map((child) => (
-                      <ListItemGroup item={child} key={child.key} />
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu> */}
       </div>
       <SearchWrapper
         trigger={
@@ -82,22 +57,6 @@ export default function Header() {
             <Search />
           </Button>
         }></SearchWrapper>
-      {/* <Drawer direction="right">
-        <DrawerTrigger asChild>
-          <Button variant="ghost" size="icon" className="lg:hidden">
-            <AlignJustify />
-          </Button>
-        </DrawerTrigger>
-        <DrawerContent className="h-full overflow-y-auto rounded-none border-0">
-          <div className="h-full overflow-y-auto bg-white p-4">
-            {menus.map((menu) => (
-              <>
-                <SubDrawer menu={menu} key={menu.key} />
-              </>
-            ))}
-          </div>
-        </DrawerContent>
-      </Drawer> */}
     </header>
   );
 }

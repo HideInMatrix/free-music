@@ -2,7 +2,7 @@
  * @Author: HideInMatrix
  * @Date: 2024-07-16
  * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-07-28
+ * @LastEditTime: 2024-08-06
  * @Description: 这是一则说明
  * @FilePath: /free-music/lib/utils.ts
  */
@@ -58,7 +58,9 @@ export const debounce = (fn: Function, wait: number) => {
   let timer: NodeJS.Timeout | undefined;
 
   return (...args: any) => {
-    timer = undefined;
+    if (timer) {
+      clearTimeout(timer);
+    }
     timer = setTimeout(() => {
       fn.apply(this, args);
     }, wait);

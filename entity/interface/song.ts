@@ -7,6 +7,6 @@ export interface Artist {
 export interface Song {
   id: string;
   name: string;
-  artist: Artist[];
+  artists?: Artist[];
   url: string;
 }
