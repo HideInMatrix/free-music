@@ -19,7 +19,7 @@ const MusicPlayAction = () => {
         setCurrentSong(defaultSongList[index - 1]);
       }
     }
-  }, [defaultSongList, defaultSong]);
+  }, []);
 
   const handleNexSong = useCallback(() => {
     let index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
@@ -30,7 +30,7 @@ const MusicPlayAction = () => {
         setCurrentSong(defaultSongList[index + 1]);
       }
     }
-  }, [defaultSongList, defaultSong]);
+  }, []);
 
   return (
     <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-auto px-[6px] h-full justify-evenly">

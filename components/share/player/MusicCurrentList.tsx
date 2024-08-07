@@ -1,27 +1,20 @@
-
 import MusicItem from "./MusicItem";
 import MusicListInfo from "./MusicListInfo";
 import { useSongStore } from "@/store/useSongStore";
-
+import { Song } from "@/entity/interface/song";
+import { useCallback } from "react";
 
 type Props = {};
 
 const MusicCurrentList = (props: Props) => {
-  let { defaultSongList } = useSongStore();
+  let { defaultSongList, defaultSong, setCurrentSong, setSongList } =
+    useSongStore();
 
-
-  const handleDeleteSong = (id: string) => {
-    console.log("sanchu");
-  };
   return (
     <div className="h-full w-full">
       <MusicListInfo />
       {defaultSongList.map((item) => (
-        <MusicItem
-          onDeleted={handleDeleteSong}
-          songInfo={item}
-          key={item.name}
-        />
+        <MusicItem songInfo={item} key={item.id} />
       ))}
     </div>
   );

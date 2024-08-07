@@ -1,7 +1,7 @@
 import { Song } from "@/entity/interface/song";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { createStore } from "zustand/vanilla";
+// import { createStore } from "zustand/vanilla";
 
 export type SongState = {
   defaultSong: Song;
@@ -9,7 +9,7 @@ export type SongState = {
 };
 
 export type SongAction = {
-  setCurrentSong: (newVal: Song) => void;
+  setCurrentSong: (newVal: Song | null) => void;
   setSongList: (newVal: Song[]) => void;
 };
 
@@ -32,25 +32,25 @@ export const defaultInitSong: SongState = {
   ],
 };
 
-export const createSongStore = (initState: SongState = defaultInitSong) => {
-  return createStore<SongStore>()(
-    persist(
-      (set) => ({
-        ...initState,
-        setCurrentSong: (newVal) => {
-          set((state) => ({ defaultSong: (state.defaultSong = newVal) }));
-        },
-        setSongList: (newVal) => {
-          set(() => ({ defaultSongList: [...newVal] }));
-        },
-      }),
-      {
-        name: "song-info",
-        storage: createJSONStorage(() => localStorage), // default localstorage
-      }
-    )
-  );
-};
+// export const createSongStore = (initState: SongState = defaultInitSong) => {
+//   return createStore<SongStore>()(
+//     persist(
+//       (set) => ({
+//         ...initState,
+//         setCurrentSong: (newVal) => {
+//           set((state) => ({ defaultSong: (state.defaultSong = newVal) }));
+//         },
+//         setSongList: (newVal) => {
+//           set(() => ({ defaultSongList: [...newVal] }));
+//         },
+//       }),
+//       {
+//         name: "song-info",
+//         storage: createJSONStorage(() => localStorage), // default localstorage
+//       }
+//     )
+//   );
+// };
 
 export const useSongStore = create<SongStore>()(
   persist(
@@ -62,9 +62,13 @@ export const useSongStore = create<SongStore>()(
         ? get().defaultSongList
         : defaultInitSong.defaultSongList,
       setCurrentSong: (newVal: any) =>
-        set((state: SongState) => ({
-          defaultSong: (state.defaultSong = newVal),
-        })),
+        set((state: SongState) => {
+          console.log("seh", newVal);
+
+          return {
+            defaultSong: (state.defaultSong = newVal),
+          };
+        }),
       setSongList: (newVal: any) =>
         set((state: SongState) => ({
           defaultSongList: (state.defaultSongList = newVal),

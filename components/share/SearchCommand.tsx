@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
 import { getRequest } from "@/lib/customFetch";
-import { debounce, throttle } from "@/lib/utils";
+import { debounce } from "@/lib/utils";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
 
@@ -44,83 +44,98 @@ export function SearchCommand() {
   };
 
   useEffect(() => {
-    getRequest(`https://saavn.dev/api/search/songs`, {
-      query: value,
-      page: 0,
-      limit: 5,
-    }).then((res) => {
-      if (res.success) {
-        setSongs(
-          res.data.results.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            artists: [
-              ...item.artists.primary.map((item: any) => ({
-                id: item.id,
-                name: item.name,
-                image: item.image,
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    const fetchData = async () => {
+      try {
+        const [songsRes, albumsRes, artistsRes, playlistsRes] =
+          await Promise.all([
+            getRequest(
+              `https://saavn.dev/api/search/songs`,
+              { query: value, page: 0, limit: 5 },
+              { signal }
+            ),
+            getRequest(
+              `https://saavn.dev/api/search/albums`,
+              { query: value, page: 0, limit: 5 },
+              { signal }
+            ),
+            getRequest(
+              `https://saavn.dev/api/search/artists`,
+              { query: value, page: 0, limit: 5 },
+              { signal }
+            ),
+            getRequest(
+              `https://saavn.dev/api/search/playlists`,
+              { query: value, page: 0, limit: 5 },
+              { signal }
+            ),
+          ]);
+
+        if (songsRes.success) {
+          setSongs(
+            songsRes.data.results.map((item: any) => ({
+              id: item.id,
+              name: item.name,
+              artists: item.artists.primary.map((artist: any) => ({
+                id: artist.id,
+                name: artist.name,
+                image: artist.image,
               })),
-            ],
-            url: item.downloadUrl[item.downloadUrl.length - 1].url,
-          }))
-        );
-      }
-    });
+              url: item.downloadUrl[item.downloadUrl.length - 1].url,
+            }))
+          );
+        }
 
-    getRequest(`https://saavn.dev/api/search/albums`, {
-      query: value,
-      page: 0,
-      limit: 5,
-    }).then((res) => {
-      if (res.success) {
-        setAlbums(
-          res.data.results.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            artists: [
-              ...item.artists.primary.map((item: any) => ({
-                id: item.id,
-                name: item.name,
-                image: item.image,
+        if (albumsRes.success) {
+          setAlbums(
+            albumsRes.data.results.map((item: any) => ({
+              id: item.id,
+              name: item.name,
+              artists: item.artists.primary.map((artist: any) => ({
+                id: artist.id,
+                name: artist.name,
+                image: artist.image,
               })),
-            ],
-            url: "",
-          }))
-        );
-      }
-    });
+              url: "",
+            }))
+          );
+        }
 
-    getRequest(`https://saavn.dev/api/search/artists`, {
-      query: value,
-      page: 0,
-      limit: 5,
-    }).then((res) => {
-      if (res.success) {
-        setArtists(
-          res.data.results.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            url: "",
-          }))
-        );
-      }
-    });
+        if (artistsRes.success) {
+          setArtists(
+            artistsRes.data.results.map((item: any) => ({
+              id: item.id,
+              name: item.name,
+              url: "",
+            }))
+          );
+        }
 
-    getRequest(`https://saavn.dev/api/search/playlists`, {
-      query: value,
-      page: 0,
-      limit: 5,
-    }).then((res) => {
-      if (res.success) {
-        setPlaylists(
-          res.data.results.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            url: "",
-          }))
-        );
+        if (playlistsRes.success) {
+          setPlaylists(
+            playlistsRes.data.results.map((item: any) => ({
+              id: item.id,
+              name: item.name,
+              url: "",
+            }))
+          );
+        }
+      } catch (error: any) {
+        if (error.name === "AbortError") {
+          console.log("Request canceled");
+        } else {
+          console.error("Request failed", error);
+        }
       }
-    });
+    };
+
+    fetchData();
+
+    return () => {
+      controller.abort(); // 组件卸载时取消请求
+    };
   }, [value]);
 
   return (
@@ -157,7 +172,12 @@ export function SearchCommand() {
                   key={album.id}
                   value={album.name + album.id + value}>
                   <Disc2 className="mr-2 h-4 w-4" />
-                  <span>{album.name}</span>
+                  <span>
+                    {album.name}
+                    {album?.artists
+                      ? "--" + album.artists.map((item) => item.name).join(",")
+                      : ""}
+                  </span>
                 </CommandItem>
               ))}
             </CommandGroup>
