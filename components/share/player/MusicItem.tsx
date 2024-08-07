@@ -81,9 +81,7 @@ const MusicItem = ({ songInfo }: Props) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuGroup>
-            <DropdownMenuItem
-            //  onClick={() => setCurrentSong(songInfo)}
-            >
+            <DropdownMenuItem onClick={handleClick}>
               <div className="flex items-center">
                 <Play strokeWidth={1} className="w-4 h-4 mr-1" />
                 播放
