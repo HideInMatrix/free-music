@@ -95,7 +95,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   return (
     <AudioContext.Provider value={value}>
       {children}
-      <audio className="hidden" ref={audioRef}></audio>
+     
     </AudioContext.Provider>
   );
 };

@@ -1,14 +1,11 @@
 import MusicItem from "./MusicItem";
 import MusicListInfo from "./MusicListInfo";
 import { useSongStore } from "@/store/useSongStore";
-import { Song } from "@/entity/interface/song";
-import { useCallback } from "react";
 
 type Props = {};
 
 const MusicCurrentList = (props: Props) => {
-  let { defaultSongList, defaultSong, setCurrentSong, setSongList } =
-    useSongStore();
+  let { defaultSongList } = useSongStore();
 
   return (
     <div className="h-full w-full">

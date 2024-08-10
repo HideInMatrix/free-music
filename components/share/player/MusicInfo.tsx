@@ -1,9 +1,13 @@
 import { useSongStore } from "@/store/useSongStore";
 import Image from "next/image";
+import { useAudio } from "./AudioProvider";
 type Props = {};
 
 const MusicInfo = (props: Props) => {
+  console.log("music info render");
+
   const { defaultSong } = useSongStore();
+  const { audioRef } = useAudio();
   return (
     <div className="flex overflow-hidden flex-1">
       <div className="items-center max-w-full flex">
@@ -22,7 +26,10 @@ const MusicInfo = (props: Props) => {
           </div>
         </div>
       </div>
-      <div className="grow hidden lg:block h-1"></div>
+      <div className="grow hidden lg:block h-1">
+        {" "}
+        <audio className="hidden" ref={audioRef}></audio>
+      </div>
     </div>
   );
 };
