@@ -27,7 +27,6 @@ const MusicInfo = (props: Props) => {
         </div>
       </div>
       <div className="grow hidden lg:block h-1">
-        {" "}
         <audio className="hidden" ref={audioRef}></audio>
       </div>
     </div>
