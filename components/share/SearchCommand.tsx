@@ -15,13 +15,12 @@ import { getRequest } from "@/lib/customFetch";
 import { debounce } from "@/lib/utils";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
+import { useRouter } from "next/navigation";
+import useSearchResult from "@/hooks/search";
 
 export function SearchCommand() {
   const [value, setValue] = useState("");
-  const [songs, setSongs] = useState<Song[]>([]);
-  const [albums, setAlbums] = useState<Song[]>([]);
-  const [artists, setArtists] = useState<Song[]>([]);
-  const [playlists, setPlaylists] = useState<Song[]>([]);
+  const { songs, albums, artists, playlists } = useSearchResult(value)
   const { defaultSongList, setSongList, defaultSong, setCurrentSong } =
     useSongStore();
   const handleChangeValue = debounce((value: string) => {
@@ -43,100 +42,28 @@ export function SearchCommand() {
     }
   };
 
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
 
-    const fetchData = async () => {
-      try {
-        const [songsRes, albumsRes, artistsRes, playlistsRes] =
-          await Promise.all([
-            getRequest(
-              `https://saavn.dev/api/search/songs`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-            getRequest(
-              `https://saavn.dev/api/search/albums`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-            getRequest(
-              `https://saavn.dev/api/search/artists`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-            getRequest(
-              `https://saavn.dev/api/search/playlists`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-          ]);
 
-        if (songsRes.success) {
-          setSongs(
-            songsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              artists: item.artists.primary.map((artist: any) => ({
-                id: artist.id,
-                name: artist.name,
-                image: artist.image,
-              })),
-              url: item.downloadUrl[item.downloadUrl.length - 1].url,
-            }))
-          );
-        }
+  const router = useRouter();
+  // 跳转到歌曲搜索页面
+  const handleRouteToSongs = () => {
+    router.push("/songs");
+  };
 
-        if (albumsRes.success) {
-          setAlbums(
-            albumsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              artists: item.artists.primary.map((artist: any) => ({
-                id: artist.id,
-                name: artist.name,
-                image: artist.image,
-              })),
-              url: "",
-            }))
-          );
-        }
+  // 跳转到专辑搜索页面
+  const handleRouteToAlbums = () => {
+    router.push("/albums");
+  };
 
-        if (artistsRes.success) {
-          setArtists(
-            artistsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              url: "",
-            }))
-          );
-        }
+  // 跳转到艺术家页面
+  const handleRouteToArtist = () => {
+    router.push("/artists");
+  };
 
-        if (playlistsRes.success) {
-          setPlaylists(
-            playlistsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              url: "",
-            }))
-          );
-        }
-      } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Request canceled");
-        } else {
-          console.error("Request failed", error);
-        }
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      controller.abort(); // 组件卸载时取消请求
-    };
-  }, [value]);
+  // 跳转到播放列表页面
+  const handleRouteToPlaylist = () => {
+    router.push("/playlists");
+  };
 
   return (
     <Command className="rounded-lg border shadow-md">
@@ -169,6 +96,7 @@ export function SearchCommand() {
             <CommandGroup heading="专辑">
               {albums.map((album) => (
                 <CommandItem
+                onSelect={() => handleRouteToAlbums()}
                   key={album.id}
                   value={album.name + album.id + value}>
                   <Disc2 className="mr-2 h-4 w-4" />

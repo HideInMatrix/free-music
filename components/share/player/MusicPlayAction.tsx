@@ -3,7 +3,7 @@ import { StepBack, StepForward } from "lucide-react";
 
 import MusicStatus from "./MusicStatus";
 import MusicProcess from "./MusicProcess";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useSongStore } from "@/store/useSongStore";
 
 const MusicPlayAction = () => {
@@ -12,6 +12,8 @@ const MusicPlayAction = () => {
 
   const handlePreSong = useCallback(() => {
     let index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
+    console.log(index);
+
     if (index > -1) {
       if (index === 0) {
         setCurrentSong(defaultSongList[defaultSongList.length - 1]);
@@ -19,10 +21,12 @@ const MusicPlayAction = () => {
         setCurrentSong(defaultSongList[index - 1]);
       }
     }
-  }, []);
+  }, [defaultSong.id]);
 
   const handleNexSong = useCallback(() => {
     let index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
+    console.log("next", index);
+
     if (index > -1) {
       if (index === defaultSongList.length - 1) {
         setCurrentSong(defaultSongList[0]);
@@ -30,7 +34,7 @@ const MusicPlayAction = () => {
         setCurrentSong(defaultSongList[index + 1]);
       }
     }
-  }, []);
+  }, [defaultSong.id]);
 
   return (
     <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-auto px-[6px] h-full justify-evenly">

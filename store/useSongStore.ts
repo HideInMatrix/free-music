@@ -62,13 +62,9 @@ export const useSongStore = create<SongStore>()(
         ? get().defaultSongList
         : defaultInitSong.defaultSongList,
       setCurrentSong: (newVal: any) =>
-        set((state: SongState) => {
-          console.log("seh", newVal);
-
-          return {
-            defaultSong: (state.defaultSong = newVal),
-          };
-        }),
+        set((state: SongState) => ({
+          defaultSong: (state.defaultSong = newVal),
+        })),
       setSongList: (newVal: any) =>
         set((state: SongState) => ({
           defaultSongList: (state.defaultSongList = newVal),

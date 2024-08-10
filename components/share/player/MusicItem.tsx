@@ -13,7 +13,7 @@ import { CloudDownload, Ellipsis, Files, Play, Trash } from "lucide-react";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
 import { cn } from "@/lib/utils";
-import { useAudio } from "./AudioProvider";
+
 import { useCallback } from "react";
 type Props = {
   songInfo: Song;
@@ -22,9 +22,7 @@ type Props = {
 const MusicItem = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong, defaultSongList, setSongList } =
     useSongStore();
-  const handleDeleteSong = useCallback(() => {
-    console.log("delete render");
-
+  const handleDeleteSong = () => {
     // 找到要删除的歌曲在列表中的索引
     const index = defaultSongList.findIndex((item) => item.id === songInfo.id);
 
@@ -48,12 +46,12 @@ const MusicItem = ({ songInfo }: Props) => {
         }
       }
     }
-  }, []);
-  const handleClick = useCallback(() => {
+  };
+  const handleClick = () => {
     if (defaultSong.id !== songInfo.id) {
       setCurrentSong(songInfo);
     }
-  }, [defaultSong]);
+  };
   return (
     <div
       onClick={handleClick}
