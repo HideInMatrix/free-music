@@ -29,7 +29,7 @@ export default function LocaleLayout({
     <html lang={locale}>
       <body
         className={cn(
-          "h-screen bg-background font-sans antialiased",
+          "h-dvh bg-background font-sans antialiased",
           fontSans.variable
         )}>
         <HeaderBarWrapper>

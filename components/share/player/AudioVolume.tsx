@@ -20,7 +20,7 @@ const AudioVolume = (props: Props) => {
     }
   }, []);
   return (
-    <div className="flex">
+    <div className="lg:flex hidden">
       <Volume2 className="mr-1" />
       <Slider
         defaultValue={[defaultVolume]}

@@ -32,7 +32,7 @@ const MusicProcess = () => {
   }, 100);
 
   return (
-    <div className="flex items-center">
+    <div className="lg:flex items-center hidden">
       <span className="w-10 grow">{formatTime(currentTime)}</span>
       <Slider
         className="flex-auto ml-3 mr-1"

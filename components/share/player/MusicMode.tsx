@@ -91,7 +91,11 @@ const MusicMode = () => {
     }
   };
 
-  return <div onClick={actionPlayMode}>{rendPlayMode()}</div>;
+  return (
+    <div onClick={actionPlayMode} className="lg:block hidden">
+      {rendPlayMode()}
+    </div>
+  );
 };
 
 export default MusicMode;

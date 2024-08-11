@@ -93,9 +93,6 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AudioContext.Provider value={value}>
-      {children}
-     
-    </AudioContext.Provider>
+    <AudioContext.Provider value={value}>{children}</AudioContext.Provider>
   );
 };

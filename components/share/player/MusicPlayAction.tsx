@@ -3,7 +3,6 @@ import { StepBack, StepForward } from "lucide-react";
 
 import MusicStatus from "./MusicStatus";
 import MusicProcess from "./MusicProcess";
-import { useCallback } from "react";
 import { useSongStore } from "@/store/useSongStore";
 
 const MusicPlayAction = () => {
@@ -35,7 +34,11 @@ const MusicPlayAction = () => {
   return (
     <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-auto px-[6px] h-full justify-evenly">
       <div className="flex items-center justify-center">
-        <StepBack strokeWidth={1} className="w-9 h-9" onClick={handlePreSong} />
+        <StepBack
+          strokeWidth={1}
+          className="w-9 h-9 lg:block hidden"
+          onClick={handlePreSong}
+        />
         <MusicStatus />
         <StepForward
           strokeWidth={1}

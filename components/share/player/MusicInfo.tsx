@@ -4,12 +4,12 @@ import { useAudio } from "./AudioProvider";
 type Props = {};
 
 const MusicInfo = (props: Props) => {
-  console.log("music info render");
+  // console.log("music info render");
 
   const { defaultSong } = useSongStore();
   const { audioRef } = useAudio();
   return (
-    <div className="flex overflow-hidden flex-1">
+    <div className="flex overflow-hidden flex-auto">
       <div className="items-center max-w-full flex">
         <div className="arco-avatar arco-avatar-square arco-avatar-with-trigger-icon w-16 h-16 rounded-lg mr-4 flex-shrink-0">
           <Image
