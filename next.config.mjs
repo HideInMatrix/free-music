@@ -28,6 +28,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "img1.koowo.com",
       },
+      {
+        protocol: "https",
+        hostname: "www.jiosaavn.com",
+      },
     ],
   },
 };

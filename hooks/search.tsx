@@ -1,105 +1,110 @@
-import { Song } from "@/entity/interface/song";
-import { getRequest } from "@/lib/customFetch";
 import { useEffect, useState } from "react";
+import { Song } from "@/entity/interface/song";
+import {
+  fetchAlbums,
+  fetchArtists,
+  fetchPlaylists,
+  fetchSongs,
+} from "@/apis/search";
 
-export default function useSearchResult(value: string) {
+const useFetchSongs = (value: string, signal: AbortSignal) => {
   const [songs, setSongs] = useState<Song[]>([]);
-  const [albums, setAlbums] = useState<Song[]>([]);
-  const [artists, setArtists] = useState<Song[]>([]);
-  const [playlists, setPlaylists] = useState<Song[]>([]);
-  useEffect(() => {
-    const controller = new AbortController();
-    const { signal } = controller;
 
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const [songsRes, albumsRes, artistsRes, playlistsRes] =
-          await Promise.all([
-            getRequest(
-              `https://saavn.dev/api/search/songs`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-            getRequest(
-              `https://saavn.dev/api/search/albums`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-            getRequest(
-              `https://saavn.dev/api/search/artists`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-            getRequest(
-              `https://saavn.dev/api/search/playlists`,
-              { query: value, page: 0, limit: 5 },
-              { signal }
-            ),
-          ]);
-
-        if (songsRes.success) {
-          setSongs(
-            songsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              artists: item.artists.primary.map((artist: any) => ({
-                id: artist.id,
-                name: artist.name,
-                image: artist.image,
-              })),
-              url: item.downloadUrl[item.downloadUrl.length - 1].url,
-            }))
-          );
-        }
-
-        if (albumsRes.success) {
-          setAlbums(
-            albumsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              artists: item.artists.primary.map((artist: any) => ({
-                id: artist.id,
-                name: artist.name,
-                image: artist.image,
-              })),
-              url: "",
-            }))
-          );
-        }
-
-        if (artistsRes.success) {
-          setArtists(
-            artistsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              url: "",
-            }))
-          );
-        }
-
-        if (playlistsRes.success) {
-          setPlaylists(
-            playlistsRes.data.results.map((item: any) => ({
-              id: item.id,
-              name: item.name,
-              url: "",
-            }))
-          );
-        }
+        const result = await fetchSongs(value, signal);
+        setSongs(result);
       } catch (error: any) {
-        if (error.name === "AbortError") {
-          console.log("Request canceled");
-        } else {
-          console.error("Request failed", error);
+        if (error.name !== "AbortError") {
+          console.error("Failed to fetch songs", error);
         }
       }
     };
 
     fetchData();
+  }, [value]);
 
+  return songs;
+};
+
+const useFetchAlbums = (value: string, signal: AbortSignal) => {
+  const [albums, setAlbums] = useState<Song[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchAlbums(value, signal);
+        setAlbums(result);
+      } catch (error: any) {
+        if (error.name !== "AbortError") {
+          console.error("Failed to fetch albums", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [value]);
+
+  return albums;
+};
+
+const useFetchArtists = (value: string, signal: AbortSignal) => {
+  const [artists, setArtists] = useState<Song[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchArtists(value, signal);
+        setArtists(result);
+      } catch (error: any) {
+        if (error.name !== "AbortError") {
+          console.error("Failed to fetch artists", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [value]);
+
+  return artists;
+};
+
+const useFetchPlaylists = (value: string, signal: AbortSignal) => {
+  const [playlists, setPlaylists] = useState<Song[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchPlaylists(value, signal);
+        setPlaylists(result);
+      } catch (error: any) {
+        if (error.name !== "AbortError") {
+          console.error("Failed to fetch playlists", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [value]);
+
+  return playlists;
+};
+
+export default function useSearchResult(value: string) {
+  const controller = new AbortController();
+  const { signal } = controller;
+
+  const songs = useFetchSongs(value, signal);
+  const albums = useFetchAlbums(value, signal);
+  const artists = useFetchArtists(value, signal);
+  const playlists = useFetchPlaylists(value, signal);
+
+  useEffect(() => {
     return () => {
       controller.abort(); // 组件卸载时取消请求
     };
-  }, [value]);
+  }, []);
+
   return { songs, albums, artists, playlists };
 }

@@ -1,18 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import Favicon from "@/app/favicon.ico";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { AlignJustify, ChevronRight, Search } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import "./over-drawer.css";
 
 import { Separator } from "@/components/ui/separator";
@@ -24,8 +15,7 @@ import {
   Drawer,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { SearchWrapper } from "../SearchWrapperDialog";
+import { SearchCommand } from "../SearchCommand";
 
 interface Menu {
   label: string;
@@ -51,12 +41,7 @@ export default function Header() {
           <div className="ml-2 min-w-max">音乐地带</div>
         </Link>
       </div>
-      <SearchWrapper
-        trigger={
-          <Button variant="ghost" size="icon" className="lg:mr-4 ml-auto">
-            <Search />
-          </Button>
-        }></SearchWrapper>
+      <SearchCommand></SearchCommand>
     </header>
   );
 }
