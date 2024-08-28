@@ -57,7 +57,7 @@ const MusicMode = () => {
 
         if (playMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
-            index == defaultSongList.length
+            index == defaultSongList.length - 1
               ? setCurrentSong(defaultSongList[0])
               : setCurrentSong(defaultSongList[index + 1]);
           }

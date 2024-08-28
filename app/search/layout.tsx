@@ -3,7 +3,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type SearchProps = {
   children: ReactNode;
@@ -27,7 +27,7 @@ export default function SearchLayout({
     { name: "播放列表", value: "playlists" },
   ];
   const searchParams = useSearchParams();
-  const [pageType, setPageType] = useState("songs");
+  const [pageType, setPageType] = useState("");
   const [value, setValue] = useState("");
   useEffect(() => {
     let _pageType = searchParams.get("page");
@@ -39,8 +39,13 @@ export default function SearchLayout({
       setValue(_value);
     }
   }, [searchParams.get("page")]);
+
+  const router = useRouter();
   const handleValueChange = (value: string) => {
     setPageType(value);
+    router.push(
+      `/search?value=${searchParams.get("value") || ""}&page=${value}`
+    );
   };
 
   return (
@@ -62,10 +67,10 @@ export default function SearchLayout({
           ))}
         </TabsList>
 
-        <TabsContent value="song">{songs}</TabsContent>
-        <TabsContent value="album">{albums}</TabsContent>
-        <TabsContent value="artist">{artists}</TabsContent>
-        <TabsContent value="playlist">{playlists}</TabsContent>
+        <TabsContent value="songs">{songs}</TabsContent>
+        <TabsContent value="albums">{albums}</TabsContent>
+        <TabsContent value="artists">{artists}</TabsContent>
+        <TabsContent value="playlists">{playlists}</TabsContent>
       </Tabs>
     </div>
   );

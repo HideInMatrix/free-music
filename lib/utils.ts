@@ -1,10 +1,10 @@
 /*
  * @Author: HideInMatrix
  * @Date: 2024-07-16
- * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-08-06
+ * @LastEditors: error: git config user.name & please set dead value or install git
+ * @LastEditTime: 2024-08-28
  * @Description: 这是一则说明
- * @FilePath: /free-music/lib/utils.ts
+ * @FilePath: \free-music\lib\utils.ts
  */
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -65,4 +65,19 @@ export const debounce = (fn: Function, wait: number) => {
       fn.apply(this, args);
     }, wait);
   };
+};
+
+/**
+ * @Author: HideInMatrix
+ * @description: 转换秒数成分钟
+ * @seconds {number}
+ * @return {*}
+ * @Date: 2024-07-28
+ */
+export const formatTime = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${minutes.toString().padStart(2, "0")}:${secs
+    .toString()
+    .padStart(2, "0")}`;
 };

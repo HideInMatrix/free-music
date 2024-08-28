@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { Song } from "@/entity/interface/song";
-import {
-  fetchAlbums,
-  fetchArtists,
-  fetchPlaylists,
-  fetchSongs,
-} from "@/apis/search";
+import { fetchPlaylists } from "@/apis/playlists/jio-savvn";
+import { fetchArtists } from "@/apis/artists/jio-savvn";
+import { fetchSongs } from "@/apis/songs/jio-savvn";
+import { fetchAlbums } from "@/apis/albums/jio-savvn";
 
 const useFetchSongs = (value: string, signal: AbortSignal) => {
   const [songs, setSongs] = useState<Song[]>([]);
@@ -13,7 +11,7 @@ const useFetchSongs = (value: string, signal: AbortSignal) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchSongs(value, signal);
+        const result = await fetchSongs({ value, options: { signal } });
         setSongs(result);
       } catch (error: any) {
         if (error.name !== "AbortError") {

@@ -2,16 +2,8 @@
 
 import { Slider } from "@/components/ui/slider";
 import { useAudio } from "./AudioProvider";
-import { throttle } from "@/lib/utils";
+import { throttle, formatTime } from "@/lib/utils";
 import { useEffect, useState } from "react";
-
-const formatTime = (seconds: number): string => {
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${minutes.toString().padStart(2, "0")}:${secs
-    .toString()
-    .padStart(2, "0")}`;
-};
 
 const MusicProcess = () => {
   const { currentTime, duration, audioRef } = useAudio();

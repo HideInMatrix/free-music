@@ -27,7 +27,7 @@ export default function Header() {
   const menus: Menu[] = [];
 
   return (
-    <header className="flex translate-y-0 transition-all duration-700 justify-between w-full bg-white fixed h-12 z-20 max-w-[1920px] items-center border-b">
+    <header className="flex translate-y-0 transition-all duration-700 justify-between w-full bg-white fixed h-12 z-20 items-center border-b">
       <div className="flex gap-3 h-full pl-10 justify-between items-center lg:justify-start lg:pl-52">
         <Link href="/" className="flex cursor-pointer items-center">
           <Image

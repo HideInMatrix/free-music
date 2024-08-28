@@ -1,3 +1,6 @@
-export default function PlaylistsPage() {
+type PageProps = {
+  searchParams: { value: string };
+};
+export default function PlaylistsPage({ searchParams }: PageProps) {
   return <>PlaylistsPage</>;
 }

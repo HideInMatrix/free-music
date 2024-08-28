@@ -17,17 +17,47 @@ export type SongStore = SongAction & SongState;
 
 export const defaultInitSong: SongState = {
   defaultSong: {
-    id: "3",
-    name: "听妈妈的话",
-    artists: [{ id: "1", name: "周杰伦", image: [] }],
-    url: "https://aac.saavncdn.com/162/7b2023add5e2938c1ffe013302cf6658_160.mp4",
+    id: "_omffwy9",
+    name: "Take Me Hand",
+    artists: [
+      {
+        id: "1020286",
+        name: "Daishi Dance",
+        image: [
+          "https://c.saavncdn.com/590/Don-t-Leave-Without-Me-English-2012-500x500.jpg",
+        ],
+      },
+    ],
+    duration: 259,
+    album: {
+      id: "19507542",
+      name: "Take Me Hand",
+    },
+    url: "https://aac.saavncdn.com/905/cd9e9025f87d15120cac77986afc7f3c_320.mp4",
+    image:
+      "https://c.saavncdn.com/905/Take-Me-Hands-English-2020-20200505122820-500x500.jpg",
   },
   defaultSongList: [
     {
-      id: "3",
-      name: "听妈妈的话",
-      artists: [{ id: "1", name: "周杰伦", image: [] }],
-      url: "https://aac.saavncdn.com/162/7b2023add5e2938c1ffe013302cf6658_160.mp4",
+      id: "_omffwy9",
+      name: "Take Me Hand",
+      artists: [
+        {
+          id: "1020286",
+          name: "Daishi Dance",
+          image: [
+            "https://c.saavncdn.com/590/Don-t-Leave-Without-Me-English-2012-500x500.jpg",
+          ],
+        },
+      ],
+      duration: 259,
+      album: {
+        id: "19507542",
+        name: "Take Me Hand",
+      },
+      url: "https://aac.saavncdn.com/905/cd9e9025f87d15120cac77986afc7f3c_320.mp4",
+      image:
+        "https://c.saavncdn.com/905/Take-Me-Hands-English-2020-20200505122820-500x500.jpg",
     },
   ],
 };

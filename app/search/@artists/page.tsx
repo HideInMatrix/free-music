@@ -1,4 +1,4 @@
-import { fetchArtists } from "@/apis/search";
+import { fetchArtists } from "@/apis/artists/jio-savvn";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,10 +9,9 @@ export default async function ArtistsPage({ searchParams }: PageProps) {
   const controller = new AbortController();
   const { signal } = controller;
   const artists = await fetchArtists(searchParams.value || "", signal, 0, 40);
-  console.log(artists);
 
   return (
-    <div className="grid grid-flow-col auto-cols-max gap-4 p-4">
+    <div className="flex flex-wrap gap-4 p-4">
       {artists.map(
         (item: {
           id: string;
