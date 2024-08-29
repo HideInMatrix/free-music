@@ -31,7 +31,6 @@ const AlbumsTable = ({ searchValue }: Props) => {
     const target = event.target as HTMLDivElement; // 确保类型安全
     const { scrollTop, scrollHeight, clientHeight } = target;
     if ((page + 1) * 20 >= total) {
-
       setToEnd(true);
     }
     // 判断是否接近底部
@@ -115,10 +114,8 @@ const AlbumsTable = ({ searchValue }: Props) => {
         <TableHeader>
           <TableRow>
             <TableHead className="truncate max-w-40">标题</TableHead>
-            <TableHead className="md:table-cell hidden text-center">
-              歌手
-            </TableHead>
-            <TableHead className="w-[120px]">时间</TableHead>
+            <TableHead className="text-center">歌手</TableHead>
+            <TableHead className="w-20">时间</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -127,14 +124,12 @@ const AlbumsTable = ({ searchValue }: Props) => {
               <TableCell className="font-medium truncate max-w-40">
                 {album.name}
               </TableCell>
-              <TableCell className="md:table-cell hidden text-center">
+              <TableCell className="text-center">
                 {album.artists
                   .map((item: { name: string }) => item.name)
                   .join(",")}
               </TableCell>
-              <TableCell className="truncate">
-                {album.year}
-              </TableCell>
+              <TableCell className="truncate w-20">{album.year}</TableCell>
             </TableRow>
           ))}
         </TableBody>
