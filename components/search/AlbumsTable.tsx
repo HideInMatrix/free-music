@@ -132,7 +132,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
                   .map((item: { name: string }) => item.name)
                   .join(",")}
               </TableCell>
-              <TableCell className="md:table-cell hidden truncate">
+              <TableCell className="truncate">
                 {album.year}
               </TableCell>
             </TableRow>
