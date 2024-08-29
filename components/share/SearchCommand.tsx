@@ -18,6 +18,7 @@ import { useSongStore } from "@/store/useSongStore";
 import { useRouter } from "next/navigation";
 import useSearchResult from "@/hooks/search";
 
+
 export function SearchCommand() {
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);

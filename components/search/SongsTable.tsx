@@ -11,64 +11,55 @@ import {
 } from "@/components/ui/table";
 import { SearchSongProps } from "@/entity/interface/song";
 import { formatTime, throttle } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { fetchSongs } from "@/apis/songs/jio-savvn";
+import { fetchSongByKeyword, fetchSongByAlbumId } from "@/hooks/fetchSongs";
 
 type Props = {
   searchValue: string;
+  loaderType: "search" | "detail";
 };
 
-const SearchTable = ({ searchValue }: Props) => {
+const SongsTable = ({ searchValue, loaderType }: Props) => {
   const [result, setResult] = useState<SearchSongProps[]>([]);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [toEnd, setToEnd] = useState(false);
+  const [total, setTotal] = useState(0);
+  let loaderSongs: (arg0: { signal: AbortSignal }) => void;
+  if (loaderType === "search") {
+    const { loaderSongs: _loaderSongs } = fetchSongByKeyword({
+      searchValue,
+      page,
+      result,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderSongs = _loaderSongs;
+  } else if (loaderType === "detail") {
+    const { loaderSongs: _loaderSongs } = fetchSongByAlbumId({
+      albumId: searchValue,
+      page,
+      result,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderSongs = _loaderSongs;
+  }
 
   const handleScroll = throttle(async (event: Event) => {
     const target = event.target as HTMLDivElement; // 确保类型安全
     const { scrollTop, scrollHeight, clientHeight } = target;
 
+    if ((page + 1) * 20 >= total) {
+      setToEnd(true);
+    }
     // 判断是否接近底部
     if (scrollHeight - scrollTop - clientHeight <= 50 && !toEnd) {
       setPage((prevPage) => prevPage + 1);
     }
   }, 250);
-
-  const loaderProfile = useCallback(
-    async ({ signal }: { signal: AbortSignal }) => {
-      if (loading || toEnd) return; // 如果正在加载，或者已经到达底部，直接返回
-      setLoading(true);
-
-      try {
-        const _result = await fetchSongs({
-          value: searchValue,
-          page,
-          limit: 20,
-          options: { signal: signal },
-        });
-        if (_result.length === 0) {
-          setToEnd(true);
-        }
-        const mergedResult = [...result, ..._result].reduce((acc, song) => {
-          if (!acc.some((s: SearchSongProps) => s.id === song.id)) {
-            acc.push(song);
-          }
-          return acc;
-        }, [] as SearchSongProps[]);
-        setResult(mergedResult);
-      } catch (error: unknown) {
-        if ((error as { name: string }).name === "AbortError") {
-          console.log("Request was aborted");
-        } else {
-          console.error(error);
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
-    [page, searchValue]
-  );
 
   useEffect(() => {
     // 重置状态
@@ -81,7 +72,7 @@ const SearchTable = ({ searchValue }: Props) => {
     const { signal } = controller;
 
     // 使用新的控制器请求数据
-    loaderProfile({ signal });
+    loaderSongs({ signal });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -93,7 +84,7 @@ const SearchTable = ({ searchValue }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loaderProfile({ signal });
+    loaderSongs({ signal });
     // 清理：仅在组件卸载时取消请求
     return () => {
       controller.abort();
@@ -142,4 +133,4 @@ const SearchTable = ({ searchValue }: Props) => {
   );
 };
 
-export default SearchTable;
+export default SongsTable;

@@ -27,3 +27,11 @@ export interface SearchSongProps {
   url: string;
   image: string;
 }
+
+export interface SearchAlbumsProps {
+  id: string;
+  name: string;
+  artists: Artist[];
+  playCount: number;
+  year: number;
+}

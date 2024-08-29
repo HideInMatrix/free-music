@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
-import { Song } from "@/entity/interface/song";
+import {
+  SearchAlbumsProps,
+  SearchSongProps,
+  Song,
+} from "@/entity/interface/song";
 import { fetchPlaylists } from "@/apis/playlists/jio-savvn";
 import { fetchArtists } from "@/apis/artists/jio-savvn";
 import { fetchSongs } from "@/apis/songs/jio-savvn";
 import { fetchAlbums } from "@/apis/albums/jio-savvn";
 
 const useFetchSongs = (value: string, signal: AbortSignal) => {
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<SearchSongProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchSongs({ value, options: { signal } });
-        setSongs(result);
+        const { data } = await fetchSongs({ value, options: { signal } });
+        setSongs(data);
       } catch (error: any) {
         if (error.name !== "AbortError") {
           console.error("Failed to fetch songs", error);
@@ -27,13 +31,13 @@ const useFetchSongs = (value: string, signal: AbortSignal) => {
 };
 
 const useFetchAlbums = (value: string, signal: AbortSignal) => {
-  const [albums, setAlbums] = useState<Song[]>([]);
+  const [albums, setAlbums] = useState<SearchAlbumsProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchAlbums(value, signal);
-        setAlbums(result);
+        const { data } = await fetchAlbums({ value, options: { signal } });
+        setAlbums(data);
       } catch (error: any) {
         if (error.name !== "AbortError") {
           console.error("Failed to fetch albums", error);

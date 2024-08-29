@@ -23,6 +23,7 @@
     "dayjs": "^1.11.11",
     "embla-carousel-autoplay": "^8.1.6",
     "embla-carousel-react": "^8.1.6",
+    "file-saver": "^2.0.5",
     "lucide-react": "^0.408.0",
     "next": "14.2.5",
     "next-qrcode": "^2.5.1",
@@ -35,6 +36,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

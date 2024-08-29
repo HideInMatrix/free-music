@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CloudDownload, Ellipsis, Files, Play, Trash } from "lucide-react";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
+import FileSaver from "file-saver";
 
 type Props = {
   songInfo: Song;
@@ -55,6 +56,10 @@ const MusicDropAction = ({ songInfo }: Props) => {
     }
   };
 
+  const handleDownload = () => {
+    // FileSaver.saveAs(songInfo.url, `${songInfo.name}.m4a`);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -87,7 +92,7 @@ const MusicDropAction = ({ songInfo }: Props) => {
               复制歌名
             </div>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleDownload}>
             <div className="flex items-center">
               <CloudDownload strokeWidth={1} className="w-4 h-4 mr-1" />
               下载

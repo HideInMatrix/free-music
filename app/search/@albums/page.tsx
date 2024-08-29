@@ -1,9 +1,11 @@
-import Link from "next/link";
+import AlbumsTable from "@/components/search/AlbumsTable";
 
-export default function AlbumsPage() {
-  return (
-    <div>
-      <Link href="/search/detail">测试</Link>
-    </div>
-  );
+type PageProps = {
+  searchParams: { keyword: string };
+};
+
+export default function AlbumsPage({ searchParams }: PageProps) {
+  const keyword = searchParams.keyword || "";
+
+  return <AlbumsTable searchValue={keyword}></AlbumsTable>;
 }

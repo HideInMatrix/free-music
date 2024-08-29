@@ -1,4 +1,4 @@
-import SearchTable from "@/components/search/SearchTable";
+import SongsTable from "@/components/search/SongsTable";
 
 type PageProps = {
   searchParams: { keyword: string };
@@ -7,5 +7,5 @@ type PageProps = {
 export default async function SongsPage({ searchParams }: PageProps) {
   const keyword = searchParams.keyword || "";
 
-  return <SearchTable searchValue={keyword}></SearchTable>;
+  return <SongsTable searchValue={keyword} loaderType="search"></SongsTable>;
 }
