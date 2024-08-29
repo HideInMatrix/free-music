@@ -19,13 +19,12 @@ type Props = {
 const MusicDropAction = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong, defaultSongList, setSongList } =
     useSongStore();
-  
-  const handleDeleteSong = () => {
-    // 找到要删除的歌曲在列表中的索引
-    const index = defaultSongList.findIndex((item) => item.id === songInfo.id);
 
+  const updateSongListFn = ({ type }: { type: "add" | "del" }) => {
+    const index = defaultSongList.findIndex((item) => item.id === songInfo.id);
     // 如果找到了歌曲
-    if (index > -1) {
+
+    if ((type = "del") && index > -1) {
       // 先更新歌曲列表
       const updatedSongList = [
         ...defaultSongList.slice(0, index),
@@ -43,13 +42,19 @@ const MusicDropAction = ({ songInfo }: Props) => {
           setCurrentSong(null);
         }
       }
+    } else if ((type = "add") && index == -1) {
+      const updatedSongList = [
+        ...defaultSongList.slice(0, index),
+        songInfo,
+        ...defaultSongList.slice(index + 1),
+      ];
+      setSongList(updatedSongList);
+      if (defaultSong.id !== songInfo.id) {
+        setCurrentSong(songInfo);
+      }
     }
   };
-  const handleClick = () => {
-    if (defaultSong.id !== songInfo.id) {
-      setCurrentSong(songInfo);
-    }
-  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -59,13 +64,13 @@ const MusicDropAction = ({ songInfo }: Props) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={handleClick}>
+          <DropdownMenuItem onClick={() => updateSongListFn({ type: "add" })}>
             <div className="flex items-center">
               <Play strokeWidth={1} className="w-4 h-4 mr-1" />
               播放
             </div>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleDeleteSong}>
+          <DropdownMenuItem onClick={() => updateSongListFn({ type: "del" })}>
             <div className="flex items-center">
               <Trash strokeWidth={1} className="w-4 h-4 mr-1" />
               删除
@@ -82,12 +87,12 @@ const MusicDropAction = ({ songInfo }: Props) => {
               复制歌名
             </div>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>
-              <div className="flex items-center">
-                <CloudDownload strokeWidth={1} className="w-4 h-4 mr-1" />
-                下载
-              </div>
-            </DropdownMenuItem> */}
+          <DropdownMenuItem>
+            <div className="flex items-center">
+              <CloudDownload strokeWidth={1} className="w-4 h-4 mr-1" />
+              下载
+            </div>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

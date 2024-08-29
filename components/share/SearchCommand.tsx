@@ -19,13 +19,13 @@ import { useRouter } from "next/navigation";
 import useSearchResult from "@/hooks/search";
 
 export function SearchCommand() {
-  const [value, setValue] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);
-  const { songs, albums, artists, playlists } = useSearchResult(value);
+  const { songs, albums, artists, playlists } = useSearchResult(keyword);
   const { defaultSongList, setSongList, defaultSong, setCurrentSong } =
     useSongStore();
   const handleChangeValue = debounce((value: string) => {
-    setValue(value);
+    setKeyword(value);
   }, 230);
 
   const handleAddSong = (song: Song) => {
@@ -49,9 +49,9 @@ export function SearchCommand() {
   const handleRouteToSearch = useCallback(
     (type: string) => {
       setOpen(false);
-      router.push(`/search?value=${value}&page=${type}`);
+      router.push(`/search?keyword=${keyword}&type=${type}`);
     },
-    [value]
+    [keyword]
   );
 
   return (
@@ -59,7 +59,7 @@ export function SearchCommand() {
       <Button
         variant="ghost"
         size="icon"
-        className="lg:mr-4 ml-auto"
+        className="lg:mr-4 ml-1"
         onClick={() => setOpen(true)}>
         <Search />
       </Button>
@@ -71,13 +71,13 @@ export function SearchCommand() {
 
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          {value ? (
+          {keyword ? (
             <>
               <CommandGroup heading="歌曲">
                 {songs.map((song) => (
                   <CommandItem
                     key={song.id}
-                    value={song.name + song.id + value}
+                    value={song.name + song.id + keyword}
                     onSelect={() => handleAddSong(song)}>
                     <Music2 className="mr-2 h-4 w-4 shrink-0" />
                     <span>
@@ -95,7 +95,7 @@ export function SearchCommand() {
                   <CommandItem
                     onSelect={() => handleRouteToSearch("albums")}
                     key={album.id}
-                    value={album.name + album.id + value}>
+                    value={album.name + album.id + keyword}>
                     <Disc2 className="mr-2 h-4 w-4" />
                     <span>
                       {album.name}
@@ -139,7 +139,4 @@ export function SearchCommand() {
       </CommandDialog>
     </>
   );
-}
-function onValueChange(search: string): void {
-  throw new Error("Function not implemented.");
 }

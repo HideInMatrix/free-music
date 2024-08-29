@@ -28,37 +28,32 @@ export default function SearchLayout({
   ];
   const searchParams = useSearchParams();
   const [pageType, setPageType] = useState("");
-  const [value, setValue] = useState("");
+  const [keyword, setKeyword] = useState("");
   useEffect(() => {
-    let _pageType = searchParams.get("page");
+    let _pageType = searchParams.get("type");
     if (_pageType) {
       setPageType(_pageType);
     }
-    let _value = searchParams.get("value");
+    let _value = searchParams.get("keyword");
     if (_value) {
-      setValue(_value);
+      setKeyword(_value);
     }
-  }, [searchParams.get("page")]);
+  }, [searchParams.get("type")]);
 
   const router = useRouter();
   const handleValueChange = (value: string) => {
     setPageType(value);
     router.push(
-      `/search?value=${searchParams.get("value") || ""}&page=${value}`
+      `/search?keyword=${searchParams.get("keyword") || ""}&type=${value}`
     );
   };
 
   return (
-    <div className="flex-auto">
-      <div className="m-2">
-        <Input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="关键字"
-          className="focus-visible:ring-0 focus-visible:ring-offset-0"
-        />
-      </div>
-      <Tabs value={pageType} className="m-2" onValueChange={handleValueChange}>
+    <div className="flex-auto h-full flex flex-col overflow-hidden">
+      <Tabs
+        value={pageType}
+        className="m-2 flex-auto flex flex-col overflow-hidden"
+        onValueChange={handleValueChange}>
         <TabsList className="grid w-full grid-cols-4">
           {triggers.map((trigger) => (
             <TabsTrigger value={trigger.value} key={trigger.value}>
@@ -67,10 +62,18 @@ export default function SearchLayout({
           ))}
         </TabsList>
 
-        <TabsContent value="songs">{songs}</TabsContent>
-        <TabsContent value="albums">{albums}</TabsContent>
-        <TabsContent value="artists">{artists}</TabsContent>
-        <TabsContent value="playlists">{playlists}</TabsContent>
+        <TabsContent className="flex-auto overflow-hidden" value="songs">
+          {songs}
+        </TabsContent>
+        <TabsContent className="flex-auto overflow-auto" value="albums">
+          {albums}
+        </TabsContent>
+        <TabsContent className="flex-auto overflow-auto" value="artists">
+          {artists}
+        </TabsContent>
+        <TabsContent className="flex-auto overflow-auto" value="playlists">
+          {playlists}
+        </TabsContent>
       </Tabs>
     </div>
   );
