@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Favicon from "@/app/favicon.ico";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import "./over-drawer.css";
@@ -40,7 +40,9 @@ export default function Header() {
           <div className="ml-2 min-w-max">音乐地带</div>
         </Link>
       </div>
-      <SearchKeyword></SearchKeyword>
+      <Suspense fallback={<div>loading</div>}>
+        <SearchKeyword></SearchKeyword>
+      </Suspense>
       <SearchCommand></SearchCommand>
     </header>
   );
