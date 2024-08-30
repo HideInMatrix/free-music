@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   SearchAlbumsProps,
+  SearchArtistProps,
   SearchSongProps,
   Song,
 } from "@/entity/interface/song";
@@ -52,13 +53,16 @@ const useFetchAlbums = (value: string, signal: AbortSignal) => {
 };
 
 const useFetchArtists = (value: string, signal: AbortSignal) => {
-  const [artists, setArtists] = useState<Song[]>([]);
+  const [artists, setArtists] = useState<SearchArtistProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchArtists(value, signal);
-        setArtists(result);
+        const { data, total } = await fetchArtists({
+          value,
+          options: { signal },
+        });
+        setArtists(data);
       } catch (error: any) {
         if (error.name !== "AbortError") {
           console.error("Failed to fetch artists", error);

@@ -1,6 +1,7 @@
 import { fetchSongsByAlbumId } from "@/apis/albums/jio-savvn";
 import { fetchSongs } from "@/apis/songs/jio-savvn";
 import { SearchSongProps } from "@/entity/interface/song";
+import { debounce } from "@/lib/utils";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
 export const fetchSongByKeyword = ({
@@ -21,7 +22,7 @@ export const fetchSongByKeyword = ({
   const [loading, setLoading] = useState(false);
 
   const loaderSongs = useCallback(
-    async ({ signal }: { signal: AbortSignal }) => {
+    debounce(async ({ signal }: { signal: AbortSignal }) => {
       if (loading || toEnd) return; // 如果正在加载，或者已经到达底部，直接返回
       setLoading(true);
 
@@ -33,13 +34,14 @@ export const fetchSongByKeyword = ({
           options: { signal: signal },
         });
         setTotal(total);
-        const mergedResult = [...result, ...data].reduce((acc, song) => {
-          if (!acc.some((s: SearchSongProps) => s.id === song.id)) {
-            acc.push(song);
-          }
-          return acc;
-        }, [] as SearchSongProps[]);
-        setResult(mergedResult);
+        setResult((preResult) =>
+          [...preResult, ...data].reduce((acc, song) => {
+            if (!acc.some((s: SearchSongProps) => s.id === song.id)) {
+              acc.push(song);
+            }
+            return acc;
+          }, [] as SearchSongProps[])
+        );
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -49,7 +51,7 @@ export const fetchSongByKeyword = ({
       } finally {
         setLoading(false);
       }
-    },
+    }, 250),
     [page, searchValue]
   );
   return { loaderSongs };
@@ -73,7 +75,7 @@ export const fetchSongByAlbumId = ({
   const [loading, setLoading] = useState(false);
 
   const loaderSongs = useCallback(
-    async ({ signal }: { signal: AbortSignal }) => {
+    debounce(async ({ signal }: { signal: AbortSignal }) => {
       if (loading || toEnd) return; // 如果正在加载，或者已经到达底部，直接返回
       setLoading(true);
 
@@ -83,13 +85,14 @@ export const fetchSongByAlbumId = ({
           options: { signal: signal },
         });
         setTotal(total);
-        const mergedResult = [...result, ...data].reduce((acc, song) => {
-          if (!acc.some((s: SearchSongProps) => s.id === song.id)) {
-            acc.push(song);
-          }
-          return acc;
-        }, [] as SearchSongProps[]);
-        setResult(mergedResult);
+        setResult((preResult) =>
+          [...preResult, ...data].reduce((acc, song) => {
+            if (!acc.some((s: SearchSongProps) => s.id === song.id)) {
+              acc.push(song);
+            }
+            return acc;
+          }, [] as SearchSongProps[])
+        );
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -99,7 +102,7 @@ export const fetchSongByAlbumId = ({
       } finally {
         setLoading(false);
       }
-    },
+    }, 250),
     [page, albumId]
   );
   return { loaderSongs };

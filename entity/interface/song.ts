@@ -35,3 +35,9 @@ export interface SearchAlbumsProps {
   playCount: number;
   year: number;
 }
+
+export interface SearchArtistProps {
+  id: string;
+  name: string;
+  image: string;
+}

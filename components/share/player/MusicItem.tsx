@@ -25,8 +25,8 @@ const MusicItem = ({ songInfo }: Props) => {
       )}>
       <div className="w-8 h-8">
         <Avatar className="w-8 h-8">
-          <AvatarImage src={songInfo.image} alt={songInfo.name} />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={songInfo.image} alt="song name" />
+          <AvatarFallback className="">{songInfo.name}</AvatarFallback>
         </Avatar>
       </div>
       <div className="overflow-hidden ml-2 flex-auto">

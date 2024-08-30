@@ -7,7 +7,6 @@ type PageProps = {
   };
 };
 export default async function DetailPage({ params }: PageProps) {
-  console.log(params.id);
   const artistsId = params.id || "0";
   const artistInfo = await fetchArtistsById(artistsId);
   return (

@@ -8,18 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SearchAlbumsProps } from "@/entity/interface/song";
+import { SearchArtistProps } from "@/entity/interface/song";
 import { debounce, throttle } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
-import { fetchAlbums } from "@/apis/albums/jio-savvn";
 import { useRouter } from "next/navigation";
+import { fetchArtists } from "@/apis/artists/jio-savvn";
+import Image from "next/image";
 
 type Props = {
   searchValue: string;
 };
 
-const AlbumsTable = ({ searchValue }: Props) => {
-  const [result, setResult] = useState<SearchAlbumsProps[]>([]);
+const ArtistsTable = ({ searchValue }: Props) => {
+  const [result, setResult] = useState<SearchArtistProps[]>([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [toEnd, setToEnd] = useState(false);
@@ -39,27 +40,27 @@ const AlbumsTable = ({ searchValue }: Props) => {
     }
   }, 250);
 
-  const loaderProfile = useCallback(
+  const loadData = useCallback(
     debounce(async ({ signal }: { signal: AbortSignal }) => {
       if (loading || toEnd) return; // 如果正在加载，或者已经到达底部，直接返回
       setLoading(true);
 
       try {
-        const { data, total } = await fetchAlbums({
+        const { data, total } = await fetchArtists({
           value: searchValue,
           page,
           limit: 20,
           options: { signal: signal },
         });
-        setTotal(total);
 
+        setTotal(total);
         setResult((preResult) =>
-          [...preResult, ...data].reduce((acc, album) => {
-            if (!acc.some((s: SearchAlbumsProps) => s.id === album.id)) {
-              acc.push(album);
+          [...preResult, ...data].reduce((acc, artist) => {
+            if (!acc.some((s: SearchArtistProps) => s.id === artist.id)) {
+              acc.push(artist);
             }
             return acc;
-          }, [] as SearchAlbumsProps[])
+          }, [] as SearchArtistProps[])
         );
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
@@ -71,7 +72,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
         setLoading(false);
       }
     }, 250),
-    [page, searchValue, toEnd]
+    [page, searchValue]
   );
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
     const { signal } = controller;
 
     // 使用新的控制器请求数据
-    loaderProfile({ signal });
+    loadData({ signal });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -97,7 +98,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loaderProfile({ signal });
+    loadData({ signal });
     // 清理：仅在组件卸载时取消请求
     return () => {
       controller.abort();
@@ -105,7 +106,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
   }, [page]);
 
   const routeToDetail = (id: string) => {
-    router.push(`/albums/${id}`);
+    router.push(`/artists/${id}`);
   };
   return (
     <div
@@ -115,23 +116,24 @@ const AlbumsTable = ({ searchValue }: Props) => {
         <TableCaption></TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="truncate max-w-40">标题</TableHead>
-            <TableHead className="text-center">歌手</TableHead>
-            <TableHead className="w-20">时间</TableHead>
+            <TableHead className="truncate">歌手</TableHead>
+            <TableHead className="w-40 text-center">头像</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {result.map((album: SearchAlbumsProps, index) => (
-            <TableRow key={index} onClick={() => routeToDetail(album.id)}>
-              <TableCell className="font-medium truncate max-w-40">
-                {album.name}
+          {result.map((artist: SearchArtistProps, index) => (
+            <TableRow key={index} onClick={() => routeToDetail(artist.id)}>
+              <TableCell className="font-medium truncate">
+                {artist.name}
               </TableCell>
-              <TableCell className="text-center">
-                {album.artists
-                  .map((item: { name: string }) => item.name)
-                  .join(",")}
+              <TableCell className="flex items-center justify-center max-w-40">
+                <Image
+                  loading="lazy"
+                  src={artist.image}
+                  alt="cover"
+                  width={40}
+                  height={40}></Image>
               </TableCell>
-              <TableCell className="truncate w-20">{album.year}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -141,4 +143,4 @@ const AlbumsTable = ({ searchValue }: Props) => {
   );
 };
 
-export default AlbumsTable;
+export default ArtistsTable;

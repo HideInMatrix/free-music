@@ -12,7 +12,7 @@ import {
 import { SearchSongProps } from "@/entity/interface/song";
 import { formatTime, throttle } from "@/lib/utils";
 import { useCallback, useEffect, useState } from "react";
-import { fetchSongs } from "@/apis/songs/jio-savvn";
+
 import { fetchSongByKeyword, fetchSongByAlbumId } from "@/hooks/fetchSongs";
 
 type Props = {
