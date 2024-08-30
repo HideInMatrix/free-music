@@ -41,3 +41,10 @@ export interface SearchArtistProps {
   name: string;
   image: string;
 }
+
+export interface SearchPlaylistProps{
+  id:string;
+  name:string;
+  image:string;
+  songCount:number;
+}

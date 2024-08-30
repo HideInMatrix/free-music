@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   SearchAlbumsProps,
   SearchArtistProps,
+  SearchPlaylistProps,
   SearchSongProps,
   Song,
 } from "@/entity/interface/song";
@@ -77,13 +78,13 @@ const useFetchArtists = (value: string, signal: AbortSignal) => {
 };
 
 const useFetchPlaylists = (value: string, signal: AbortSignal) => {
-  const [playlists, setPlaylists] = useState<Song[]>([]);
+  const [playlists, setPlaylists] = useState<SearchPlaylistProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchPlaylists(value, signal);
-        setPlaylists(result);
+        const { data } = await fetchPlaylists({ value, options: { signal } });
+        setPlaylists(data);
       } catch (error: any) {
         if (error.name !== "AbortError") {
           console.error("Failed to fetch playlists", error);

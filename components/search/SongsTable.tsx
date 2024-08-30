@@ -18,10 +18,11 @@ import {
   fetchSongByAlbumId,
   fetchSongByArtistId,
 } from "@/hooks/fetchSongs";
+import { fetchPlaylistById } from "@/hooks/fetchPlaylists";
 
 type Props = {
   searchValue: string;
-  loaderType: "search" | "detail" | "artists";
+  loaderType: "search" | "detail" | "artists" | "playlists";
 };
 
 const SongsTable = ({ searchValue, loaderType }: Props) => {
@@ -54,6 +55,16 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
   } else if (loaderType === "artists") {
     const { loaderSongs: _loaderSongs } = fetchSongByArtistId({
       artistId: searchValue,
+      page,
+      result,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderSongs = _loaderSongs;
+  } else if (loaderType === "playlists") {
+    const { loaderData: _loaderSongs } = fetchPlaylistById({
+      id: searchValue,
       page,
       result,
       setResult,
