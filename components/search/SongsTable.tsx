@@ -122,7 +122,7 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
               </TableCell>
               <TableCell className="text-center flex items-center justify-start">
                 {formatTime(song.duration)}
-                <MusicDropAction songInfo={{ ...song }} />
+                <MusicDropAction songInfo={{ ...song }} fromType="noDel" />
               </TableCell>
             </TableRow>
           ))}

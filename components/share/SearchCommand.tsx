@@ -30,19 +30,19 @@ export function SearchCommand() {
   }, 230);
 
   const handleAddSong = (song: Song) => {
-    let index = defaultSongList.findIndex(
-      (_song) => _song.id === defaultSong.id
-    );
-    let existSong = defaultSongList.some((_song) => _song.id === song.id);
-    if (index > -1 && !existSong) {
-      setSongList([
-        ...defaultSongList.slice(0, index), // 取出插入点之前的元素
-        song, // 插入的新元素
-        ...defaultSongList.slice(index), // 取出插入点之后的元素
-      ]);
-      setCurrentSong(song);
-    }
-    handleRouteToSearch("songs");
+    // let index = defaultSongList.findIndex(
+    //   (_song) => _song.id === defaultSong.id
+    // );
+    // let existSong = defaultSongList.some((_song) => _song.id === song.id);
+    // if (index > -1 && !existSong) {
+    //   setSongList([
+    //     ...defaultSongList.slice(0, index), // 取出插入点之前的元素
+    //     song, // 插入的新元素
+    //     ...defaultSongList.slice(index), // 取出插入点之后的元素
+    //   ]);
+    //   setCurrentSong(song);
+    // }
+    // handleRouteToSearch("songs");
   };
 
   const router = useRouter();

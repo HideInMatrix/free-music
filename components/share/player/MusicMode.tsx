@@ -10,6 +10,7 @@ const MusicMode = () => {
   const modes = ["order", "random", "intro", "circulation"];
   const { defaultSong, defaultSongList, setCurrentSong } = useSongStore();
   const { playMode, setPlayMode, audioRef, handleMusicStatus } = useAudio();
+  // console.log("music mode render");
 
   const getRandomSong = (defaultSongList: any[], currentIndex: number) => {
     // 过滤掉当前正在播放的歌曲

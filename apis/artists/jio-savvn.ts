@@ -1,4 +1,4 @@
-import { SearchArtistProps } from "@/entity/interface/song";
+import { SearchArtistProps, SearchSongProps } from "@/entity/interface/song";
 import { getRequest } from "@/lib/customFetch";
 const controller = new AbortController();
 const { signal } = controller;
@@ -34,7 +34,14 @@ export const fetchArtists = async ({
   return { data: [], total: 0 };
 };
 
-export const fetchArtistsById = async (id: string) => {
+export const fetchArtistsById = async (
+  id: string
+): Promise<{
+  id: string;
+  name: string;
+  image: string;
+  topSongs: SearchSongProps[];
+} | null> => {
   const response = await getRequest(`https://saavn.dev/api/artists/${id}`, {
     signal,
   });
@@ -44,7 +51,19 @@ export const fetchArtistsById = async (id: string) => {
       id: response.data.id,
       name: response.data.name,
       image: response.data.image[response.data.image.length - 1].url,
-      topSongs: response.data.topSongs,
+      topSongs: response.data.topSongs.map((song: any) => ({
+        id: song.id,
+        name: song.name,
+        artists: song.artists.all.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          image: item.image.length > 0 && item.image[item.image.length - 1].url,
+        })),
+        url: song.downloadUrl[song.downloadUrl.length - 1].url,
+        image: song.image[song.image.length - 1].url,
+        duration: song.duration,
+        album: { name: song.album.name, id: song.album.id },
+      })),
     };
   }
   return null;
