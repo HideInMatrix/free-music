@@ -35,7 +35,7 @@ const MusicItem = ({ songInfo }: Props) => {
           {songInfo.artists?.map((item) => item.name).join("-")}
         </span>
       </div>
-      <MusicDropAction songInfo={songInfo} fromType="noDel"></MusicDropAction>
+      <MusicDropAction songInfo={songInfo}></MusicDropAction>
     </div>
   );
 };

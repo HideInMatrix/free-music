@@ -15,10 +15,9 @@ import FileSaver from "file-saver";
 
 type Props = {
   songInfo: Song;
-  fromType: "hasDel" | "noDel";
 };
 
-const MusicDropAction = ({ songInfo, fromType }: Props) => {
+const MusicDropAction = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong, defaultSongList, setSongList } =
     useSongStore();
 
@@ -93,13 +92,15 @@ const MusicDropAction = ({ songInfo, fromType }: Props) => {
               播放
             </div>
           </DropdownMenuItem>
-          {fromType === "hasDel" && (
+          {defaultSongList.some((song) => song.id === songInfo.id) ? (
             <DropdownMenuItem onClick={() => updateSongListFn({ type: "del" })}>
               <div className="flex items-center">
                 <Trash strokeWidth={1} className="w-4 h-4 mr-1" />
                 删除
               </div>
             </DropdownMenuItem>
+          ) : (
+            <></>
           )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

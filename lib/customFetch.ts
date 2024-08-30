@@ -2,9 +2,9 @@
  * @Author: HideInMatrix
  * @Date: 2024-07-15
  * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-08-06
+ * @LastEditTime: 2024-08-30
  * @Description: 请求封装
- * @FilePath: /free-music/lib/customFetch.ts
+ * @FilePath: \free-music\lib\customFetch.ts
  */
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -32,7 +32,7 @@ const apiClient = <T>(method: HttpMethod) => {
 
     if (method !== "GET" && data) {
       config.body = JSON.stringify(data);
-    } else {
+    } else if (method === "GET" && data) {
       let _params = [];
       for (const [key, value] of Object.entries(data)) {
         _params.push(`${key}=${value}`);

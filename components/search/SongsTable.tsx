@@ -11,13 +11,17 @@ import {
 } from "@/components/ui/table";
 import { SearchSongProps } from "@/entity/interface/song";
 import { formatTime, throttle } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { fetchSongByKeyword, fetchSongByAlbumId } from "@/hooks/fetchSongs";
+import {
+  fetchSongByKeyword,
+  fetchSongByAlbumId,
+  fetchSongByArtistId,
+} from "@/hooks/fetchSongs";
 
 type Props = {
   searchValue: string;
-  loaderType: "search" | "detail";
+  loaderType: "search" | "detail" | "artists";
 };
 
 const SongsTable = ({ searchValue, loaderType }: Props) => {
@@ -25,6 +29,7 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
   const [page, setPage] = useState(0);
   const [toEnd, setToEnd] = useState(false);
   const [total, setTotal] = useState(0);
+
   let loaderSongs: (arg0: { signal: AbortSignal }) => void;
   if (loaderType === "search") {
     const { loaderSongs: _loaderSongs } = fetchSongByKeyword({
@@ -39,6 +44,16 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
   } else if (loaderType === "detail") {
     const { loaderSongs: _loaderSongs } = fetchSongByAlbumId({
       albumId: searchValue,
+      page,
+      result,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderSongs = _loaderSongs;
+  } else if (loaderType === "artists") {
+    const { loaderSongs: _loaderSongs } = fetchSongByArtistId({
+      artistId: searchValue,
       page,
       result,
       setResult,
@@ -86,9 +101,9 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
     const { signal } = controller;
     loaderSongs({ signal });
     // 清理：仅在组件卸载时取消请求
-    return () => {
-      controller.abort();
-    };
+    // return () => {
+    //   controller.abort();
+    // };
   }, [page]);
   return (
     <div
@@ -103,7 +118,7 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
             <TableHead className="md:table-cell hidden text-center">
               歌手
             </TableHead>
-            <TableHead className="">时长</TableHead>
+            <TableHead className="w-20">时长</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -122,13 +137,18 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
               </TableCell>
               <TableCell className="text-center flex items-center justify-start">
                 {formatTime(song.duration)}
-                <MusicDropAction songInfo={{ ...song }} fromType="noDel" />
+                <MusicDropAction songInfo={{ ...song }} />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       {toEnd ? <div className="font-semibold">下面没有数据了</div> : <></>}
+      {result.length === 0 ? (
+        <div className="font-semibold">暂无数据</div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

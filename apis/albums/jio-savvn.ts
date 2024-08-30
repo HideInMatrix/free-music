@@ -74,3 +74,40 @@ export const fetchSongsByAlbumId = async ({
   }
   return { data: [], total: 0 };
 };
+
+export const fetchAlbumsByArtistIdFn = async ({
+  id,
+  page = 0,
+  options,
+}: {
+  id: string;
+  page: number;
+  options?: { signal?: AbortSignal };
+}): Promise<{ data: SearchAlbumsProps[]; total: number }> => {
+  const response = await getRequest(
+    `https://saavn.dev/api/artists/${id}/albums`,
+    {
+      page,
+      sortBy: "alphabetical",
+    },
+    { signal: options?.signal }
+  );
+  if (response.success) {
+    return {
+      data: response.data.albums.map((album: any) => ({
+        id: album.id,
+        name: album.name,
+        artists:
+          album.artists.primary.map((artist: any) => ({
+            id: artist.id,
+            name: artist.name,
+            image: artist.image,
+          })) || [],
+        playCount: album.playCount || 0,
+        year: album.year || 1996,
+      })),
+      total: response.data.total,
+    };
+  }
+  return { total: 0, data: [] };
+};

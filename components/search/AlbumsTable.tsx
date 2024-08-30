@@ -9,22 +9,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchAlbumsProps } from "@/entity/interface/song";
-import { debounce, throttle } from "@/lib/utils";
-import { useCallback, useEffect, useState } from "react";
-import { fetchAlbums } from "@/apis/albums/jio-savvn";
+import { throttle } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  fetchAlbumsByArtistId,
+  fetchAlbumsByKeyword,
+} from "@/hooks/fetchAlbums";
 
 type Props = {
   searchValue: string;
+  loaderType: "search" | "artists";
 };
 
-const AlbumsTable = ({ searchValue }: Props) => {
+const AlbumsTable = ({ searchValue, loaderType }: Props) => {
   const [result, setResult] = useState<SearchAlbumsProps[]>([]);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [toEnd, setToEnd] = useState(false);
   const [total, setTotal] = useState(0);
 
+  let loaderData: (arg0: { signal: AbortSignal }) => void;
   const router = useRouter();
 
   const handleScroll = throttle(async (event: Event) => {
@@ -39,40 +43,27 @@ const AlbumsTable = ({ searchValue }: Props) => {
     }
   }, 250);
 
-  const loaderProfile = useCallback(
-    debounce(async ({ signal }: { signal: AbortSignal }) => {
-      if (loading || toEnd) return; // 如果正在加载，或者已经到达底部，直接返回
-      setLoading(true);
-
-      try {
-        const { data, total } = await fetchAlbums({
-          value: searchValue,
-          page,
-          limit: 20,
-          options: { signal: signal },
-        });
-        setTotal(total);
-
-        setResult((preResult) =>
-          [...preResult, ...data].reduce((acc, album) => {
-            if (!acc.some((s: SearchAlbumsProps) => s.id === album.id)) {
-              acc.push(album);
-            }
-            return acc;
-          }, [] as SearchAlbumsProps[])
-        );
-      } catch (error: unknown) {
-        if ((error as { name: string }).name === "AbortError") {
-          console.log("Request was aborted");
-        } else {
-          console.error(error);
-        }
-      } finally {
-        setLoading(false);
-      }
-    }, 250),
-    [page, searchValue, toEnd]
-  );
+  if (loaderType === "search") {
+    const { loaderData: _loaderData } = fetchAlbumsByKeyword({
+      searchValue,
+      page,
+      result,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderData = _loaderData;
+  } else if (loaderType === "artists") {
+    const { loaderData: _loaderData } = fetchAlbumsByArtistId({
+      id: searchValue,
+      page,
+      result,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderData = _loaderData;
+  }
 
   useEffect(() => {
     // 重置状态
@@ -85,7 +76,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
     const { signal } = controller;
 
     // 使用新的控制器请求数据
-    loaderProfile({ signal });
+    loaderData({ signal });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -97,11 +88,11 @@ const AlbumsTable = ({ searchValue }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loaderProfile({ signal });
+    loaderData({ signal });
     // 清理：仅在组件卸载时取消请求
-    return () => {
-      controller.abort();
-    };
+    // return () => {
+    //   controller.abort();
+    // };
   }, [page]);
 
   const routeToDetail = (id: string) => {
@@ -137,6 +128,7 @@ const AlbumsTable = ({ searchValue }: Props) => {
         </TableBody>
       </Table>
       {toEnd ? <div className="font-semibold">下面没有数据了</div> : <></>}
+      {result.length === 0 ? <div className="font-semibold">暂无数据</div>:<></>}
     </div>
   );
 };

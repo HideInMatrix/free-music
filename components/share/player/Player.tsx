@@ -18,7 +18,7 @@ const Player = (props: Props) => {
         <MusicInfo />
         <MusicPlayAction></MusicPlayAction>
 
-        <div className="flex-1 px-[6px] justify-evenly flex">
+        <div className="flex-1 px-[6px] justify-evenly flex gap-1">
           <MusicMode />
           <AudioVolume />
           <MusicList>

@@ -7,5 +7,5 @@ type PageProps = {
 export default function AlbumsPage({ searchParams }: PageProps) {
   const keyword = searchParams.keyword || "";
 
-  return <AlbumsTable searchValue={keyword}></AlbumsTable>;
+  return <AlbumsTable searchValue={keyword} loaderType="search"></AlbumsTable>;
 }
