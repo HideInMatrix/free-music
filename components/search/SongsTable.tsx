@@ -103,7 +103,7 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
             <TableHead className="md:table-cell hidden text-center">
               歌手
             </TableHead>
-            <TableHead className="w-[120px]">时长</TableHead>
+            <TableHead className="">时长</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

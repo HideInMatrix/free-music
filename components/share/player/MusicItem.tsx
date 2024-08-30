@@ -4,7 +4,6 @@ import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
 import { cn } from "@/lib/utils";
 import MusicDropAction from "./MusicDropAction";
-import { useAudio } from "./AudioProvider";
 
 type Props = {
   songInfo: Song;
@@ -26,7 +25,7 @@ const MusicItem = ({ songInfo }: Props) => {
       )}>
       <div className="w-8 h-8">
         <Avatar className="w-8 h-8">
-          <AvatarImage src={songInfo.image} alt="@shadcn" />
+          <AvatarImage src={songInfo.image} alt={songInfo.name} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>

@@ -25,7 +25,7 @@ const MusicDropAction = ({ songInfo }: Props) => {
     const index = defaultSongList.findIndex((item) => item.id === songInfo.id);
     // 如果找到了歌曲
 
-    if ((type = "del") && index > -1) {
+    if (type === "del" && index > -1) {
       // 先更新歌曲列表
       const updatedSongList = [
         ...defaultSongList.slice(0, index),
@@ -43,7 +43,7 @@ const MusicDropAction = ({ songInfo }: Props) => {
           setCurrentSong(null);
         }
       }
-    } else if ((type = "add") && index == -1) {
+    } else if (type === "add" && index == -1) {
       const updatedSongList = [
         ...defaultSongList.slice(0, index),
         songInfo,
