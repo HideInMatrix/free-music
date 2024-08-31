@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/drawer";
 import { SearchCommand } from "../SearchCommand";
 import SearchKeyword from "./SearchKeyword";
+import BackButton from "./BackButton";
 
 interface Menu {
   label: string;
@@ -40,7 +41,9 @@ export default function Header() {
           <div className="ml-2 min-w-max">音乐地带</div>
         </Link>
       </div>
-      
+      <Suspense>
+        <BackButton />
+      </Suspense>
       <Suspense fallback={<div>loading</div>}>
         <SearchKeyword></SearchKeyword>
       </Suspense>
