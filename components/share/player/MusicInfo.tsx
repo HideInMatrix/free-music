@@ -20,7 +20,7 @@ const MusicInfo = (props: Props) => {
       newMetaDescription.innerHTML = `${defaultSong.name} | 音乐地带`;
       document.head.appendChild(newMetaDescription);
     }
-  }, []); // 空数组作为依赖项，确保只在组件挂载时执行一次
+  }, [defaultSong.name]); // 空数组作为依赖项，确保只在组件挂载时执行一次
   return (
     <div className="flex overflow-hidden flex-auto">
       <div className="items-center max-w-full flex">
