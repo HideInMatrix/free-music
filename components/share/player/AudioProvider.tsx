@@ -79,7 +79,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         audioRef.current.onloadedmetadata = null;
       }
     };
-  }, [defaultSong?.url]);
+  }, [defaultSong?.url, audioRef.current]);
 
   const value = {
     audioRef,
