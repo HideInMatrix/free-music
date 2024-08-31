@@ -9,7 +9,7 @@
   "icons": [
     {
       "src": "/icons/favicon.png",
-      "sizes": "192x192",
+      "sizes": "320x320",
       "type": "image/png"
     }
   ]
