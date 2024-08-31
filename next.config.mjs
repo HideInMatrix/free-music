@@ -8,7 +8,7 @@ const rewrites = () => {
       fallback: [
         {
           source: "/saavn/:path*",
-          destination: "https://saavn.dev/api/:path*",
+          destination: `${process.env.NEXT_PUBLIC_BACK_PRE_URL}/api/:path*`,
         },
       ],
     };
