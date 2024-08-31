@@ -27,6 +27,7 @@ export default function LocaleLayout({
 }) {
   return (
     <html lang={locale}>
+      <link rel="manifest" href="/manifest.json" />
       <body
         className={cn(
           "h-dvh bg-background font-sans antialiased",

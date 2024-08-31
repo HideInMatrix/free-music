@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-
+import nextPWA from "next-pwa";
 const isProd = ["production"].includes(process.env.NODE_ENV);
 // 转发
 const rewrites = () => {
@@ -16,7 +16,14 @@ const rewrites = () => {
     return {};
   }
 };
-const nextConfig = {
+
+const withPWA = nextPWA({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development", // 开发环境中禁用 PWA
+  register: true,
+  skipWaiting: true,
+});
+const nextConfig = withPWA({
   rewrites,
   images: {
     remotePatterns: [
@@ -34,6 +41,6 @@ const nextConfig = {
       },
     ],
   },
-};
+});
 
 export default nextConfig;
