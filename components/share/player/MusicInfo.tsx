@@ -1,6 +1,7 @@
 import { useSongStore } from "@/store/useSongStore";
 import Image from "next/image";
 import { useAudio } from "./AudioProvider";
+import { useEffect } from "react";
 type Props = {};
 
 const MusicInfo = (props: Props) => {
@@ -8,6 +9,18 @@ const MusicInfo = (props: Props) => {
 
   const { defaultSong } = useSongStore();
   const { audioRef } = useAudio();
+  useEffect(() => {
+    // 动态设置title标签的内容
+    const metaDescription = document.querySelector("title");
+    if (metaDescription) {
+      metaDescription.innerHTML = `${defaultSong.name} | 音乐地带`;
+    } else {
+      // 如果title标签不存在，则创建一个新的
+      const newMetaDescription = document.createElement("title");
+      newMetaDescription.innerHTML = `${defaultSong.name} | 音乐地带`;
+      document.head.appendChild(newMetaDescription);
+    }
+  }, []); // 空数组作为依赖项，确保只在组件挂载时执行一次
   return (
     <div className="flex overflow-hidden flex-auto">
       <div className="items-center max-w-full flex">

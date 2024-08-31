@@ -18,7 +18,10 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 export const metadata = {
-  title: "音乐地带",
+  title: {
+    template: "%s|音乐地带",
+    default: "音乐地带",
+  },
   description: "一个免费听歌的地方",
   generator: "Next.js",
   manifest: "/pwa/manifest.json",
