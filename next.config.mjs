@@ -5,12 +5,12 @@ const isProd = ["production"].includes(process.env.NODE_ENV);
 const rewrites = () => {
   if (!isProd) {
     return {
-      fallback: [
-        {
-          source: "/saavn/:path*",
-          destination: `${process.env.NEXT_PUBLIC_BACK_PRE_URL}/api/:path*`,
-        },
-      ],
+      // fallback: [
+      //   {
+      //     source: "/saavn/:path*",
+      //     destination: "https://saavn.dev/api/:path*",
+      //   },
+      // ],
     };
   } else {
     return {};
