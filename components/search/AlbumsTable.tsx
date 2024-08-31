@@ -128,7 +128,11 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
         </TableBody>
       </Table>
       {toEnd ? <div className="font-semibold">下面没有数据了</div> : <></>}
-      {result.length === 0 ? <div className="font-semibold">暂无数据</div>:<></>}
+      {result.length === 0 ? (
+        <div className="font-semibold">暂无数据</div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

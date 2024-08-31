@@ -17,6 +17,18 @@ export const viewport: Viewport = {
   minimumScale: 1,
   userScalable: false,
 };
+export const metadata = {
+  title: "音乐地带",
+  description: "一个免费听歌的地方",
+  generator: "Next.js",
+  manifest: "/pwa/manifest.json",
+  keywords: ["music", "music-site"],
+  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }],
+  authors: [{ name: "David" }],
+  viewport:
+    "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
+  icons: [{ rel: "icon", url: "icons/favicon.png" }],
+};
 
 export default function LocaleLayout({
   children,
@@ -27,7 +39,7 @@ export default function LocaleLayout({
 }) {
   return (
     <html lang={locale}>
-      <link rel="manifest" href="/manifest.json" />
+      <link rel="manifest" href="/pwa/manifest.json" />
       <body
         className={cn(
           "h-dvh bg-background font-sans antialiased",

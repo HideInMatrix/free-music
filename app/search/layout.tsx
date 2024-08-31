@@ -37,7 +37,7 @@ export default function SearchLayout({
     if (_value) {
       setKeyword(_value);
     }
-  }, [searchParams.get("type")]);
+  }, [searchParams]);
 
   const router = useRouter();
   const handleValueChange = (value: string) => {
