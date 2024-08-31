@@ -1,5 +1,7 @@
 import { SearchAlbumsProps, SearchSongProps } from "@/entity/interface/song";
 import { getRequest } from "@/lib/customFetch";
+const backendURL =
+  process.env.NEXT_PUBLIC_BACKEND_PRE_URL || "https://saavn.dev";
 
 export const fetchAlbums = async ({
   value,
@@ -13,7 +15,7 @@ export const fetchAlbums = async ({
   limit?: number;
 }): Promise<{ data: SearchAlbumsProps[]; total: number }> => {
   const response = await getRequest(
-    `https://saavn.dev/api/search/albums`,
+    `${backendURL}/api/search/albums`,
     { query: value, page, limit },
     { signal: options?.signal }
   );
@@ -46,7 +48,7 @@ export const fetchSongsByAlbumId = async ({
   options?: { signal?: AbortSignal };
 }): Promise<{ data: SearchSongProps[]; total: number }> => {
   const response = await getRequest(
-    `https://saavn.dev/api/albums`,
+    `${backendURL}/api/albums`,
     {
       id,
     },
@@ -85,7 +87,7 @@ export const fetchAlbumsByArtistIdFn = async ({
   options?: { signal?: AbortSignal };
 }): Promise<{ data: SearchAlbumsProps[]; total: number }> => {
   const response = await getRequest(
-    `https://saavn.dev/api/artists/${id}/albums`,
+    `${backendURL}/api/artists/${id}/albums`,
     {
       page,
       sortBy: "alphabetical",

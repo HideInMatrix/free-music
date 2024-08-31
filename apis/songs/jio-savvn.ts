@@ -1,6 +1,7 @@
 import { SearchSongProps } from "@/entity/interface/song";
 import { getRequest } from "@/lib/customFetch";
-
+const backendURL =
+  process.env.NEXT_PUBLIC_BACKEND_PRE_URL || "https://saavn.dev";
 export const fetchSongs = async ({
   value,
   options,
@@ -13,7 +14,7 @@ export const fetchSongs = async ({
   limit?: number;
 }): Promise<{ data: SearchSongProps[]; total: number }> => {
   const response = await getRequest(
-    `https://saavn.dev/api/search/songs`,
+    `${backendURL}/api/search/songs`,
     { query: value, page, limit },
     options
   );
