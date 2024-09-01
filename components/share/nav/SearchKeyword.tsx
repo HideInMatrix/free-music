@@ -20,17 +20,23 @@ const SearchKeyword = (props: Props) => {
     replace(`${pathname}?${params.toString()}`);
   }, 250);
   return (
-    <div className="ml-2">
-      <Input
-        onChange={(e) => {
-          handleSearch(e.target.value);
-        }}
-        defaultValue={searchParams.get("keyword")?.toString()}
-        name="searchValue"
-        placeholder="关键字"
-        className="focus-visible:ring-0 focus-visible:ring-offset-0 border-white w-20"
-      />
-    </div>
+    <>
+      {pathname === "/search" ? (
+        <div className="ml-2">
+          <Input
+            onChange={(e) => {
+              handleSearch(e.target.value);
+            }}
+            defaultValue={searchParams.get("keyword")?.toString()}
+            name="searchValue"
+            placeholder="关键字"
+            className="focus-visible:ring-0 focus-visible:ring-offset-0 border-white w-20"
+          />
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
