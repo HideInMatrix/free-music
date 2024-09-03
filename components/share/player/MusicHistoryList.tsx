@@ -1,9 +1,6 @@
 import MusicListInfo from "./MusicListInfo";
 
-type Props = {};
-
-const MusicHistoryList = (props: Props) => {
-
+const MusicHistoryList = () => {
   return (
     <div className="w-full h-full">
       <MusicListInfo />

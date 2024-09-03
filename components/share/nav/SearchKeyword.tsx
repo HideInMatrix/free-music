@@ -3,9 +3,7 @@ import { Input } from "@/components/ui/input";
 import { debounce } from "@/lib/utils";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
-type Props = {};
-
-const SearchKeyword = (props: Props) => {
+const SearchKeyword = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();

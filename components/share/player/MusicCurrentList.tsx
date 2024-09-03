@@ -2,9 +2,7 @@ import MusicItem from "./MusicItem";
 import MusicListInfo from "./MusicListInfo";
 import { useSongStore } from "@/store/useSongStore";
 
-type Props = {};
-
-const MusicCurrentList = (props: Props) => {
+const MusicCurrentList = () => {
   let { defaultSongList } = useSongStore();
 
   return (

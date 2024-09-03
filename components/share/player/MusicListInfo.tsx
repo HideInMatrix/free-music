@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
-type Props = {};
 
-const MusicListInfo = (props: Props) => {
+const MusicListInfo = () => {
   return (
     <div className="flex items-center">
       <span>共8首</span>

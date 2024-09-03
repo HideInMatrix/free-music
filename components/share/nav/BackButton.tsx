@@ -4,9 +4,7 @@ import { Button } from "@/components/ui/button";
 import { UndoDot } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 
-type Props = {};
-
-const BackButton = (props: Props) => {
+const BackButton = () => {
   const router = useRouter();
   const pathname = usePathname();
   const handleRouter = () => {

@@ -2,9 +2,8 @@ import { useSongStore } from "@/store/useSongStore";
 import Image from "next/image";
 import { useAudio } from "./AudioProvider";
 import { useEffect } from "react";
-type Props = {};
 
-const MusicInfo = (props: Props) => {
+const MusicInfo = () => {
   // console.log("music info render");
 
   const { defaultSong } = useSongStore();

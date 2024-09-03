@@ -4,9 +4,8 @@ import { Volume2 } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { throttle } from "@/lib/utils";
 import { useEffect } from "react";
-type Props = {};
 
-const AudioVolume = (props: Props) => {
+const AudioVolume = () => {
   const { audioRef } = useAudio();
   const defaultVolume = 30;
   const handleValueCommit = throttle((value: number[]) => {

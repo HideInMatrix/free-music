@@ -1,12 +1,5 @@
-
-type Props = {}
-
-const Album = (props:Props) => {
-    return (
-        <div>
-            
-        </div>
-    );
+const Album = () => {
+  return <div></div>;
 };
 
 export default Album;
