@@ -1,0 +1,3 @@
+[vaul-drawer][vaul-drawer-direction=right]::after {
+    width: 0 !important;
+}

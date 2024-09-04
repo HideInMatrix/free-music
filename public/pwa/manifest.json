@@ -1,0 +1,16 @@
+{
+  "name": "音乐地带",
+  "short_name": "music-web",
+  "description": "一个免费听歌的地方",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/icons/favicon.ico",
+      "sizes": "320x320",
+      "type": "image/png"
+    }
+  ]
+}
