@@ -1,13 +1,14 @@
 "use client";
 import { Pause, Play } from "lucide-react";
 import { useAudio } from "./AudioProvider";
+import StopPropagation from "../StopPropagation";
 
 const MusicStatus = () => {
   // console.log("music status render");
   const { musicStatus, handleMusicStatus } = useAudio();
 
   return (
-    <div
+    <StopPropagation
       onClick={() => {
         handleMusicStatus(!musicStatus);
       }}>
@@ -16,7 +17,7 @@ const MusicStatus = () => {
       ) : (
         <Play strokeWidth={1} className="w-9 h-9" />
       )}
-    </div>
+    </StopPropagation>
   );
 };
 

@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { useSongStore } from "@/store/useSongStore";
-import { MapPin } from "lucide-react";
 import MusicMode from "./MusicMode";
 
 const MusicListInfo = () => {
@@ -9,10 +8,7 @@ const MusicListInfo = () => {
     <div className="flex items-center">
       <span>共{defaultSongList.length}首</span>
       <MusicMode className="md:hidden block ml-auto"></MusicMode>
-      <Button variant="ghost" size="icon" className="md:ml-auto ml-1">
-        <MapPin size={18} />
-      </Button>
-      <Button variant="ghost" size="icon" className="ml-1">
+      <Button variant="ghost" size="icon" className="ml-1 w-min">
         清空列表
       </Button>
     </div>

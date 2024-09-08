@@ -38,6 +38,15 @@ const PopularAlbums = () => {
       image:
         "https://c.saavncdn.com/070/UMG_00602458952070-Chinese-2024-20240104053447-500x500.jpg",
     },
+    {
+      id: "50878525",
+      name: "依然范特西",
+      artists: [{ name: "周杰倫", id: "2144073", image: [] }],
+      playCount: 0,
+      year: 2024,
+      image:
+        "https://c.saavncdn.com/162/UMG_00602458949162-Chinese-2024-20240104053419-500x500.jpg",
+    },
   ];
   return (
     <div className="flex flex-col my-2">

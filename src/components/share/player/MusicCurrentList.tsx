@@ -6,11 +6,13 @@ const MusicCurrentList = () => {
   let { defaultSongList } = useSongStore();
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full flex flex-col">
       <MusicListInfo />
-      {defaultSongList.map((item) => (
-        <MusicItem songInfo={item} key={item.id} />
-      ))}
+      <div className="flex-auto overflow-y-auto no-scrollbar">
+        {defaultSongList.map((item) => (
+          <MusicItem songInfo={item} key={item.id} />
+        ))}
+      </div>
     </div>
   );
 };

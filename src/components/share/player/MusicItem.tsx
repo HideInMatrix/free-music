@@ -5,6 +5,7 @@ import { useSongStore } from "@/store/useSongStore";
 import { cn } from "@/lib/utils";
 import MusicDropAction from "./MusicDropAction";
 import StopPropagation from "../StopPropagation";
+import { useEffect, useRef } from "react";
 
 type Props = {
   songInfo: Song;
@@ -12,13 +13,22 @@ type Props = {
 
 const MusicItem = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong } = useSongStore();
+  const musicItemRef = useRef(null);
   const handleClick = () => {
     if (defaultSong.id !== songInfo.id) {
       setCurrentSong(songInfo);
     }
   };
+  useEffect(() => {
+    if (defaultSong.id == songInfo.id) {
+      let musicItemDom = musicItemRef.current ? musicItemRef.current as HTMLDivElement : null
+      musicItemDom?.scrollIntoView({  
+        behavior: "smooth", // Smooth scroll
+        block: "center" // Align the item to the center})
+    })}
+  }, [musicItemRef]);
   return (
-    <>
+    <div ref={musicItemRef}>
       <StopPropagation
         onClick={handleClick}
         className={cn(
@@ -39,7 +49,7 @@ const MusicItem = ({ songInfo }: Props) => {
         </div>
         <MusicDropAction songInfo={songInfo}></MusicDropAction>
       </StopPropagation>
-    </>
+    </div>
   );
 };
 
