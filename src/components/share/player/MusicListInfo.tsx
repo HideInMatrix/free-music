@@ -8,7 +8,7 @@ const MusicListInfo = () => {
     <div className="flex items-center">
       <span>共{defaultSongList.length}首</span>
       <MusicMode className="md:hidden block ml-auto"></MusicMode>
-      <Button variant="ghost" size="icon" className="ml-1 w-min">
+      <Button variant="ghost" size="icon" className="md:ml-auto ml-1 w-min">
         清空列表
       </Button>
     </div>

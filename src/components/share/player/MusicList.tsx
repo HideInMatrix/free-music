@@ -19,19 +19,21 @@ const MusicList = ({ children }: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent className="h-full flex">
+      <SheetContent className="h-full flex flex-col">
         <SheetHeader>
           <SheetTitle></SheetTitle>
           <SheetDescription></SheetDescription>
         </SheetHeader>
-        <Tabs defaultValue="current" className="m-2 w-full flex flex-col">
+        <Tabs
+          defaultValue="current"
+          className="m-2 flex-auto flex flex-col h-0">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="current">当前歌单</TabsTrigger>
             {/* <TabsTrigger value="history">历史歌单</TabsTrigger> */}
           </TabsList>
           <TabsContent
             value="current"
-            className="focus-visible:ring-0 focus-visible:ring-offset-0 border-white overflow-y-auto flex-auto">
+            className="focus-visible:ring-0 focus-visible:ring-offset-0 border-white flex-auto h-0">
             <MusicCurrentList />
           </TabsContent>
           {/* <TabsContent value="history">
