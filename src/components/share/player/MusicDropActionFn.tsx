@@ -54,7 +54,7 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
       }
     } else if (type === "add") {
       if (defaultSong.id !== songInfo.id) {
-        console.log("action render", songInfo);
+        // console.log("action render", songInfo);
         setCurrentSong(songInfo);
       }
     }
@@ -75,10 +75,10 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
       console.error("Download failed", error);
     }
   };
-  const copyMusicName = ()=> {
-    navigator.clipboard.writeText(songInfo.name)
-  }
-  return { updateSongListFn,handleDownload,copyMusicName };
+  const copyMusicName = () => {
+    navigator.clipboard.writeText(songInfo.name);
+  };
+  return { updateSongListFn, handleDownload, copyMusicName };
 };
 
 export default MusicDropActionFn;

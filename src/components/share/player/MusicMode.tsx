@@ -56,25 +56,22 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
         let index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
-        // console.log(index, defaultSongList)
+        // console.log(index, defaultSongList);
 
         if (playMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
-            console.log("music mod 1");
             index == defaultSongList.length - 1
               ? setCurrentSong(defaultSongList[0])
               : setCurrentSong(defaultSongList[index + 1]);
           }
         } else if (playMode == AudioMode.ORDER) {
-          if (index !== -1 && index < defaultSongList.length - 1) {
-            console.log("music mod 2");
+          if (index > -1 && index < defaultSongList.length - 1) {
             setCurrentSong(defaultSongList[index + 1]);
           } else {
             handleMusicStatus(false);
           }
         } else if (playMode === AudioMode.RANDOM) {
           const randomSong = getRandomSong(defaultSongList, index);
-          console.log("music mod 3");
           setCurrentSong(randomSong);
         } else {
           handleMusicStatus(false);
@@ -87,7 +84,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
         audioRef.current.onended = null;
       }
     };
-  }, [playMode, defaultSongList, defaultSong]);
+  }, [playMode, defaultSongList, defaultSong, audioRef.current]);
 
   const actionPlayMode = () => {
     if (playMode === AudioMode.CIRCULATION) {
