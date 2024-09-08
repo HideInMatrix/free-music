@@ -4,6 +4,7 @@ import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
 import { useEffect } from "react";
 import { useSongStore } from "@/store/useSongStore";
+import StopPropagation from "../StopPropagation";
 // import { useState } from "react";
 
 const MusicMode = () => {
@@ -58,18 +59,21 @@ const MusicMode = () => {
 
         if (playMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
+            console.log("music mod 1");
             index == defaultSongList.length - 1
               ? setCurrentSong(defaultSongList[0])
               : setCurrentSong(defaultSongList[index + 1]);
           }
         } else if (playMode == AudioMode.ORDER) {
           if (index !== -1 && index < defaultSongList.length - 1) {
+            console.log("music mod 2");
             setCurrentSong(defaultSongList[index + 1]);
           } else {
             handleMusicStatus(false);
           }
         } else if (playMode === AudioMode.RANDOM) {
           const randomSong = getRandomSong(defaultSongList, index);
+          console.log("music mod 3");
           setCurrentSong(randomSong);
         } else {
           handleMusicStatus(false);
@@ -93,9 +97,11 @@ const MusicMode = () => {
   };
 
   return (
-    <div onClick={actionPlayMode} className="lg:block hidden">
-      {rendPlayMode()}
-    </div>
+    <StopPropagation>
+      <div onClick={actionPlayMode} className="lg:block hidden">
+        {rendPlayMode()}
+      </div>
+    </StopPropagation>
   );
 };
 

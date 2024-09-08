@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CloudDownload, Ellipsis, Files, Play, Trash } from "lucide-react";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
+import StopPropagation from "../StopPropagation";
 
 type Props = {
   songInfo: Song;
@@ -40,6 +41,7 @@ const MusicDropAction = ({ songInfo }: Props) => {
           // 如果还有剩余歌曲，选择下一首歌曲（如果存在），否则选择最后一首歌曲
           const nextIndex =
             index < updatedSongList.length ? index : updatedSongList.length - 1;
+          console.log("music action");
           setCurrentSong(updatedSongList[nextIndex]);
         } else {
           // 如果列表为空，清空当前播放的歌曲
@@ -87,19 +89,24 @@ const MusicDropAction = ({ songInfo }: Props) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => updateSongListFn({ type: "add" })}>
-            <div className="flex items-center">
-              <Play strokeWidth={1} className="w-4 h-4 mr-1" />
-              播放
-            </div>
-          </DropdownMenuItem>
-          {defaultSongList.some((song) => song.id === songInfo.id) ? (
-            <DropdownMenuItem onClick={() => updateSongListFn({ type: "del" })}>
+          <StopPropagation>
+            <DropdownMenuItem onClick={() => updateSongListFn({ type: "add" })}>
               <div className="flex items-center">
-                <Trash strokeWidth={1} className="w-4 h-4 mr-1" />
-                删除
+                <Play strokeWidth={1} className="w-4 h-4 mr-1" />
+                播放
               </div>
             </DropdownMenuItem>
+          </StopPropagation>
+          {defaultSongList.some((song) => song.id === songInfo.id) ? (
+            <StopPropagation>
+              <DropdownMenuItem
+                onClick={() => updateSongListFn({ type: "del" })}>
+                <div className="flex items-center">
+                  <Trash strokeWidth={1} className="w-4 h-4 mr-1" />
+                  删除
+                </div>
+              </DropdownMenuItem>
+            </StopPropagation>
           ) : (
             <></>
           )}
@@ -107,22 +114,26 @@ const MusicDropAction = ({ songInfo }: Props) => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <div
-              className="flex items-center"
-              onClick={() => navigator.clipboard.writeText(songInfo.name)}>
-              <Files strokeWidth={1} className="w-4 h-4 mr-1" />
-              复制歌名
-            </div>
+            <StopPropagation>
+              <div
+                className="flex items-center"
+                onClick={() => navigator.clipboard.writeText(songInfo.name)}>
+                <Files strokeWidth={1} className="w-4 h-4 mr-1" />
+                复制歌名
+              </div>
+            </StopPropagation>
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleDownload}>
-            <a
-              href={songInfo.url}
-              download={`${songInfo.name}.m4a`}
-              className="flex items-center">
-              <CloudDownload strokeWidth={1} className="w-4 h-4 mr-1" />
-              下载
-            </a>
-          </DropdownMenuItem>
+          <StopPropagation>
+            <DropdownMenuItem onClick={handleDownload}>
+              <a
+                href={songInfo.url}
+                download={`${songInfo.name}.m4a`}
+                className="flex items-center">
+                <CloudDownload strokeWidth={1} className="w-4 h-4 mr-1" />
+                下载
+              </a>
+            </DropdownMenuItem>
+          </StopPropagation>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
