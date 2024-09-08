@@ -2,12 +2,13 @@
 import { Heart, Menu, Shuffle, RefreshCcw } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
-import { useEffect } from "react";
+import { HTMLProps, useEffect } from "react";
 import { useSongStore } from "@/store/useSongStore";
 import StopPropagation from "../StopPropagation";
 // import { useState } from "react";
+interface MusicModeProps extends HTMLProps<HTMLDivElement> {}
 
-const MusicMode = () => {
+const MusicMode = ({ ...props }: MusicModeProps) => {
   const modes = ["order", "random", "intro", "circulation"];
   const { defaultSong, defaultSongList, setCurrentSong } = useSongStore();
   const { playMode, setPlayMode, audioRef, handleMusicStatus } = useAudio();
@@ -97,11 +98,11 @@ const MusicMode = () => {
   };
 
   return (
-    <StopPropagation>
-      <div onClick={actionPlayMode} className="lg:block hidden">
+    <>
+      <StopPropagation onClick={actionPlayMode} {...props}>
         {rendPlayMode()}
-      </div>
-    </StopPropagation>
+      </StopPropagation>
+    </>
   );
 };
 

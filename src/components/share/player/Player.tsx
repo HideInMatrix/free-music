@@ -21,7 +21,7 @@ const Player = () => {
         <MusicPlayAction></MusicPlayAction>
 
         <div className="flex-1 px-[6px] justify-evenly flex gap-1">
-          <MusicMode />
+          <MusicMode className="lg:block hidden" />
           <AudioVolume />
           <MusicList>
             <ListMusic />
