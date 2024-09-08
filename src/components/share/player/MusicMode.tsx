@@ -1,15 +1,14 @@
 "use client";
-import { Heart, Menu, Shuffle, RefreshCcw } from "lucide-react";
+import {  Menu, Shuffle, RefreshCcw } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
 import { HTMLProps, useEffect } from "react";
 import { useSongStore } from "@/store/useSongStore";
 import StopPropagation from "../StopPropagation";
-// import { useState } from "react";
+import { getNextEnumValue } from "@/lib/utils";
 interface MusicModeProps extends HTMLProps<HTMLDivElement> {}
 
 const MusicMode = ({ ...props }: MusicModeProps) => {
-  const modes = ["order", "random", "intro", "circulation"];
   const {
     defaultSong,
     defaultSongList,
@@ -44,9 +43,9 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
       case AudioMode.RANDOM:
         component = <Shuffle />;
         break;
-      case AudioMode.INTRO:
-        component = <Heart />;
-        break;
+      // case AudioMode.INTRO:
+      //   component = <Heart />;
+      //   break;
       case AudioMode.CIRCULATION:
         component = <RefreshCcw />;
         break;
@@ -96,7 +95,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     if (defaultMode === AudioMode.CIRCULATION) {
       setMusicMode(AudioMode.ORDER);
     } else {
-      setMusicMode(modes[modes.indexOf(defaultMode) + 1] as AudioMode);
+      setMusicMode(getNextEnumValue(AudioMode,defaultMode));
     }
   };
 

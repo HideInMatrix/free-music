@@ -1,10 +1,10 @@
 /*
  * @Author: HideInMatrix
  * @Date: 2024-07-16
- * @LastEditors: error: git config user.name & please set dead value or install git
- * @LastEditTime: 2024-08-28
+ * @LastEditors: HideInMatrix
+ * @LastEditTime: 2024-09-08
  * @Description: 这是一则说明
- * @FilePath: \free-music\lib\utils.ts
+ * @FilePath: /free-music-react/src/lib/utils.ts
  */
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -80,4 +80,20 @@ export const formatTime = (seconds: number): string => {
   return `${minutes.toString().padStart(2, "0")}:${secs
     .toString()
     .padStart(2, "0")}`;
+};
+
+/**
+ * @Author: HideInMatrix
+ * @description: 获取枚举类 指定值的下一个值
+ * @return {*}
+ * @Date: 2024-09-08
+ */
+export const getNextEnumValue = <T extends Record<string, string>>(
+  enumObj: T,
+  currentValue: T[keyof T]
+): T[keyof T] => {
+  const values = Object.values(enumObj) as T[keyof T][];
+  const currentIndex = values.indexOf(currentValue);
+  const nextIndex = (currentIndex + 1) % values.length;
+  return values[nextIndex];
 };
