@@ -34,6 +34,7 @@ export interface SearchAlbumsProps {
   artists: Artist[];
   playCount: number;
   year: number;
+  image:string;
 }
 
 export interface SearchArtistProps {

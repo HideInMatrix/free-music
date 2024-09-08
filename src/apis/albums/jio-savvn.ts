@@ -33,6 +33,7 @@ export const fetchAlbums = async ({
           })) || [],
         playCount: item.playCount || 0,
         year: item.year || 1996,
+        image: item.image[item.image.length - 1].url,
       })),
       total: response.data.total,
     };

@@ -13,15 +13,13 @@ type Props = {
 const MusicItem = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong } = useSongStore();
   const handleClick = () => {
-    console.log('music item');
-    
     if (defaultSong.id !== songInfo.id) {
       setCurrentSong(songInfo);
     }
   };
   return (
-    <StopPropagation>
-      <div
+    <>
+      <StopPropagation
         onClick={handleClick}
         className={cn(
           "flex px-2 items-center p-1 rounded-md",
@@ -40,8 +38,8 @@ const MusicItem = ({ songInfo }: Props) => {
           </span>
         </div>
         <MusicDropAction songInfo={songInfo}></MusicDropAction>
-      </div>
-    </StopPropagation>
+      </StopPropagation>
+    </>
   );
 };
 

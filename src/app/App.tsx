@@ -1,7 +1,13 @@
+import PopularAlbums from "@/components/main/PopularAlbums";
+import PopularRecommend from "@/components/main/PopularRecommend";
+import { Separator } from "@/components/ui/separator";
+
 function App() {
   return (
-    <div className="flex-auto flex flex-col items-center justify-center">
-      我是主页，暂时还没有想好主要展示什么内容。歌单创建的功能也暂时没有，去右上角的搜索图标，找找你喜爱的歌曲吧。
+    <div className="flex-auto flex flex-col p-6">
+      <PopularRecommend></PopularRecommend>
+      <Separator />
+      <PopularAlbums></PopularAlbums>
     </div>
   );
 }
