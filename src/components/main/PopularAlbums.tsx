@@ -53,7 +53,7 @@ const PopularAlbums = () => {
       <h1 className="font-semibold text-2xl mb-2">专辑推荐</h1>
       <div className="flex gap-4 w-full overflow-auto">
         {albums.map((item) => (
-          <PopularAlbumItem album={item}></PopularAlbumItem>
+          <PopularAlbumItem album={item} key={item.id}></PopularAlbumItem>
         ))}
       </div>
     </div>
