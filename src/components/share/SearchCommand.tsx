@@ -11,22 +11,56 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
-import { startTransition, useCallback, useState } from "react";
+import { startTransition, useCallback, useEffect, useState } from "react";
 import { debounce } from "@/lib/utils";
-import { Song } from "@/entity/interface/song";
+import {
+  SearchAlbumsProps,
+  SearchArtistProps,
+  SearchPlaylistProps,
+  SearchSongProps,
+  Song,
+} from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
 import { useNavigate } from "react-router-dom";
-import { useSearchResult } from "@/hooks/search";
+import {
+  useFetchAlbums,
+  useFetchArtists,
+  useFetchPlaylists,
+  useFetchSongs,
+} from "@/hooks/search";
 
 export function SearchCommand() {
   const [keyword, setKeyword] = useState("");
   const [open, setOpen] = useState(false);
-  const { songs, albums, artists, playlists } = useSearchResult(keyword);
+  const [songs, setSongs] = useState<SearchSongProps[]>([]);
+  const [albums, setAlbums] = useState<SearchAlbumsProps[]>([]);
+  const [artists, setArtists] = useState<SearchArtistProps[]>([]);
+  const [playlists, setPlaylists] = useState<SearchPlaylistProps[]>([]);
+
   const { defaultSongList, setSongList, defaultSong, setCurrentSong } =
     useSongStore();
   const handleChangeValue = debounce((value: string) => {
     setKeyword(value);
   }, 230);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+    Promise.all([
+      useFetchSongs(keyword, signal),
+      useFetchAlbums(keyword, signal),
+      useFetchArtists(keyword, signal),
+      useFetchPlaylists(keyword, signal),
+    ]).then((values) => {
+      setSongs(values[0]);
+      setAlbums(values[1]);
+      setArtists(values[2]);
+      setPlaylists(values[3]);
+    });
+    return () => {
+      controller.abort(); // 组件卸载时取消请求
+    };
+  }, [keyword]);
 
   const handleAddSong = (song: Song) => {
     let index = defaultSongList.findIndex(
