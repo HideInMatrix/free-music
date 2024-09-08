@@ -1,3 +1,4 @@
+import { AudioMode } from "@/entity/enum";
 import { Song } from "@/entity/interface/song";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -6,11 +7,13 @@ import { createJSONStorage, persist } from "zustand/middleware";
 export type SongState = {
   defaultSong: Song;
   defaultSongList: Song[];
+  defaultMode: AudioMode;
 };
 
 export type SongAction = {
   setCurrentSong: (newVal: Song | null) => void;
   setSongList: (newVal: Song[]) => void;
+  setMusicMode: (newVal: AudioMode) => void;
 };
 
 export type SongStore = SongAction & SongState;
@@ -60,27 +63,8 @@ export const defaultInitSong: SongState = {
         "https://c.saavncdn.com/905/Take-Me-Hands-English-2020-20200505122820-500x500.jpg",
     },
   ],
+  defaultMode: AudioMode.ORDER,
 };
-
-// export const createSongStore = (initState: SongState = defaultInitSong) => {
-//   return createStore<SongStore>()(
-//     persist(
-//       (set) => ({
-//         ...initState,
-//         setCurrentSong: (newVal) => {
-//           set((state) => ({ defaultSong: (state.defaultSong = newVal) }));
-//         },
-//         setSongList: (newVal) => {
-//           set(() => ({ defaultSongList: [...newVal] }));
-//         },
-//       }),
-//       {
-//         name: "song-info",
-//         storage: createJSONStorage(() => localStorage), // default localstorage
-//       }
-//     )
-//   );
-// };
 
 export const useSongStore = create<SongStore>()(
   persist(
@@ -88,16 +72,23 @@ export const useSongStore = create<SongStore>()(
       defaultSong: get()?.defaultSong
         ? get().defaultSong
         : defaultInitSong.defaultSong,
-      defaultSongList: get()?.defaultSongList
-        ? get().defaultSongList
-        : defaultInitSong.defaultSongList,
       setCurrentSong: (newVal: any) =>
         set((state: SongState) => ({
           defaultSong: (state.defaultSong = newVal),
         })),
+
+      defaultSongList: get()?.defaultSongList
+        ? get().defaultSongList
+        : defaultInitSong.defaultSongList,
       setSongList: (newVal: any) =>
         set((state: SongState) => ({
           defaultSongList: (state.defaultSongList = newVal),
+        })),
+
+      defaultMode: get()?.defaultMode ? get().defaultMode : AudioMode.ORDER,
+      setMusicMode: (newVal: AudioMode) =>
+        set((state: SongState) => ({
+          defaultMode: (state.defaultMode = newVal),
         })),
     }),
     {

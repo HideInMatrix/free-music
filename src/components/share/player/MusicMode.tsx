@@ -10,8 +10,14 @@ interface MusicModeProps extends HTMLProps<HTMLDivElement> {}
 
 const MusicMode = ({ ...props }: MusicModeProps) => {
   const modes = ["order", "random", "intro", "circulation"];
-  const { defaultSong, defaultSongList, setCurrentSong } = useSongStore();
-  const { playMode, setPlayMode, audioRef, handleMusicStatus } = useAudio();
+  const {
+    defaultSong,
+    defaultSongList,
+    setCurrentSong,
+    defaultMode,
+    setMusicMode,
+  } = useSongStore();
+  const { audioRef, handleMusicStatus } = useAudio();
   // console.log("music mode render");
 
   const getRandomSong = (defaultSongList: any[], currentIndex: number) => {
@@ -31,7 +37,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
   const rendPlayMode = () => {
     let component = <></>;
 
-    switch (playMode) {
+    switch (defaultMode) {
       case AudioMode.ORDER:
         component = <Menu />;
         break;
@@ -56,21 +62,21 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
         let index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
-        // console.log(index, defaultSongList);
+        // console.log("play end",index, defaultSongList, defaultSong, defaultMode);
 
-        if (playMode == AudioMode.CIRCULATION) {
+        if (defaultMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
             index == defaultSongList.length - 1
               ? setCurrentSong(defaultSongList[0])
               : setCurrentSong(defaultSongList[index + 1]);
           }
-        } else if (playMode == AudioMode.ORDER) {
+        } else if (defaultMode == AudioMode.ORDER) {
           if (index > -1 && index < defaultSongList.length - 1) {
             setCurrentSong(defaultSongList[index + 1]);
           } else {
             handleMusicStatus(false);
           }
-        } else if (playMode === AudioMode.RANDOM) {
+        } else if (defaultMode === AudioMode.RANDOM) {
           const randomSong = getRandomSong(defaultSongList, index);
           setCurrentSong(randomSong);
         } else {
@@ -84,13 +90,13 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
         audioRef.current.onended = null;
       }
     };
-  }, [playMode, defaultSongList, defaultSong, audioRef.current]);
+  }, [defaultMode, defaultSongList, defaultSong, audioRef.current]);
 
   const actionPlayMode = () => {
-    if (playMode === AudioMode.CIRCULATION) {
-      setPlayMode(AudioMode.ORDER);
+    if (defaultMode === AudioMode.CIRCULATION) {
+      setMusicMode(AudioMode.ORDER);
     } else {
-      setPlayMode(modes[modes.indexOf(playMode) + 1]);
+      setMusicMode(modes[modes.indexOf(defaultMode) + 1] as AudioMode);
     }
   };
 

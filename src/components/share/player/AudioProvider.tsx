@@ -15,8 +15,6 @@ import { throttle } from "@/lib/utils";
 
 interface AudioContextProps {
   audioRef: React.RefObject<HTMLAudioElement>;
-  playMode: string;
-  setPlayMode: Function;
   currentTime: number;
   duration: number;
   musicStatus: boolean;
@@ -40,7 +38,6 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const [playMode, setPlayMode] = useState("order"); // random intro
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [musicStatus, setMusicStatus] = useState(false);
@@ -83,8 +80,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
   const value = {
     audioRef,
-    playMode,
-    setPlayMode,
+
     currentTime,
     duration,
     musicStatus,
