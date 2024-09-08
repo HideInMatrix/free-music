@@ -11,6 +11,7 @@ const PopularAlbumItem = ({ album }: { album: SearchAlbumsProps }) => {
         alt="cover"
         width={144}
         height={144}
+        loading="lazy"
         className="object-cover rounded-sm w-36 min-w-36"
       />
       <h1 className="mt-1 truncate text-lg">{album.name}</h1>

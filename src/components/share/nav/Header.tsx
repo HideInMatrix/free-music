@@ -19,6 +19,7 @@ export default function Header() {
             alt="网站图标"
             width={28}
             height={28}
+            loading="lazy"
             className="cursor-pointer w-7 h-7 aspect-square"
           />
           <div className="ml-2 min-w-max">音乐地带</div>

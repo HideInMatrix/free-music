@@ -36,7 +36,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   // console.log("provider change");
   const { defaultSong } = useSongStore();
 
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(new Audio());
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);

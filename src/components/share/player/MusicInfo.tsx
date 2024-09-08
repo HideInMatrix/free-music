@@ -1,12 +1,12 @@
 import { useSongStore } from "@/store/useSongStore";
-import { useAudio } from "./AudioProvider";
+// import { useAudio } from "./AudioProvider";
 import { useEffect } from "react";
 
 const MusicInfo = () => {
   // console.log("music info render");
 
   const { defaultSong } = useSongStore();
-  const { audioRef } = useAudio();
+  // const { audioRef } = useAudio();
   useEffect(() => {
     // 动态设置title标签的内容
     const metaDescription = document.querySelector("title");
@@ -28,6 +28,7 @@ const MusicInfo = () => {
             alt="avatar"
             width={64}
             height={64}
+            loading="lazy"
             className="arco-avatar-image"></img>
         </div>
         <div className="overflow-hidden flex flex-col w-40">
@@ -38,7 +39,7 @@ const MusicInfo = () => {
         </div>
       </div>
       <div className="grow hidden lg:block w-0 h-0">
-        <audio className="hidden" ref={audioRef}></audio>
+        {/* <audio className="hidden" ref={audioRef}></audio> */}
       </div>
     </div>
   );
