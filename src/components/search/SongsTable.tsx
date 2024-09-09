@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { SearchSongProps } from "@/entity/interface/song";
 import { formatTime, throttle } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 import {
   fetchSongByKeyword,
@@ -33,44 +33,52 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
 
   let loaderSongs: (arg0: { signal: AbortSignal }) => void;
   if (loaderType === "search") {
-    const { loaderSongs: _loaderSongs } = fetchSongByKeyword({
-      searchValue,
-      page,
+    startTransition(() => {
+      const { loaderSongs: _loaderSongs } = fetchSongByKeyword({
+        searchValue,
+        page,
 
-      setResult,
-      toEnd,
-      setTotal,
+        setResult,
+        toEnd,
+        setTotal,
+      });
+      loaderSongs = _loaderSongs;
     });
-    loaderSongs = _loaderSongs;
   } else if (loaderType === "detail") {
-    const { loaderSongs: _loaderSongs } = fetchSongByAlbumId({
-      albumId: searchValue,
-      page,
+    startTransition(() => {
+      const { loaderSongs: _loaderSongs } = fetchSongByAlbumId({
+        albumId: searchValue,
+        page,
 
-      setResult,
-      toEnd,
-      setTotal,
+        setResult,
+        toEnd,
+        setTotal,
+      });
+      loaderSongs = _loaderSongs;
     });
-    loaderSongs = _loaderSongs;
   } else if (loaderType === "artists") {
-    const { loaderSongs: _loaderSongs } = fetchSongByArtistId({
-      artistId: searchValue,
-      page,
+    startTransition(() => {
+      const { loaderSongs: _loaderSongs } = fetchSongByArtistId({
+        artistId: searchValue,
+        page,
 
-      setResult,
-      toEnd,
-      setTotal,
+        setResult,
+        toEnd,
+        setTotal,
+      });
+      loaderSongs = _loaderSongs;
     });
-    loaderSongs = _loaderSongs;
   } else if (loaderType === "playlists") {
-    const { loaderData: _loaderSongs } = fetchPlaylistById({
-      id: searchValue,
-      page,
-      setResult,
-      toEnd,
-      setTotal,
+    startTransition(() => {
+      const { loaderData: _loaderSongs } = fetchPlaylistById({
+        id: searchValue,
+        page,
+        setResult,
+        toEnd,
+        setTotal,
+      });
+      loaderSongs = _loaderSongs;
     });
-    loaderSongs = _loaderSongs;
   }
 
   const handleScroll = throttle(async (event: Event) => {
@@ -95,9 +103,10 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-
-    // 使用新的控制器请求数据
-    loaderSongs({ signal });
+    startTransition(() => {
+      // 使用新的控制器请求数据
+      loaderSongs({ signal });
+    });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -109,11 +118,13 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loaderSongs({ signal });
+    startTransition(() => {
+      loaderSongs({ signal });
+    });
     // 清理：仅在组件卸载时取消请求
-    // return () => {
-    //   controller.abort();
-    // };
+    return () => {
+      controller.abort();
+    };
   }, [page]);
   return (
     <div

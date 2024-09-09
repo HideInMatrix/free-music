@@ -1,5 +1,5 @@
 "use client";
-import { startTransition, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 
@@ -27,10 +27,8 @@ export default function SearchLayout() {
 
   const navigate = useNavigate();
   const handleValueChange = (value: string) => {
-    startTransition(() => {
-      setPageType(value);
-      navigate(`/search/${value}?keyword=${keyword || ""}&type=${value}`);
-    });
+    setPageType(value);
+    navigate(`/search/${value}?keyword=${keyword || ""}&type=${value}`);
   };
 
   return (

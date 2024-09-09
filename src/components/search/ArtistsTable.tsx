@@ -39,7 +39,7 @@ const ArtistsTable = ({ searchValue }: Props) => {
     }
   }, 250);
 
-  const loadData = useCallback(
+  const loaderData = useCallback(
     debounce(async ({ signal }: { signal: AbortSignal }) => {
       if (loading || toEnd) return; // 如果正在加载，或者已经到达底部，直接返回
       setLoading(true);
@@ -85,7 +85,9 @@ const ArtistsTable = ({ searchValue }: Props) => {
     const { signal } = controller;
 
     // 使用新的控制器请求数据
-    loadData({ signal });
+    startTransition(() => {
+      loaderData({ signal });
+    });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -97,7 +99,9 @@ const ArtistsTable = ({ searchValue }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loadData({ signal });
+    startTransition(() => {
+      loaderData({ signal });
+    });
     // 清理：仅在组件卸载时取消请求
     return () => {
       controller.abort();
@@ -105,9 +109,7 @@ const ArtistsTable = ({ searchValue }: Props) => {
   }, [page]);
 
   const routeToDetail = (id: string) => {
-    startTransition(() => {
-      navigate(`/artists/${id}`);
-    });
+    navigate(`/artists/${id}`);
   };
   return (
     <div

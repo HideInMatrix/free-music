@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { CircleArrowLeft } from "lucide-react";
-import { startTransition } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const BackButton = () => {
@@ -10,9 +9,7 @@ const BackButton = () => {
   const { pathname } = useLocation();
   const handleRouter = () => {
     if (pathname !== "/") {
-      startTransition(() => {
-        navigate(-1);
-      });
+      navigate(-1);
     }
   };
   return (

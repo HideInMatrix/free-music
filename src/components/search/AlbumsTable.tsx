@@ -44,23 +44,27 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
   }, 250);
 
   if (loaderType === "search") {
-    const { loaderData: _loaderData } = fetchAlbumsByKeyword({
-      searchValue,
-      page,
-      setResult,
-      toEnd,
-      setTotal,
+    startTransition(() => {
+      const { loaderData: _loaderData } = fetchAlbumsByKeyword({
+        searchValue,
+        page,
+        setResult,
+        toEnd,
+        setTotal,
+      });
+      loaderData = _loaderData;
     });
-    loaderData = _loaderData;
   } else if (loaderType === "artists") {
-    const { loaderData: _loaderData } = fetchAlbumsByArtistId({
-      id: searchValue,
-      page,
-      setResult,
-      toEnd,
-      setTotal,
+    startTransition(() => {
+      const { loaderData: _loaderData } = fetchAlbumsByArtistId({
+        id: searchValue,
+        page,
+        setResult,
+        toEnd,
+        setTotal,
+      });
+      loaderData = _loaderData;
     });
-    loaderData = _loaderData;
   }
 
   useEffect(() => {
@@ -74,7 +78,10 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
     const { signal } = controller;
 
     // 使用新的控制器请求数据
-    loaderData({ signal });
+
+    startTransition(() => {
+      loaderData({ signal });
+    });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -86,17 +93,17 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loaderData({ signal });
+    startTransition(() => {
+      loaderData({ signal });
+    });
     // 清理：仅在组件卸载时取消请求
-    // return () => {
-    //   controller.abort();
-    // };
+    return () => {
+      controller.abort();
+    };
   }, [page]);
 
   const routeToDetail = (id: string) => {
-    startTransition(() => {
-      navigate(`/albums/${id}`);
-    });
+    navigate(`/albums/${id}`);
   };
   return (
     <div

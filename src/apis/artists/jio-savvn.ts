@@ -34,15 +34,19 @@ export const fetchArtists = async ({
 
 export const fetchArtistsById = async ({
   id,
+  options,
 }: {
   id: string;
+  options?: { signal?: AbortSignal };
 }): Promise<{
   id: string;
   name: string;
   image: string;
   topSongs: SearchSongProps[];
 } | null> => {
-  const response = await getRequest(`${backendURL}/api/artists/${id}`);
+  const response = await getRequest(`${backendURL}/api/artists/${id}`, {
+    signal: options?.signal,
+  });
 
   if (response.success) {
     return {

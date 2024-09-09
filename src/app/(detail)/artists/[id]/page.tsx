@@ -1,7 +1,7 @@
 import { fetchArtistsById } from "@/apis/artists/jio-savvn";
 import SongsTable from "@/components/search/SongsTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Suspense, useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AlbumsTable from "@/components/search/AlbumsTable";
 
@@ -18,9 +18,21 @@ export default function DetailPage() {
     topSongs: SearchSongProps[];
   } | null>();
   useEffect(() => {
-    fetchArtistsById({ id: artistsId }).then((result) => {
-      setArtistsInfo(result);
+    // 创建新的 AbortController
+    const controller = new AbortController();
+    const { signal } = controller;
+    startTransition(() => {
+      fetchArtistsById({ id: artistsId, options: { signal } }).then(
+        (result) => {
+          setArtistsInfo(result);
+        }
+      );
     });
+    return () => {
+      if (controller) {
+        controller.abort();
+      }
+    };
   }, []);
   return (
     <div className="flex flex-col p-2 h-full">
@@ -39,18 +51,12 @@ export default function DetailPage() {
           <TabsTrigger value="albums">专辑</TabsTrigger>
         </TabsList>
         <TabsContent value="songs" className="flex-auto min-h-0">
-          <Suspense fallback={<div>loading</div>}>
-            <SongsTable
-              searchValue={artistsId}
-              loaderType="artists"></SongsTable>
-          </Suspense>
+          <SongsTable searchValue={artistsId} loaderType="artists"></SongsTable>
         </TabsContent>
         <TabsContent value="albums" className="flex-auto min-h-0">
-          <Suspense fallback={<div>loading</div>}>
-            <AlbumsTable
-              searchValue={artistsId}
-              loaderType="artists"></AlbumsTable>
-          </Suspense>
+          <AlbumsTable
+            searchValue={artistsId}
+            loaderType="artists"></AlbumsTable>
         </TabsContent>
       </Tabs>
     </div>

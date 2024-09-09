@@ -46,16 +46,18 @@ export function SearchCommand() {
   useEffect(() => {
     const controller = new AbortController();
     const { signal } = controller;
-    Promise.all([
-      useFetchSongs(keyword, signal),
-      useFetchAlbums(keyword, signal),
-      useFetchArtists(keyword, signal),
-      useFetchPlaylists(keyword, signal),
-    ]).then((values) => {
-      setSongs(values[0]);
-      setAlbums(values[1]);
-      setArtists(values[2]);
-      setPlaylists(values[3]);
+    startTransition(() => {
+      Promise.all([
+        useFetchSongs(keyword, signal),
+        useFetchAlbums(keyword, signal),
+        useFetchArtists(keyword, signal),
+        useFetchPlaylists(keyword, signal),
+      ]).then((values) => {
+        setSongs(values[0]);
+        setAlbums(values[1]);
+        setArtists(values[2]);
+        setPlaylists(values[3]);
+      });
     });
     return () => {
       controller.abort(); // 组件卸载时取消请求
@@ -82,10 +84,8 @@ export function SearchCommand() {
 
   const handleRouteToSearch = useCallback(
     (type: string) => {
-      startTransition(() => {
-        setOpen(false);
-        navigate(`/search/${type}?keyword=${keyword}&type=${type}`);
-      });
+      setOpen(false);
+      navigate(`/search/${type}?keyword=${keyword}&type=${type}`);
     },
     [keyword]
   );

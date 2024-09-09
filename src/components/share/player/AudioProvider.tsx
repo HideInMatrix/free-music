@@ -60,7 +60,16 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
     if (audioRef.current) {
       audioRef.current.ontimeupdate = timeupdate;
-      audioRef.current.onloadedmetadata = () => {
+      // audioRef.current.onloadedmetadata = () => {
+      //   if (audioRef.current) {
+      //     setDuration(audioRef.current.duration);
+      //     if (musicStatus) {
+      //       handleMusicStatus(true);
+      //     }
+      //   }
+      // };
+      audioRef.current.oncanplaythrough = () => {
+        // 缓存可以播放的时候播放
         if (audioRef.current) {
           setDuration(audioRef.current.duration);
           if (musicStatus) {
@@ -68,12 +77,25 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       };
+
+      //音频播放时缓冲不够而暂停时触发
+      audioRef.current.onwaiting = () => {
+        console.log("涨停了");
+      };
+
+      // 处理数据获取停止的情况，重试加载
+      // audioRef.current.onstalled = () => {
+      //   console.log("数据获取停止");
+      // };
     }
 
     return () => {
       if (audioRef.current) {
         audioRef.current.ontimeupdate = null;
-        audioRef.current.onloadedmetadata = null;
+        // audioRef.current.onloadedmetadata = null;
+        audioRef.current.oncanplaythrough = null;
+        // audioRef.current.onstalled = null;
+        audioRef.current.onwaiting = null;
       }
     };
   }, [defaultSong?.url, audioRef.current]);

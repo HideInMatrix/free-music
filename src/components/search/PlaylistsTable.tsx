@@ -25,14 +25,16 @@ const PlaylistsTable = ({ searchValue }: Props) => {
   const [total, setTotal] = useState(0);
 
   let loaderData: (arg0: { signal: AbortSignal }) => void;
-  const { loaderData: _loaderData } = fetchPlaylistsByKeyword({
-    searchValue,
-    page,
-    setResult,
-    toEnd,
-    setTotal,
+  startTransition(() => {
+    const { loaderData: _loaderData } = fetchPlaylistsByKeyword({
+      searchValue,
+      page,
+      setResult,
+      toEnd,
+      setTotal,
+    });
+    loaderData = _loaderData;
   });
-  loaderData = _loaderData;
   const navigate = useNavigate();
   const handleScroll = throttle(async (event: Event) => {
     const target = event.target as HTMLDivElement; // 确保类型安全
@@ -58,7 +60,9 @@ const PlaylistsTable = ({ searchValue }: Props) => {
     const { signal } = controller;
 
     // 使用新的控制器请求数据
-    loaderData({ signal });
+    startTransition(() => {
+      loaderData({ signal });
+    });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -70,16 +74,16 @@ const PlaylistsTable = ({ searchValue }: Props) => {
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
-    loaderData({ signal });
+    startTransition(() => {
+      loaderData({ signal });
+    });
     // 清理：仅在组件卸载时取消请求
-    // return () => {
-    //   controller.abort();
-    // };
+    return () => {
+      controller.abort();
+    };
   }, [page]);
   const routeToDetail = (id: string) => {
-    startTransition(() => {
-      navigate(`/playlists/${id}`);
-    });
+    navigate(`/playlists/${id}`);
   };
   return (
     <div
