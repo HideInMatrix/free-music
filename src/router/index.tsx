@@ -44,14 +44,17 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: (
       <ErrorBoundary>
-        <div>出错了，请稍后再试。</div>
+        <div className="flex-auto flex flex-col p-6">出错了，请稍后再试。</div>
       </ErrorBoundary>
     ),
     children: [
       {
         index: true,
         element: (
-          <Suspense fallback={<div>加载中...</div>}>
+          <Suspense
+            fallback={
+              <div className="flex-auto flex flex-col p-6">加载中...</div>
+            }>
             <HomePage />
           </Suspense>
         ),
@@ -59,7 +62,10 @@ export const router = createBrowserRouter([
       {
         path: "/search",
         element: (
-          <Suspense fallback={<div>加载中...</div>}>
+          <Suspense
+            fallback={
+              <div className="flex-auto flex flex-col p-6">加载中...</div>
+            }>
             <SearchLayout />
           </Suspense>
         ),
@@ -67,7 +73,10 @@ export const router = createBrowserRouter([
           {
             path: "songs",
             element: (
-              <Suspense fallback={<div>加载中...</div>}>
+              <Suspense
+                fallback={
+                  <div className="flex-auto flex flex-col p-6">加载中...</div>
+                }>
                 <SongsPage />
               </Suspense>
             ),
@@ -75,7 +84,10 @@ export const router = createBrowserRouter([
           {
             path: "albums",
             element: (
-              <Suspense fallback={<div>加载中...</div>}>
+              <Suspense
+                fallback={
+                  <div className="flex-auto flex flex-col p-6">加载中...</div>
+                }>
                 <AlbumsPage />
               </Suspense>
             ),
@@ -83,7 +95,10 @@ export const router = createBrowserRouter([
           {
             path: "artists",
             element: (
-              <Suspense fallback={<div>加载中...</div>}>
+              <Suspense
+                fallback={
+                  <div className="flex-auto flex flex-col p-6">加载中...</div>
+                }>
                 <ArtistsPage />
               </Suspense>
             ),
@@ -91,7 +106,10 @@ export const router = createBrowserRouter([
           {
             path: "playlists",
             element: (
-              <Suspense fallback={<div>加载中...</div>}>
+              <Suspense
+                fallback={
+                  <div className="flex-auto flex flex-col p-6">加载中...</div>
+                }>
                 <PlaylistsPage />
               </Suspense>
             ),
@@ -102,7 +120,10 @@ export const router = createBrowserRouter([
         path: "/albums/:id",
         element: (
           <DetailLayout>
-            <Suspense fallback={<div>加载中...</div>}>
+            <Suspense
+              fallback={
+                <div className="flex-auto flex flex-col p-6">加载中...</div>
+              }>
               <AlbumsDetailPage />
             </Suspense>
           </DetailLayout>
@@ -112,7 +133,10 @@ export const router = createBrowserRouter([
         path: "/playlists/:id",
         element: (
           <DetailLayout>
-            <Suspense fallback={<div>加载中...</div>}>
+            <Suspense
+              fallback={
+                <div className="flex-auto flex flex-col p-6">加载中...</div>
+              }>
               <PlaylistsDetailPage />
             </Suspense>
           </DetailLayout>
@@ -122,7 +146,10 @@ export const router = createBrowserRouter([
         path: "/artists/:id",
         element: (
           <DetailLayout>
-            <Suspense fallback={<div>加载中...</div>}>
+            <Suspense
+              fallback={
+                <div className="flex-auto flex flex-col p-6">加载中...</div>
+              }>
               <ArtistsDetailPage />
             </Suspense>
           </DetailLayout>
