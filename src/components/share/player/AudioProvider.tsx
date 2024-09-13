@@ -79,9 +79,9 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       };
 
       //音频播放时缓冲不够而暂停时触发
-      audioRef.current.onwaiting = () => {
-        console.log("涨停了");
-      };
+      // audioRef.current.onwaiting = () => {
+      //   console.log("涨停了");
+      // };
 
       // 处理数据获取停止的情况，重试加载
       // audioRef.current.onstalled = () => {
@@ -95,7 +95,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         // audioRef.current.onloadedmetadata = null;
         audioRef.current.oncanplaythrough = null;
         // audioRef.current.onstalled = null;
-        audioRef.current.onwaiting = null;
+        // audioRef.current.onwaiting = null;
       }
     };
   }, [defaultSong?.url, audioRef.current]);

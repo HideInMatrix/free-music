@@ -1,5 +1,5 @@
 "use client";
-import {  Menu, Shuffle, RefreshCcw } from "lucide-react";
+import { Menu, Shuffle, RefreshCcw } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
 import { HTMLProps, useEffect } from "react";
@@ -61,7 +61,13 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
         let index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
-        // console.log("play end",index, defaultSongList, defaultSong, defaultMode);
+        console.log(
+          "play end",
+          index,
+          defaultSongList,
+          defaultSong,
+          defaultMode
+        );
 
         if (defaultMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
@@ -95,7 +101,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     if (defaultMode === AudioMode.CIRCULATION) {
       setMusicMode(AudioMode.ORDER);
     } else {
-      setMusicMode(getNextEnumValue(AudioMode,defaultMode));
+      setMusicMode(getNextEnumValue(AudioMode, defaultMode));
     }
   };
 
