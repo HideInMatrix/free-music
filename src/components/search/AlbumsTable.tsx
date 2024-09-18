@@ -9,8 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchAlbumsProps } from "@/entity/interface/song";
-import { throttle } from "@/lib/utils";
-import { startTransition, useEffect, useState } from "react";
+import { checkAndLoadMore, throttle } from "@/lib/utils";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   fetchAlbumsByArtistId,
@@ -27,6 +27,7 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
   const [page, setPage] = useState(0);
   const [toEnd, setToEnd] = useState(false);
   const [total, setTotal] = useState(0);
+  const tableContainerRef = useRef<HTMLDivElement>(null); // 添加一个 ref 用于获取容器高度
 
   let loaderData: (arg0: { signal: AbortSignal }) => void;
   const navigate = useNavigate();
@@ -82,7 +83,8 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
     startTransition(() => {
       loaderData({ signal });
     });
-
+    // 检查容器高度，自动加载更多数据
+    checkAndLoadMore({ containerRef: tableContainerRef, toEnd, setPage });
     // 清理：仅在组件卸载时取消请求
     return () => {
       controller.abort();
@@ -98,7 +100,9 @@ const AlbumsTable = ({ searchValue, loaderType }: Props) => {
     });
     // 清理：仅在组件卸载时取消请求
     return () => {
-      controller.abort();
+      if (toEnd) {
+        controller.abort();
+      }
     };
   }, [page]);
 

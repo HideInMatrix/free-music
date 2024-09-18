@@ -2,7 +2,7 @@
  * @Author: HideInMatrix
  * @Date: 2024-07-16
  * @LastEditors: HideInMatrix
- * @LastEditTime: 2024-09-08
+ * @LastEditTime: 2024-09-18
  * @Description: 这是一则说明
  * @FilePath: /free-music-react/src/lib/utils.ts
  */
@@ -96,4 +96,26 @@ export const getNextEnumValue = <T extends Record<string, string>>(
   const currentIndex = values.indexOf(currentValue);
   const nextIndex = (currentIndex + 1) % values.length;
   return values[nextIndex];
+};
+
+// 检测容器是否需要滚动，若不需要则加载更多数据
+export const checkAndLoadMore = ({
+  containerRef,
+  setPage,
+  toEnd,
+}: {
+  containerRef: React.RefObject<HTMLDivElement>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  toEnd: boolean;
+}) => {
+  const container = containerRef.current;
+  if (
+    container &&
+    container.children[0] &&
+    container.children[0].clientHeight <= container.clientHeight &&
+    !toEnd
+  ) {
+    // 如果内容高度不足以滚动，且还有数据未加载，则主动触发加载
+    setPage((prevPage) => prevPage + 1);
+  }
 };

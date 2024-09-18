@@ -10,8 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchSongProps } from "@/entity/interface/song";
-import { formatTime, throttle } from "@/lib/utils";
-import { startTransition, useEffect, useState } from "react";
+import { checkAndLoadMore, formatTime, throttle } from "@/lib/utils";
+import { startTransition, useEffect, useRef, useState } from "react";
 
 import {
   fetchSongByKeyword,
@@ -30,6 +30,7 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
   const [page, setPage] = useState(0);
   const [toEnd, setToEnd] = useState(false);
   const [total, setTotal] = useState(0);
+  const tableContainerRef = useRef<HTMLDivElement>(null); // 添加一个 ref 用于获取容器高度
 
   let loaderSongs: (arg0: { signal: AbortSignal }) => void;
   if (loaderType === "search") {
@@ -37,7 +38,6 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
       const { loaderSongs: _loaderSongs } = fetchSongByKeyword({
         searchValue,
         page,
-
         setResult,
         toEnd,
         setTotal,
@@ -49,7 +49,6 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
       const { loaderSongs: _loaderSongs } = fetchSongByAlbumId({
         albumId: searchValue,
         page,
-
         setResult,
         toEnd,
         setTotal,
@@ -61,7 +60,6 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
       const { loaderSongs: _loaderSongs } = fetchSongByArtistId({
         artistId: searchValue,
         page,
-
         setResult,
         toEnd,
         setTotal,
@@ -107,6 +105,8 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
       // 使用新的控制器请求数据
       loaderSongs({ signal });
     });
+    // 检查容器高度，自动加载更多数据
+    checkAndLoadMore({ containerRef: tableContainerRef, toEnd, setPage });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -123,14 +123,17 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
     });
     // 清理：仅在组件卸载时取消请求
     return () => {
-      controller.abort();
+      if (toEnd) {
+        controller.abort();
+      }
     };
   }, [page]);
   return (
     <div
+      ref={tableContainerRef}
       className="flex items-center flex-col h-full overflow-auto"
       onScroll={handleScroll}>
-      <Table className="">
+      <Table>
         <TableCaption></TableCaption>
         <TableHeader>
           <TableRow>

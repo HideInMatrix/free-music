@@ -9,8 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchArtistProps } from "@/entity/interface/song";
-import { debounce, throttle } from "@/lib/utils";
-import { startTransition, useCallback, useEffect, useState } from "react";
+import { checkAndLoadMore, debounce, throttle } from "@/lib/utils";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchArtists } from "@/apis/artists/jio-savvn";
 
@@ -24,8 +30,8 @@ const ArtistsTable = ({ searchValue }: Props) => {
   const [loading, setLoading] = useState(false);
   const [toEnd, setToEnd] = useState(false);
   const [total, setTotal] = useState(0);
-
   const navigate = useNavigate();
+  const tableContainerRef = useRef<HTMLDivElement>(null); // 添加一个 ref 用于获取容器高度
 
   const handleScroll = throttle(async (event: Event) => {
     const target = event.target as HTMLDivElement; // 确保类型安全
@@ -88,7 +94,8 @@ const ArtistsTable = ({ searchValue }: Props) => {
     startTransition(() => {
       loaderData({ signal });
     });
-
+    // 检查容器高度，自动加载更多数据
+    checkAndLoadMore({ containerRef: tableContainerRef, toEnd, setPage });
     // 清理：仅在组件卸载时取消请求
     return () => {
       controller.abort();
@@ -104,7 +111,9 @@ const ArtistsTable = ({ searchValue }: Props) => {
     });
     // 清理：仅在组件卸载时取消请求
     return () => {
-      controller.abort();
+      if (toEnd) {
+        controller.abort();
+      }
     };
   }, [page]);
 
