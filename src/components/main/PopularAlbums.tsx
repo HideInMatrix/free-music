@@ -48,6 +48,15 @@ const PopularAlbums = () => {
       image:
         "https://c.saavncdn.com/162/UMG_00602458949162-Chinese-2024-20240104053419-500x500.jpg",
     },
+    {
+      id: "55133403",
+      name: "Baldur's Gate 3 (Original Game Soundtrack)",
+      artists: [{ name: "Borislav Slavov", id: "1933558", image: [] }],
+      playCount: 0,
+      year: 2023,
+      image:
+        "https://c.saavncdn.com/703/Baldur-s-Gate-3-Original-Game-Soundtrack-Unknown-2023-20240611154254-150x150.jpg",
+    },
   ];
   return (
     <div className="flex flex-col my-2">
