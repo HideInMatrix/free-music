@@ -31,7 +31,7 @@ export default defineConfig({
   ],
   build: {
     reportCompressedSize: true,
-    sourcemap: true,
+    sourcemap: false,
   },
   resolve: {
     alias: {
