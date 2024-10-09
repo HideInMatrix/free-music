@@ -5,11 +5,11 @@ import { useSongStore } from "@/store/useSongStore";
 import { cn } from "@/lib/utils";
 import MusicDropAction from "./MusicDropAction";
 import StopPropagation from "../StopPropagation";
-import { useEffect, useRef } from "react";
+import { HTMLProps, useEffect, useRef } from "react";
 
 type Props = {
   songInfo: Song;
-};
+} & HTMLProps<HTMLDivElement>;
 
 const MusicItem = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong } = useSongStore();
