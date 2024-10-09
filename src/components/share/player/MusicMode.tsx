@@ -61,13 +61,6 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
         let index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
-        console.log(
-          "play end",
-          index,
-          defaultSongList,
-          defaultSong,
-          defaultMode
-        );
 
         if (defaultMode == AudioMode.CIRCULATION) {
           if (index !== -1) {
