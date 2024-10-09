@@ -21,11 +21,14 @@ const MusicItem = ({ songInfo }: Props) => {
   };
   useEffect(() => {
     if (defaultSong.id == songInfo.id) {
-      let musicItemDom = musicItemRef.current ? musicItemRef.current as HTMLDivElement : null
-      musicItemDom?.scrollIntoView({  
+      let musicItemDom = musicItemRef.current
+        ? (musicItemRef.current as HTMLDivElement)
+        : null;
+      musicItemDom?.scrollIntoView({
         behavior: "smooth", // Smooth scroll
-        block: "center" // Align the item to the center})
-    })}
+        block: "center", // Align the item to the center})
+      });
+    }
   }, [musicItemRef]);
   return (
     <div ref={musicItemRef}>
@@ -38,7 +41,9 @@ const MusicItem = ({ songInfo }: Props) => {
         <div className="w-8 h-8">
           <Avatar className="w-8 h-8">
             <AvatarImage src={songInfo.image} alt="song name" />
-            <AvatarFallback className="">{songInfo.name}</AvatarFallback>
+            <AvatarFallback className="truncate">
+              {songInfo.name}
+            </AvatarFallback>
           </Avatar>
         </div>
         <div className="overflow-hidden ml-2 flex-auto">
