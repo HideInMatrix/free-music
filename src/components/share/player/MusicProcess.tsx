@@ -1,5 +1,3 @@
-"use client";
-
 import { Slider } from "@/components/ui/slider";
 import { useAudio } from "./AudioProvider";
 import { throttle, formatTime } from "@/lib/utils";

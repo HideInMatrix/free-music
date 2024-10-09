@@ -1,4 +1,3 @@
-"use client";
 import { StepBack, StepForward } from "lucide-react";
 
 import MusicStatus from "./MusicStatus";

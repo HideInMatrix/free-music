@@ -1,4 +1,3 @@
-"use client";
 import { Input } from "@/components/ui/input";
 import { debounce } from "@/lib/utils";
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";

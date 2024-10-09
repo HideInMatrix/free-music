@@ -1,4 +1,3 @@
-"use client";
 import { Slider } from "@/components/ui/slider";
 import { Volume2 } from "lucide-react";
 import { useAudio } from "./AudioProvider";

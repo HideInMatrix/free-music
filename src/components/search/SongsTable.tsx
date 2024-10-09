@@ -1,4 +1,3 @@
-"use client";
 import MusicDropAction from "@/components/share/player/MusicDropAction";
 import {
   Table,

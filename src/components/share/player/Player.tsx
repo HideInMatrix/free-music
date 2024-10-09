@@ -1,5 +1,3 @@
-"use client";
-
 import { ListMusic } from "lucide-react";
 
 import MusicMode from "./MusicMode";

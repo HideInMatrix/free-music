@@ -1,4 +1,4 @@
-"use client";
+
 import { Menu, Shuffle, RefreshCcw } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";

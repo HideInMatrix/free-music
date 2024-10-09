@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";

@@ -1,4 +1,3 @@
-"use client";
 import { Disc2, Music2, User, ListMusic, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

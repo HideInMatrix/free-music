@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { CircleArrowLeft } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";

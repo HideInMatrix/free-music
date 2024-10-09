@@ -1,4 +1,3 @@
-"use client";
 import { Pause, Play } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import StopPropagation from "../StopPropagation";
