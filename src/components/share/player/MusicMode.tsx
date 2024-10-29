@@ -1,4 +1,3 @@
-
 import { Menu, Shuffle, RefreshCcw } from "lucide-react";
 import { useAudio } from "./AudioProvider";
 import { AudioMode } from "@/entity/enum";
@@ -38,19 +37,19 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
 
     switch (defaultMode) {
       case AudioMode.ORDER:
-        component = <Menu />;
+        component = <Menu size={22} />;
         break;
       case AudioMode.RANDOM:
-        component = <Shuffle />;
+        component = <Shuffle size={22} />;
         break;
       // case AudioMode.INTRO:
       //   component = <Heart />;
       //   break;
       case AudioMode.CIRCULATION:
-        component = <RefreshCcw />;
+        component = <RefreshCcw size={22} />;
         break;
       default:
-        component = <Menu />;
+        component = <Menu size={22} />;
         break;
     }
     return component;

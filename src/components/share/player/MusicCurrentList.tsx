@@ -20,8 +20,10 @@ const MusicCurrentList = () => {
         <ReactSortable
           list={state}
           setList={handleSetList}
+          scroll={true}
+          delayOnTouchOnly
           animation={200}
-          delay={2}>
+          delay={400}>
           {state.map((item) => (
             <MusicItem songInfo={item} key={item.id} />
           ))}
