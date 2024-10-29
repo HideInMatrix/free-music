@@ -9,8 +9,41 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      mode: "development",
+      mode: process.env ? "development" : "production",
       base: "/",
+      registerType: "autoUpdate",
+      workbox: {
+        runtimeCaching: [
+          {
+            urlPattern: /.*/, // 接口缓存 此处填你想缓存的接口正则匹配
+            handler: "CacheFirst",
+            options: {
+              cacheName: "interface-cache",
+            },
+          },
+          {
+            urlPattern: /(.*?)\.(js|css|ts)/, // js /css /ts静态资源缓存
+            handler: "CacheFirst",
+            options: {
+              cacheName: "js-css-cache",
+            },
+          },
+          {
+            urlPattern: /(.*?)\.(png|jpe?g|svg|gif|bmp|psd|tiff|tga|eps)/, // 图片缓存
+            handler: "CacheFirst",
+            options: {
+              cacheName: "image-cache",
+            },
+          },
+          {
+            urlPattern: /(.*?)\.(mp4)/, // 音乐缓存
+            handler: "CacheFirst",
+            options: {
+              cacheName: "video-cache",
+            },
+          },
+        ],
+      },
       manifest: {
         name: "音乐地带",
         short_name: "music-web",
