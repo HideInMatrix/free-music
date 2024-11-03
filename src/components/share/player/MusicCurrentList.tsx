@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MusicItem from "./MusicItem";
 import MusicListInfo from "./MusicListInfo";
 import { useSongStore } from "@/store/useSongStore";
@@ -12,6 +12,9 @@ const MusicCurrentList = () => {
     setState(value);
     setSongList(value);
   };
+  useEffect(() => {
+    setState(defaultSongList);
+  }, [defaultSongList]);
 
   return (
     <div className="h-full flex flex-col">
