@@ -20,7 +20,7 @@ const MusicItem = ({ songInfo }: Props) => {
   };
   useEffect(() => {
     if (defaultSong.id == songInfo.id) {
-      let musicItemDom = musicItemRef.current
+      const musicItemDom = musicItemRef.current
         ? (musicItemRef.current as HTMLDivElement)
         : null;
       musicItemDom?.scrollIntoView({
@@ -28,7 +28,7 @@ const MusicItem = ({ songInfo }: Props) => {
         block: "center", // Align the item to the center})
       });
     }
-  }, [musicItemRef]);
+  }, [musicItemRef, defaultSong, songInfo]);
   return (
     <div ref={musicItemRef}>
       <StopPropagation

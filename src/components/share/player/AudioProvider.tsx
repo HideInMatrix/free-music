@@ -16,12 +16,13 @@ interface AudioContextProps {
   currentTime: number;
   duration: number;
   musicStatus: boolean;
-  setMusicStatus: Function;
-  handleMusicStatus: Function;
+  setMusicStatus: React.Dispatch<React.SetStateAction<boolean>>; // 显式定义参数类型和返回类型
+  handleMusicStatus: (value: boolean) => void; // 如果没有参数且没有返回值，可以这样定义
 }
 
 const AudioContext = createContext<AudioContextProps | undefined>(undefined);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAudio = () => {
   const context = useContext(AudioContext);
   if (!context) {
@@ -42,22 +43,27 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
   const handleMusicStatus = useCallback((value: boolean) => {
     setMusicStatus(value);
-    value ? audioRef.current?.play() : audioRef.current?.pause();
+    if (value) {
+      audioRef.current?.play();
+    } else {
+      audioRef.current?.pause();
+    }
   }, []);
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.src = defaultSong.url;
+    const currentAudioRef = audioRef.current; // 将 audioRef.current 保存为一个变量
+    if (currentAudioRef) {
+      currentAudioRef.src = defaultSong.url;
     }
 
     // console.log("MusicProcess render useEffect");
     const timeupdate = throttle(() => {
-      if (audioRef.current) {
-        setCurrentTime(audioRef.current.currentTime);
+      if (currentAudioRef) {
+        setCurrentTime(currentAudioRef.currentTime);
       }
     }, 200);
 
-    if (audioRef.current) {
-      audioRef.current.ontimeupdate = timeupdate;
+    if (currentAudioRef) {
+      currentAudioRef.ontimeupdate = timeupdate;
       // audioRef.current.onloadedmetadata = () => {
       //   if (audioRef.current) {
       //     setDuration(audioRef.current.duration);
@@ -66,10 +72,10 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       //     }
       //   }
       // };
-      audioRef.current.oncanplaythrough = () => {
+      currentAudioRef.oncanplaythrough = () => {
         // 缓存可以播放的时候播放
-        if (audioRef.current) {
-          setDuration(audioRef.current.duration);
+        if (currentAudioRef) {
+          setDuration(currentAudioRef.duration);
           if (musicStatus) {
             handleMusicStatus(true);
           }
@@ -88,19 +94,18 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     }
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.ontimeupdate = null;
+      if (currentAudioRef) {
+        currentAudioRef.oncanplaythrough = null;
+        currentAudioRef.ontimeupdate = null;
         // audioRef.current.onloadedmetadata = null;
-        audioRef.current.oncanplaythrough = null;
         // audioRef.current.onstalled = null;
         // audioRef.current.onwaiting = null;
       }
     };
-  }, [defaultSong?.url, audioRef.current]);
+  }, [defaultSong?.url, musicStatus, handleMusicStatus]);
 
   const value = {
     audioRef,
-
     currentTime,
     duration,
     musicStatus,

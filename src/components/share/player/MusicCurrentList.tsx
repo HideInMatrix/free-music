@@ -5,13 +5,22 @@ import { useSongStore } from "@/store/useSongStore";
 import { ReactSortable } from "react-sortablejs";
 import { Song } from "@/entity/interface/song";
 
+/**
+ * 音乐当前列表组件
+ */
 const MusicCurrentList = () => {
-  let { defaultSongList, setSongList } = useSongStore();
+  const { defaultSongList, setSongList } = useSongStore();
   const [state, setState] = useState<Song[]>(defaultSongList);
+
+  /**
+   * 设置音乐列表
+   * @param value - 新的音乐列表
+   */
   const handleSetList = (value: Song[]) => {
     setState(value);
     setSongList(value);
   };
+
   useEffect(() => {
     setState(defaultSongList);
   }, [defaultSongList]);
