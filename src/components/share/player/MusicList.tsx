@@ -11,10 +11,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ReactNode } from "react";
 import MusicCurrentList from "./MusicCurrentList";
 // import MusicHistoryList from "./MusicHistoryList";
+// MusicList 组件，用于展示音乐列表及相关内容
 type Props = {
   children: ReactNode;
 };
 
+// MusicList 组件，接受 children 作为属性
 const MusicList = ({ children }: Props) => {
   return (
     <Sheet>

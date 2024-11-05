@@ -10,7 +10,7 @@ const MusicPlayAction = () => {
   const { setCurrentSong, defaultSong, defaultSongList } = useSongStore();
 
   const handlePreSong = () => {
-    let index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
+    const index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
     if (index > -1) {
       if (index === 0) {
         setCurrentSong(defaultSongList[defaultSongList.length - 1]);
@@ -21,7 +21,7 @@ const MusicPlayAction = () => {
   };
 
   const handleNexSong = () => {
-    let index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
+    const index = defaultSongList.findIndex((item) => item.id == defaultSong.id);
     if (index > -1) {
       if (index === defaultSongList.length - 1) {
         setCurrentSong(defaultSongList[0]);

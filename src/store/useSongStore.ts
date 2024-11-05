@@ -72,15 +72,15 @@ export const useSongStore = create<SongStore>()(
       defaultSong: get()?.defaultSong
         ? get().defaultSong
         : defaultInitSong.defaultSong,
-      setCurrentSong: (newVal: any) =>
+      setCurrentSong: (newVal: Song | null) =>
         set((state: SongState) => ({
-          defaultSong: (state.defaultSong = newVal),
+          defaultSong: (state.defaultSong = newVal as Song),
         })),
 
       defaultSongList: get()?.defaultSongList
         ? get().defaultSongList
         : defaultInitSong.defaultSongList,
-      setSongList: (newVal: any) =>
+      setSongList: (newVal: Song[]) =>
         set((state: SongState) => ({
           defaultSongList: (state.defaultSongList = newVal),
         })),

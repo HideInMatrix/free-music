@@ -5,7 +5,8 @@ import { HTMLProps, useEffect } from "react";
 import { useSongStore } from "@/store/useSongStore";
 import StopPropagation from "../StopPropagation";
 import { getNextEnumValue } from "@/lib/utils";
-interface MusicModeProps extends HTMLProps<HTMLDivElement> {}
+import { Song } from "@/entity/interface/song";
+type MusicModeProps = HTMLProps<HTMLDivElement>;
 
 const MusicMode = ({ ...props }: MusicModeProps) => {
   const {
@@ -18,7 +19,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
   const { audioRef, handleMusicStatus } = useAudio();
   // console.log("music mode render");
 
-  const getRandomSong = (defaultSongList: any[], currentIndex: number) => {
+  const getRandomSong = (defaultSongList: unknown[], currentIndex: number) => {
     // 过滤掉当前正在播放的歌曲
     const filteredList = defaultSongList.filter(
       (_, index) => index !== currentIndex
@@ -55,17 +56,18 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     return component;
   };
   useEffect(() => {
-    if (audioRef.current) {
+    const currentAudioRef = audioRef.current;
+    if (currentAudioRef) {
       audioRef.current.onended = () => {
-        let index = defaultSongList.findIndex(
+        const index = defaultSongList.findIndex(
           (item) => item.id == defaultSong.id
         );
 
         if (defaultMode == AudioMode.CIRCULATION) {
-          if (index !== -1) {
-            index == defaultSongList.length - 1
-              ? setCurrentSong(defaultSongList[0])
-              : setCurrentSong(defaultSongList[index + 1]);
+          if (index !== -1 && index == defaultSongList.length - 1) {
+            setCurrentSong(defaultSongList[0]);
+          } else {
+            setCurrentSong(defaultSongList[index + 1]);
           }
         } else if (defaultMode == AudioMode.ORDER) {
           if (index > -1 && index < defaultSongList.length - 1) {
@@ -75,7 +77,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
           }
         } else if (defaultMode === AudioMode.RANDOM) {
           const randomSong = getRandomSong(defaultSongList, index);
-          setCurrentSong(randomSong);
+          setCurrentSong(randomSong as Song);
         } else {
           handleMusicStatus(false);
         }
@@ -83,11 +85,18 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     }
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.onended = null;
+      if (currentAudioRef) {
+        currentAudioRef.onended = null;
       }
     };
-  }, [defaultMode, defaultSongList, defaultSong, audioRef.current]);
+  }, [
+    defaultMode,
+    defaultSongList,
+    defaultSong,
+    setCurrentSong,
+    handleMusicStatus,
+    audioRef,
+  ]);
 
   const actionPlayMode = () => {
     if (defaultMode === AudioMode.CIRCULATION) {

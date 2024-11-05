@@ -13,7 +13,7 @@ interface FetchOptions extends RequestInit {
 }
 
 interface ApiResponse {
-  data?: any;
+  data?: unknown;
   error?: string;
   status?: number;
   success?: boolean;
@@ -22,7 +22,7 @@ interface ApiResponse {
 const apiClient = (method: HttpMethod) => {
   return async (
     url: string,
-    data?: any,
+    data?: unknown,
     options: FetchOptions = {}
   ): Promise<ApiResponse> => {
     const config: FetchOptions = {
@@ -33,7 +33,7 @@ const apiClient = (method: HttpMethod) => {
     if (method !== "GET" && data) {
       config.body = JSON.stringify(data);
     } else if (method === "GET" && data) {
-      let _params = [];
+      const _params = [];
       for (const [key, value] of Object.entries(data)) {
         _params.push(`${key}=${value}`);
       }
