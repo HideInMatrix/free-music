@@ -31,32 +31,3 @@ export default function Header() {
     </header>
   );
 }
-
-// const ListItem = ({
-//   className,
-//   title,
-//   children,
-//   type,
-// }: {
-//   className?: string;
-//   title: string;
-//   children?: ReactNode;
-//   type?: boolean;
-// }) => (
-//   <div
-//     className={cn(
-//       "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
-//       className,
-//       {
-//         "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground":
-//           type,
-//       }
-//     )}>
-//     <div className="text-sm font-medium leading-none">{title}</div>
-//     <div className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-//       {children}
-//     </div>
-//   </div>
-// );
-
-// ListItem.displayName = "ListItem";

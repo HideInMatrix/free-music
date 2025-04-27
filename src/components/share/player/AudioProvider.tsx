@@ -64,14 +64,14 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
     if (currentAudioRef) {
       currentAudioRef.ontimeupdate = timeupdate;
-      // audioRef.current.onloadedmetadata = () => {
-      //   if (audioRef.current) {
-      //     setDuration(audioRef.current.duration);
-      //     if (musicStatus) {
-      //       handleMusicStatus(true);
-      //     }
-      //   }
-      // };
+      audioRef.current.onloadedmetadata = () => {
+        if (audioRef.current) {
+          setDuration(audioRef.current.duration);
+          if (musicStatus) {
+            handleMusicStatus(true);
+          }
+        }
+      };
       currentAudioRef.oncanplaythrough = () => {
         // 缓存可以播放的时候播放
         if (currentAudioRef) {
