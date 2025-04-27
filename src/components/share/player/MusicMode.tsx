@@ -33,6 +33,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     const randomIndex = Math.floor(Math.random() * filteredList.length);
     return filteredList[randomIndex];
   };
+  
   const rendPlayMode = () => {
     let component = <></>;
 
@@ -55,38 +56,55 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     }
     return component;
   };
+  
+  // 处理歌曲结束后的逻辑
+  const handleSongEnd = () => {
+    const index = defaultSongList.findIndex(
+      (item) => item.id == defaultSong.id
+    );
+    
+    console.log("歌曲结束，当前模式:", defaultMode, "当前索引:", index);
+
+    if (defaultMode == AudioMode.CIRCULATION) {
+      if (index !== -1 && index == defaultSongList.length - 1) {
+        setCurrentSong(defaultSongList[0]);
+      } else if (index !== -1) {
+        setCurrentSong(defaultSongList[index + 1]);
+      }
+    } else if (defaultMode == AudioMode.ORDER) {
+      if (index > -1 && index < defaultSongList.length - 1) {
+        setCurrentSong(defaultSongList[index + 1]);
+      } else {
+        handleMusicStatus(false);
+      }
+    } else if (defaultMode === AudioMode.RANDOM) {
+      const randomSong = getRandomSong(defaultSongList, index);
+      if (randomSong) {
+        setCurrentSong(randomSong as Song);
+      } else {
+        handleMusicStatus(false);
+      }
+    } else {
+      handleMusicStatus(false);
+    }
+  };
+  
   useEffect(() => {
     const currentAudioRef = audioRef.current;
     if (currentAudioRef) {
-      audioRef.current.onended = () => {
-        const index = defaultSongList.findIndex(
-          (item) => item.id == defaultSong.id
-        );
-
-        if (defaultMode == AudioMode.CIRCULATION) {
-          if (index !== -1 && index == defaultSongList.length - 1) {
-            setCurrentSong(defaultSongList[0]);
-          } else {
-            setCurrentSong(defaultSongList[index + 1]);
-          }
-        } else if (defaultMode == AudioMode.ORDER) {
-          if (index > -1 && index < defaultSongList.length - 1) {
-            setCurrentSong(defaultSongList[index + 1]);
-          } else {
-            handleMusicStatus(false);
-          }
-        } else if (defaultMode === AudioMode.RANDOM) {
-          const randomSong = getRandomSong(defaultSongList, index);
-          setCurrentSong(randomSong as Song);
-        } else {
-          handleMusicStatus(false);
-        }
+      // 使用我们提取的函数来处理歌曲结束事件
+      currentAudioRef.onended = handleSongEnd;
+      currentAudioRef.onerror = (_e) => {
+        console.error("音频加载错误:", _e);
+        // 可以在这里添加错误处理逻辑
+        handleSongEnd();
       };
     }
 
     return () => {
       if (currentAudioRef) {
         currentAudioRef.onended = null;
+        currentAudioRef.onerror = null;
       }
     };
   }, [

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate,useSearchParams,useParams } from "react-router-dom";
+import { useNavigate,useSearchParams } from "react-router-dom";
 
 
 export function SearchCommand() {
