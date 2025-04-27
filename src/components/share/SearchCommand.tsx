@@ -1,17 +1,16 @@
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-
-
-
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useSearchParams,useParams } from "react-router-dom";
 
 
 export function SearchCommand() {
-
-
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
+  const type = searchParams.get("type") || "songs";
+  const handleSearch = () => {
+    navigate(`/search/${type}?keyword=${keyword}&type=${type}`);
+  };
 
   return (
     <>
@@ -19,7 +18,7 @@ export function SearchCommand() {
         variant="ghost"
         size="icon"
         className="lg:mr-4 ml-1"
-        onClick={() => navigate('/search/songs?keyword=&type=songs')}>
+        onClick={handleSearch}>
         <Search />
       </Button>
 
