@@ -19,14 +19,15 @@ export const fetchArtists = async ({
   );
 
   if (response.success) {
+    const results = response.data as {results:SearchArtistProps[];total:number}
     return {
-      data: response.data.results.map((item: any) => ({
+      data: results.results.map((item: any) => ({
         id: item.id,
         name: item.name,
         image: item.image[item.image.length - 1].url,
         url: "",
       })),
-      total: response.data.total,
+      total: results.total,
     };
   }
   return { data: [], total: 0 };
@@ -49,11 +50,12 @@ export const fetchArtistsById = async ({
   });
 
   if (response.success) {
+    const results = response.data as {id:string,name:string,image:{url:string}[],topSongs:SearchSongProps[]}
     return {
-      id: response.data.id,
-      name: response.data.name,
-      image: response.data.image[response.data.image.length - 1].url,
-      topSongs: response.data.topSongs.map((song: any) => ({
+      id: results.id,
+      name: results.name,
+      image: results.image[results.image.length - 1].url,
+      topSongs: results.topSongs.map((song: any) => ({
         id: song.id,
         name: song.name,
         artists: song.artists.all.map((item: any) => ({
@@ -90,8 +92,9 @@ export const fetchSongsByArtists = async ({
   );
 
   if (response.success) {
+    const results = response.data as {songs:SearchSongProps[];total:number}
     return {
-      data: response.data.songs.map((song: any) => ({
+      data: results.songs.map((song: any) => ({
         id: song.id,
         name: song.name,
         artists: song.artists.all.map((item: any) => ({
@@ -104,7 +107,7 @@ export const fetchSongsByArtists = async ({
         duration: song.duration,
         album: { name: song.album.name, id: song.album.id },
       })),
-      total: response.data.total,
+      total: results.total,
     };
   }
   return { data: [], total: 0 };

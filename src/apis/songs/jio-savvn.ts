@@ -18,8 +18,9 @@ export const fetchSongs = async ({
     options
   );
   if (response.success) {
+    const results = response.data as { results: SearchSongProps[]; total: number };
     return {
-      data: response.data.results.map((item: any) => ({
+      data: results.results.map((item: any) => ({
         id: item.id,
         name: item.name,
         artists:
@@ -33,7 +34,7 @@ export const fetchSongs = async ({
         url: item.downloadUrl[item.downloadUrl.length - 1].url,
         image: item.image[item.image.length - 1].url,
       })),
-      total: response.data.total,
+      total: results.total,
     };
   }
   return { data: [], total: 0 };

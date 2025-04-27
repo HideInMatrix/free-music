@@ -21,8 +21,9 @@ export const fetchAlbums = async ({
   );
 
   if (response.success) {
+    const result = response.data as {results:any[],total:number}
     return {
-      data: response.data.results.map((item: any) => ({
+      data: result.results.map((item: any) => ({
         id: item.id,
         name: item.name,
         artists:
@@ -35,7 +36,7 @@ export const fetchAlbums = async ({
         year: item.year || 1996,
         image: item.image[item.image.length - 1].url,
       })),
-      total: response.data.total,
+      total: result.total,
     };
   }
   return { data: [], total: 0 };
@@ -56,7 +57,8 @@ export const fetchSongsByAlbumId = async ({
     { signal: options?.signal }
   );
   if (response.success) {
-    let data = response.data.songs.map((item: any) => ({
+    const result = response.data as {songs:any[],songCount:number}
+    let data = result.songs.map((item: any) => ({
       id: item.id,
       name: item.name,
       artists:
@@ -72,7 +74,7 @@ export const fetchSongsByAlbumId = async ({
     }));
     return {
       data,
-      total: response.data.songCount,
+      total: result.songCount,
     };
   }
   return { data: [], total: 0 };
@@ -96,8 +98,9 @@ export const fetchAlbumsByArtistIdFn = async ({
     { signal: options?.signal }
   );
   if (response.success) {
+    const result = response.data as {albums:any[],total:number}
     return {
-      data: response.data.albums.map((album: any) => ({
+      data: result.albums.map((album: any) => ({
         id: album.id,
         name: album.name,
         artists:
@@ -108,8 +111,9 @@ export const fetchAlbumsByArtistIdFn = async ({
           })) || [],
         playCount: album.playCount || 0,
         year: album.year || 1996,
+        image:''
       })),
-      total: response.data.total,
+      total: result.total,
     };
   }
   return { total: 0, data: [] };

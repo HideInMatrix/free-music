@@ -19,7 +19,7 @@ export function SearchCommand() {
         variant="ghost"
         size="icon"
         className="lg:mr-4 ml-1"
-        onClick={() => navigate('/search')}>
+        onClick={() => navigate('/search/songs?keyword=&type=songs')}>
         <Search />
       </Button>
 
