@@ -56,7 +56,21 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const currentAudioRef = audioRef.current; // 将 audioRef.current 保存为一个变量
     if (currentAudioRef) {
+      // 在设置src前先暂停并重置
+      currentAudioRef.pause();
+      currentAudioRef.currentTime = 0;
+      
+      // 设置跨域属性，解决某些iOS跨域问题
+      currentAudioRef.crossOrigin = "anonymous";
+      
+      // 设置预加载模式为metadata，减少iOS上的加载问题
+      currentAudioRef.preload = "metadata";
+      
+      // 然后设置新的源
       currentAudioRef.src = defaultSong.url;
+      
+      // iOS上需要手动触发加载
+      currentAudioRef.load();
     }
 
     // console.log("MusicProcess render useEffect");
@@ -109,10 +123,10 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       };
 
       // 添加错误处理
-      // currentAudioRef.onerror = (_e) => {
-      //   console.error("音频加载错误:", _e);
-      //   // 可以在这里添加错误处理逻辑
-      // };
+      currentAudioRef.onerror = (_e) => {
+        console.error("音频加载错误:", _e);
+        // 可以在这里添加错误处理逻辑
+      };
 
       //音频播放时缓冲不够而暂停时触发
       currentAudioRef.onwaiting = () => {

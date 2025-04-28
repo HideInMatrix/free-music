@@ -1,40 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>音乐地带</title>
-    <meta name="description" content="一个免费听歌的地方" />
-    <meta name="generator" content="React" />
-    <meta name="keywords" content="music, music-site" />
-    <meta
-      name="theme-color"
-      content="#fff"
-      media="(prefers-color-scheme: dark)" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1.0, minimum-scale=1.0" />
 
-    <link rel="manifest" href="/pwa/manifest.json" />
-    <link rel="icon" href="/icons/favicon.png" />
-    <meta name="author" content="David" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>音乐地带</title>
+  <meta name="description" content="一个免费听歌的地方" />
+  <meta name="generator" content="React" />
+  <meta name="keywords" content="music, music-site" />
+  <meta name="theme-color" content="#fff" media="(prefers-color-scheme: dark)" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no,maximum-scale=1.0, minimum-scale=1.0" />
 
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-TTRQ51JT6Q"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
+  <link rel="manifest" href="/pwa/manifest.json" />
+  <link rel="icon" href="/icons/favicon.png" />
+  <meta name="author" content="David" />
 
-      gtag("config", "G-TTRQ51JT6Q");
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <!-- iOS 音频播放优化 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <script>
+    // iOS 音频播放解锁
+    window.addEventListener('touchstart', function () {
+      // 创建一个空的音频上下文并关闭它，解锁音频播放
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      audioContext.resume().then(() => {
+        audioContext.close();
+      });
+    }, { once: true });
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTRQ51JT6Q"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-TTRQ51JT6Q");
+  </script>
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
