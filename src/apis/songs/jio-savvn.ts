@@ -39,3 +39,28 @@ export const fetchSongs = async ({
   }
   return { data: [], total: 0 };
 };
+
+export const fetchSongById = async ({id}: {id:string}) => {
+  const response = await getRequest(`${backendURL}/api/songs/${id}`);
+  if (response.success) {
+    const results = response.data as SearchSongProps[];
+
+    return {
+      data: results.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        artists:
+          item.artists?.primary.map((song: any) => ({
+            id: song.id,
+            name: song.name,
+            image: song.image,
+          })) || [],
+        duration: item.duration,
+        album: item.album,
+        url: item.downloadUrl[item.downloadUrl.length - 1].url,
+        image: item.image[item.image.length - 1].url,
+      }))
+    }
+  }
+  return null;
+}

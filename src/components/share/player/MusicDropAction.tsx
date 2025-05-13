@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CloudDownload, Ellipsis, Files, Play, Trash } from "lucide-react";
+import { CloudDownload, Ellipsis, ExternalLink, Files, Play, Trash } from "lucide-react";
 import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
 import StopPropagation from "../StopPropagation";
@@ -19,7 +19,7 @@ type Props = {
 
 const MusicDropAction = ({ songInfo }: Props) => {
   const { defaultSongList } = useSongStore();
-  const { updateSongListFn, handleDownload, copyMusicName } = MusicDropActionFn(
+  const { updateSongListFn, handleDownload, copyMusicName,shareSong } = MusicDropActionFn(
     { songInfo }
   );
 
@@ -74,6 +74,15 @@ const MusicDropAction = ({ songInfo }: Props) => {
             </DropdownMenuItem>
           </StopPropagation>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <StopPropagation>
+            <DropdownMenuItem onClick={shareSong}>
+              <div className="flex items-center">
+                <ExternalLink strokeWidth={1} className="w-4 h-4 mr-1" />
+                分享歌曲
+              </div>
+            </DropdownMenuItem>
+          </StopPropagation> 
       </DropdownMenuContent>
     </DropdownMenu>
   );

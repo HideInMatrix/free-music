@@ -11,6 +11,7 @@ const SongsPage = lazy(() => import("@/app/search/@songs/page"));
 const AlbumsPage = lazy(() => import("@/app/search/@albums/page"));
 const ArtistsPage = lazy(() => import("@/app/search/@artists/page"));
 const PlaylistsPage = lazy(() => import("@/app/search/@playlists/page"));
+const ShareSongPage = lazy(() => import("@/app/(share)/song/[id]/page")); // 新增 ShareSon
 
 const AlbumsDetailPage = lazy(() => import("@/app/(detail)/albums/[id]/page"));
 const PlaylistsDetailPage = lazy(
@@ -155,6 +156,17 @@ export const router = createBrowserRouter([
           </DetailLayout>
         ),
       },
+      {
+        path: "share/song/:id",
+        element: (
+          <Suspense
+            fallback={
+              <div className="flex-auto flex flex-col p-6">加载中...</div>
+            }>
+            <ShareSongPage />
+          </Suspense>
+        ),
+      }
     ],
   },
 ]);
