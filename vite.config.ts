@@ -16,14 +16,14 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: /.*/, // 接口缓存 此处填你想缓存的接口正则匹配
-            handler: "CacheFirst",
+            handler: "NetworkFirst",
             options: {
               cacheName: "interface-cache",
             },
           },
           {
             urlPattern: /(.*?)\.(js|css|ts)/, // js /css /ts静态资源缓存
-            handler: "CacheFirst",
+            handler: "NetworkFirst",
             options: {
               cacheName: "js-css-cache",
             },
