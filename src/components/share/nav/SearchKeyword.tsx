@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { debounce } from "@/lib/utils";
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -15,7 +14,7 @@ const SearchKeyword = () => {
     setInputValue(searchParams.get("keyword") || "");
   }, [searchParams]);
 
-  const handleSearch = debounce((value: string) => {
+  const handleSearch = (value: string) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
       params.set("keyword", value);
@@ -23,7 +22,7 @@ const SearchKeyword = () => {
       params.delete("keyword");
     }
     navigate(`${pathname}?${params.toString()}`);
-  }, 250);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

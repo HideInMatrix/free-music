@@ -86,7 +86,8 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
     })
   };
   const shareSong = () => {
-    navigator.clipboard.writeText(location.href);
+    const shareUrl = `${location.origin}/share/song/${songInfo.id}`;
+    navigator.clipboard.writeText(shareUrl);
     toast({
       title: "分享成功",
       description: "歌曲链接已复制到剪贴板",
