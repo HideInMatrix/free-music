@@ -1,11 +1,13 @@
 import { useSongStore } from "@/store/useSongStore";
 // import { useAudio } from "./AudioProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {motion} from "motion/react"
 
 const MusicInfo = () => {
   // console.log("music info render");
 
   const { defaultSong } = useSongStore();
+  const [showAnimation, setShowAnimation] = useState(false);
   // const { audioRef } = useAudio();
   useEffect(() => {
     // 动态设置title标签的内容
@@ -23,13 +25,16 @@ const MusicInfo = () => {
     <div className="flex overflow-hidden flex-auto">
       <div className="items-center max-w-full flex">
         <div className="arco-avatar arco-avatar-square arco-avatar-with-trigger-icon w-16 h-16 rounded-lg mr-4 flex-shrink-0">
-          <img
+          <motion.img
             src={defaultSong.image}
             alt="avatar"
             width={64}
             height={64}
             loading="lazy"
-            className="arco-avatar-image"></img>
+            onClick={() => setShowAnimation(!showAnimation)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="arco-avatar-image"></motion.img>
         </div>
         <div className="overflow-hidden flex flex-col w-40">
           <div className="font-bold text-base truncate">{defaultSong.name}</div>

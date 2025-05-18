@@ -1,6 +1,6 @@
 import { Song } from "@/entity/interface/song";
-import { useToast } from "@/hooks/use-toast";
 import { useSongStore } from "@/store/useSongStore";
+import { useCopyToClipboard } from "@/utils/clipboard";
 
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 const MusicDropActionFn = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong, defaultSongList, setSongList } =
     useSongStore();
-    const { toast } = useToast()
+  const { copy } = useCopyToClipboard()
   const updateSongListFn = ({ type }: { type: "add" | "del" }) => {
     const index = defaultSongList.findIndex((item) => item.id === songInfo.id);
     // 如果找到了歌曲
@@ -79,19 +79,17 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
     }
   };
   const copyMusicName = () => {
-    navigator.clipboard.writeText(songInfo.name);
-    toast({
-      title: "复制成功",
-      description: "歌曲名称已复制到剪贴板",
-    })
+    copy(songInfo.name, {
+      successTitle: "复制成功",
+      successDescription: "歌曲名称已复制到剪贴板"
+    });
   };
   const shareSong = () => {
     const shareUrl = `${location.origin}/share/song/${songInfo.id}`;
-    navigator.clipboard.writeText(shareUrl);
-    toast({
-      title: "分享成功",
-      description: "歌曲链接已复制到剪贴板",
-    })
+    copy(shareUrl, {
+      successTitle: "分享成功",
+      successDescription: "歌曲链接已复制到剪贴板"
+    });
   }
   return { updateSongListFn, handleDownload, copyMusicName, shareSong };
 };

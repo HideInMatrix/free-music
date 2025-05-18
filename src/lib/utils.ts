@@ -28,6 +28,31 @@ export const isBrowser = typeof window !== "undefined";
 
 /**
  * @Author: HideInMatrix
+ * @description: 判断当前环境是PC还是移动端
+ * @return {boolean} true为移动端，false为PC端
+ * @Date: 2024-09-18
+ */
+export const isMobile = (): boolean => {
+  if (!isBrowser) return false;
+  
+  const userAgent = window.navigator.userAgent.toLowerCase();
+  const mobileKeywords = [
+    "android",
+    "iphone",
+    "ipod",
+    "ipad",
+    "windows phone",
+    "blackberry",
+    "opera mini",
+    "mobile",
+    "mobi"
+  ];
+  
+  return mobileKeywords.some(keyword => userAgent.includes(keyword));
+};
+
+/**
+ * @Author: HideInMatrix
  * @description: 节流函数
  * @param {Function} fn
  * @param {number} wait

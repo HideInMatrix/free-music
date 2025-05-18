@@ -12,6 +12,8 @@ import { Song } from "@/entity/interface/song";
 import { useSongStore } from "@/store/useSongStore";
 import StopPropagation from "../StopPropagation";
 import MusicDropActionFn from "@/components/share/player/MusicDropActionFn";
+import MusicSharePanel from "./MusicSharePanel";
+import { useState } from "react";
 
 type Props = {
   songInfo: Song;
@@ -19,11 +21,17 @@ type Props = {
 
 const MusicDropAction = ({ songInfo }: Props) => {
   const { defaultSongList } = useSongStore();
-  const { updateSongListFn, handleDownload, copyMusicName,shareSong } = MusicDropActionFn(
+  const { updateSongListFn, handleDownload, copyMusicName } = MusicDropActionFn(
     { songInfo }
   );
+  const [isShareOpen, setIsShareOpen] = useState(false);
+
+  const handleShareClick = () => {
+    setIsShareOpen(true);
+  };
 
   return (
+    <>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
@@ -76,7 +84,7 @@ const MusicDropAction = ({ songInfo }: Props) => {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <StopPropagation>
-            <DropdownMenuItem onClick={shareSong}>
+            <DropdownMenuItem onClick={handleShareClick}>
               <div className="flex items-center">
                 <ExternalLink strokeWidth={1} className="w-4 h-4 mr-1" />
                 分享歌曲
@@ -85,6 +93,13 @@ const MusicDropAction = ({ songInfo }: Props) => {
           </StopPropagation> 
       </DropdownMenuContent>
     </DropdownMenu>
+    
+    <MusicSharePanel 
+      isOpen={isShareOpen} 
+      onOpenChange={setIsShareOpen} 
+      songInfo={songInfo} 
+    />
+    </>
   );
 };
 
