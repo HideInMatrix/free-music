@@ -52,9 +52,8 @@ export default function MusicSharePanel({ isOpen, onOpenChange, songInfo }: Musi
   
   const shareToQQ = () => {
     if (isMobileDevice) {
-      // QQ分享链接格式
-      const qqShareUrl = `mqqapi://share/to_fri?src_type=web&version=1&file_type=news&title=${encodeURIComponent(songInfo?.name || '分享歌曲')}&url=${encodeURIComponent(shareUrl)}`;
-      copyShareUrl();
+      // QQ分享链接格式 - 更新参数确保内容显示在聊天记录中
+      const qqShareUrl = `mqqapi://share/to_fri?src_type=web&version=1&file_type=news&title=${encodeURIComponent(songInfo?.name || '分享歌曲')}&desc=${encodeURIComponent(`来自自由音乐的分享，点击收听：${songInfo?.name}`)}&url=${encodeURIComponent(shareUrl)}&image_url=${encodeURIComponent(songInfo?.image || '')}&app_name=${encodeURIComponent('自由音乐')}`;
       window.location.href = qqShareUrl;
     }
   };
