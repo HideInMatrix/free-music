@@ -9,7 +9,6 @@ import {
 } from "react";
 
 import { useSongStore } from "@/store/useSongStore";
-import { throttle } from "@/lib/utils";
 
 interface AudioContextProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -42,7 +41,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const [musicStatus, setMusicStatus] = useState(false);
 
   const handleMusicStatus = useCallback((value: boolean) => {
-    setMusicStatus(value);
+    setMusicStatus(value);    
     if (value) {
       audioRef.current?.play().catch(err => {
         console.error("播放失败:", err);
@@ -56,25 +55,17 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const currentAudioRef = audioRef.current; // 将 audioRef.current 保存为一个变量
     if (currentAudioRef) {
-      // 在设置src前先暂停并重置
-      currentAudioRef.pause();
-      currentAudioRef.currentTime = 0;
-      
       // 设置跨域属性，解决某些iOS跨域问题
       currentAudioRef.crossOrigin = "anonymous";
-      
       // 设置预加载模式为metadata，减少iOS上的加载问题
       currentAudioRef.preload = "metadata";
-      
       // 然后设置新的源
       currentAudioRef.src = defaultSong.url;
       
-      // iOS上需要手动触发加载
-      currentAudioRef.load();
     }
 
     // console.log("MusicProcess render useEffect");
-    const timeupdate = throttle(() => {
+    const timeupdate = () => {
       if (currentAudioRef) {
         setCurrentTime(currentAudioRef.currentTime);
         
@@ -91,7 +82,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       }
-    }, 200);
+    };
 
     if (currentAudioRef) {
       currentAudioRef.ontimeupdate = timeupdate;
@@ -136,10 +127,10 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
       // 处理数据获取停止的情况，重试加载
       currentAudioRef.onstalled = () => {
         console.log("数据获取停止");
-        // 尝试重新加载
-        if (currentAudioRef.networkState === 2) { // NETWORK_LOADING
-          currentAudioRef.load();
-        }
+        // // 尝试重新加载
+        // if (currentAudioRef.networkState === 2) { // NETWORK_LOADING
+        //   currentAudioRef.load();
+        // }
       };
     }
 
@@ -153,7 +144,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         currentAudioRef.onstalled = null;
       }
     };
-  }, [defaultSong?.url, musicStatus, handleMusicStatus]);
+  }, [defaultSong?.url, handleMusicStatus]);
 
   const value = {
     audioRef,

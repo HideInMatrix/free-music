@@ -1,51 +1,48 @@
 import { Slider } from "@/components/ui/slider";
 import { useAudio } from "./AudioProvider";
 import { formatTime } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const MusicProcess = () => {
   const { currentTime, duration, audioRef } = useAudio();
   const [process, setProcess] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
+
+  const userSetTimeRef = useRef<number | null>(null);
+
 
   useEffect(() => {
-    if (!isDragging) {
+    if ((!userSetTimeRef.current || Math.abs(currentTime - userSetTimeRef.current) > 1)) {      
       setProcess((currentTime / duration) * 100);
+      userSetTimeRef.current = null;
     }
-  }, [currentTime, duration, isDragging]);
+  }, [currentTime, duration]);
 
   const handleValueChange = (value: number[]) => {
-    setIsDragging(true);
-    setProcess(value[0]);
-    
-    // 在拖拽过程中也更新音频播放位置，实现实时预览
-    if (audioRef.current) {
-      audioRef.current.currentTime = (value[0] / 100) * duration;
+    const audio = audioRef.current;
+    if (audio) {      
+      audio.currentTime = value[0] * (duration / 100);
+      setProcess(value[0]);
     }
-  };
-
-  const handleValueCommit = (value: number[]) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = (value[0] / 100) * duration;
-    }
-    
-    // 拖拽结束后短暂延时再允许外部更新进度条
-    setTimeout(() => {
-      setIsDragging(false);
-    }, 300);
   };
 
   return (
-    <div className="lg:flex items-center hidden">
-      <span className="w-10 grow">{formatTime(currentTime)}</span>
-      <Slider
-        className="flex-auto ml-3 mr-1"
-        value={[process]}
-        onValueChange={handleValueChange}
-        onValueCommit={handleValueCommit}
-      />
-      <span className="w-10 grow">{formatTime(duration)}</span>
-    </div>
+    <>
+      {/* 桌面端进度条 */}
+      <div className="lg:flex items-center hidden">
+        <span className="w-10">{formatTime(currentTime)}</span>
+        <div className="flex-auto ml-3 mr-1 relative">
+          {/* 缓冲进度条 */}
+          <Slider
+            className=""
+            value={[process]}
+            onValueChange={handleValueChange}
+            step={0.1}
+            max={100}
+          />
+        </div>
+        <span className="w-10">{formatTime(duration)}</span>
+      </div>
+    </>
   );
 };
 

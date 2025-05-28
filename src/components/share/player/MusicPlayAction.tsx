@@ -33,7 +33,7 @@ const MusicPlayAction = () => {
 
   return (
     <div className="flex flex-col flex-[0_0_37.5%] w-[37.5%] lg:flex-auto px-[6px] h-full justify-evenly">
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center relative">
         <StopPropagation>
           <StepBack
             strokeWidth={1}
@@ -51,8 +51,13 @@ const MusicPlayAction = () => {
             onClick={handleNexSong}
           />
         </StopPropagation>
+        <div className="absolute -z-10 w-[52px] h-[52px] lg:hidden">
+          <MusicProcess />
+        </div>
       </div>
-      <MusicProcess />
+      <div className="lg:block hidden">
+        <MusicProcess />
+      </div>
     </div>
   );
 };

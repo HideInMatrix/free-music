@@ -62,8 +62,6 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     const index = defaultSongList.findIndex(
       (item) => item.id == defaultSong.id
     );
-    
-    console.log("歌曲结束，当前模式:", defaultMode, "当前索引:", index);
 
     if (defaultMode == AudioMode.CIRCULATION) {
       if (index !== -1 && index == defaultSongList.length - 1) {
