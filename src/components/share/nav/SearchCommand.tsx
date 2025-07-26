@@ -21,7 +21,6 @@ export function SearchCommand() {
         onClick={handleSearch}>
         <Search />
       </Button>
-
     </>
   );
 }

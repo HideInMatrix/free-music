@@ -71,4 +71,17 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server:{
+    proxy:{
+      "/v1":{
+        target: "http://localhost:8001",
+        changeOrigin: true,
+      },
+      "/ytapi":{
+        target:'',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/ytapi/, ""),
+      }
+    }
+  }
 });

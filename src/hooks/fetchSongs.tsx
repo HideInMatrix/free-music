@@ -14,7 +14,6 @@ export const fetchSongByKeyword = ({
 }: {
   searchValue: string;
   page: number;
-
   toEnd: boolean;
   setResult: Dispatch<SetStateAction<SearchSongProps[]>>;
   setTotal: Dispatch<SetStateAction<number>>;

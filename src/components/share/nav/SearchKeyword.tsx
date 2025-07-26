@@ -27,7 +27,7 @@ const SearchKeyword = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    
+
     // 只有在不是中文输入状态时才触发搜索
     if (!isComposing) {
       handleSearch(value);
@@ -48,21 +48,17 @@ const SearchKeyword = () => {
 
   return (
     <>
-      {pathname.startsWith("/search") ? (
-        <div className="ml-2">
-          <Input
-            onChange={handleInputChange}
-            onCompositionStart={handleCompositionStart}
-            onCompositionEnd={handleCompositionEnd}
-            value={inputValue}
-            name="searchValue"
-            placeholder="关键字"
-            className="focus-visible:ring-0 focus-visible:ring-offset-0 border-white w-20"
-          />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div className="ml-2">
+        <Input
+          onChange={handleInputChange}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
+          value={inputValue}
+          name="searchValue"
+          placeholder="关键字"
+          className={`focus-visible:ring-0 focus-visible:ring-offset-0 border-white ${pathname.startsWith("/search/") ? "w-50" : "w-20"}`}
+        />
+      </div>
     </>
   );
 };

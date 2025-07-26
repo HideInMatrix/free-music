@@ -6,7 +6,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ReactNode } from "react";
-import { SearchCommand } from "./SearchCommand";
+import { SearchCommand } from "./nav/SearchCommand";
 
 export function SearchWrapper({ trigger }: { trigger: ReactNode }) {
   return (

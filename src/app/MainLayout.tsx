@@ -1,9 +1,9 @@
 
 import HeaderBarWrapper from "@/components/share/HeaderBar";
 import { cn } from "@/lib/utils";
-import Player from "@/components/share/player/Player";
 import { Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster"
+import Player from "@/components/share/player/Player";
 
 export default function LocaleLayout() {
   return (

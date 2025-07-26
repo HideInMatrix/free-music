@@ -3,20 +3,30 @@ import {
   ReactNode,
   useCallback,
   useContext,
-  useEffect,
   useRef,
   useState,
 } from "react";
+import ReactPlayer from 'react-player';
 
 import { useSongStore } from "@/store/useSongStore";
+import { usePlayerStore } from "@/store/playerStore";
 
 interface AudioContextProps {
   audioRef: React.RefObject<HTMLAudioElement>;
   currentTime: number;
   duration: number;
   musicStatus: boolean;
+  playing: boolean;
+  volume: number;
+  muted: boolean;
+  loop: boolean;
+  controls: boolean;
+  buffered: number; // 添加缓冲进度状态
+  setVolume: (value: number) => void; // 显式定义参数类型
+  setMuted: (value: boolean) => void; // 显式定义参数类型
   setMusicStatus: React.Dispatch<React.SetStateAction<boolean>>; // 显式定义参数类型和返回类型
   handleMusicStatus: (value: boolean) => void; // 如果没有参数且没有返回值，可以这样定义
+
 }
 
 const AudioContext = createContext<AudioContextProps | undefined>(undefined);
@@ -34,128 +44,93 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   // console.log("provider change");
   const { defaultSong } = useSongStore();
 
-  const audioRef = useRef<HTMLAudioElement>(new Audio());
+  // const audioRef = useRef<HTMLAudioElement>(new Audio());
+  const audioRef = useRef<HTMLVideoElement | null>(null);
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [musicStatus, setMusicStatus] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const [muted, setMuted] = useState(false);
+  const [buffered, setBuffered] = useState(0); // 添加缓冲进度状态
+
+  const {
+    loop,
+    controls,
+  } = usePlayerStore((state) => state);
 
   const handleMusicStatus = useCallback((value: boolean) => {
-    setMusicStatus(value);    
+    setMusicStatus(value);
     if (value) {
-      audioRef.current?.play().catch(err => {
-        console.error("播放失败:", err);
-        setMusicStatus(false);
-      });
+      setPlaying(true);
     } else {
-      audioRef.current?.pause();
+      setPlaying(false);
     }
   }, []);
-  
-  useEffect(() => {
-    const currentAudioRef = audioRef.current; // 将 audioRef.current 保存为一个变量
-    if (currentAudioRef) {
-      // 设置跨域属性，解决某些iOS跨域问题
-      currentAudioRef.crossOrigin = "anonymous";
-      // 设置预加载模式为metadata，减少iOS上的加载问题
-      currentAudioRef.preload = "metadata";
-      // 然后设置新的源
-      currentAudioRef.src = defaultSong.url;
-      
-    }
 
-    // console.log("MusicProcess render useEffect");
-    const timeupdate = () => {
-      if (currentAudioRef) {
-        setCurrentTime(currentAudioRef.currentTime);
-        
-        // 添加额外的结束检测逻辑
-        // 当播放进度非常接近结尾时（小于0.5秒），主动触发结束事件
-        if (currentAudioRef.duration > 0 && 
-            currentAudioRef.currentTime > 0 && 
-            currentAudioRef.duration - currentAudioRef.currentTime < 0.5) {
-          // 确保音频确实已经播放了大部分内容（至少90%）
-          if (currentAudioRef.currentTime / currentAudioRef.duration > 0.9) {
-            // 手动触发ended事件
-            const endEvent = new Event('ended');
-            currentAudioRef.dispatchEvent(endEvent);
-          }
-        }
-      }
-    };
+  const setPlayerRef = useCallback((player: HTMLVideoElement) => {
+    if (!player) return;
+    audioRef.current = player;
+  }, []);
 
-    if (currentAudioRef) {
-      currentAudioRef.ontimeupdate = timeupdate;
-      
-      // 确保onended事件处理程序被正确设置
-      // currentAudioRef.onended = (_event) => {
-      //   // 触发MusicMode组件中的onended处理逻辑
-      //   // 这里不需要实现具体逻辑，因为MusicMode组件已经处理了
-      //   console.log("音频播放结束");
-      // };
-      
-      audioRef.current.onloadedmetadata = () => {
-        if (audioRef.current) {
-          setDuration(audioRef.current.duration);
-          if (musicStatus) {
-            handleMusicStatus(true);
-          }
-        }
-      };
-      
-      currentAudioRef.oncanplaythrough = () => {
-        // 缓存可以播放的时候播放
-        if (currentAudioRef) {
-          setDuration(currentAudioRef.duration);
-          if (musicStatus) {
-            handleMusicStatus(true);
-          }
-        }
-      };
+  const handleDurationChange = () => {
+    const player = audioRef.current;
+    if (!player) return;
+    setDuration(player.duration);
+  }
 
-      // 添加错误处理
-      currentAudioRef.onerror = (_e) => {
-        console.error("音频加载错误:", _e);
-        // 可以在这里添加错误处理逻辑
-      };
+  const handleProgress = () => {
+    const player = audioRef.current;
+    if (!player || !player.buffered?.length) return;
+    setBuffered(player.buffered?.end(player.buffered?.length - 1));
+  };
 
-      //音频播放时缓冲不够而暂停时触发
-      currentAudioRef.onwaiting = () => {
-        console.log("音频缓冲中");
-      };
-
-      // 处理数据获取停止的情况，重试加载
-      currentAudioRef.onstalled = () => {
-        console.log("数据获取停止");
-        // // 尝试重新加载
-        // if (currentAudioRef.networkState === 2) { // NETWORK_LOADING
-        //   currentAudioRef.load();
-        // }
-      };
-    }
-
-    return () => {
-      if (currentAudioRef) {
-        currentAudioRef.oncanplaythrough = null;
-        currentAudioRef.ontimeupdate = null;
-        currentAudioRef.onended = null;
-        currentAudioRef.onerror = null;
-        currentAudioRef.onwaiting = null;
-        currentAudioRef.onstalled = null;
-      }
-    };
-  }, [defaultSong?.url, handleMusicStatus]);
+  const handleTimeUpdate = () => {
+    const player = audioRef.current;
+    if (!player || !player.currentTime) return;
+    setCurrentTime(player.currentTime);
+  }
 
   const value = {
+    playing,
+    volume,
+    muted,
+    loop,
+    controls,
     audioRef,
     currentTime,
     duration,
     musicStatus,
+    buffered,
     setMusicStatus,
     handleMusicStatus,
+    setVolume,
+    setMuted,
   };
 
   return (
-    <AudioContext.Provider value={value}>{children}</AudioContext.Provider>
+    <AudioContext.Provider value={value}>
+      {
+        defaultSong &&
+        <ReactPlayer
+          ref={setPlayerRef}
+          style={{ display: 'none' }}
+          crossOrigin="anonymous"
+          src={defaultSong.url}
+          playing={playing}
+          volume={volume}
+          muted={muted}
+          controls={controls}
+          loop={loop}
+          pip={true}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onDurationChange={handleDurationChange}
+          onProgress={handleProgress}
+          onTimeUpdate={handleTimeUpdate}
+        />
+      }
+      {children}</AudioContext.Provider>
   );
 };

@@ -9,11 +9,12 @@ export interface Album {
 }
 
 export interface Song {
-  id: string;
+  id?: string;
+  artistId?: string;
   name: string;
   artists?: Artist[];
   url: string;
-  image: string;
+  image?: string;
   duration: number;
   album: Album;
 }

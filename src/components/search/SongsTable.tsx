@@ -8,104 +8,79 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SearchSongProps } from "@/entity/interface/song";
-import { checkAndLoadMore, formatTime, throttle } from "@/lib/utils";
-import { startTransition, useEffect, useRef, useState } from "react";
-
-import {
-  fetchSongByKeyword,
-  fetchSongByAlbumId,
-  fetchSongByArtistId,
-} from "@/hooks/fetchSongs";
-import { fetchPlaylistById } from "@/hooks/fetchPlaylists";
+import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps } from "@/entity/interface/song";
+import { formatTime } from "@/lib/utils";
+import { Dispatch, SetStateAction, startTransition, useEffect, useRef, useState } from "react";
+import { 
+  fetchSongsByKeyword,
+  fetchArtistsByKeyword,
+  fetchAlbumsByKeyword,
+  fetchPlaylistsByKeyword 
+} from "@/hooks/fetchSongsByYtmusic";
 
 type Props = {
   searchValue: string;
   loaderType: "search" | "detail" | "artists" | "playlists";
 };
 
+type ResultType = SearchSongProps | SearchAlbumsProps | SearchArtistProps | SearchPlaylistProps;
+
 const SongsTable = ({ searchValue, loaderType }: Props) => {
-  const [result, setResult] = useState<SearchSongProps[]>([]);
-  const [page, setPage] = useState(0);
-  const [toEnd, setToEnd] = useState(false);
-  const [total, setTotal] = useState(0);
-  const tableContainerRef = useRef<HTMLDivElement>(null); // 添加一个 ref 用于获取容器高度
+  const [result, setResult] = useState<ResultType[]>([]);
+  const [loading, setLoading] = useState(false);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   let loaderSongs: (arg0: { signal: AbortSignal }) => void;
+  
   if (loaderType === "search") {
     startTransition(() => {
-      const { loaderSongs: _loaderSongs } = fetchSongByKeyword({
+      const { loaderSongs: _loaderSongs } = fetchSongsByKeyword({
         searchValue,
-        page,
-        setResult,
-        toEnd,
-        setTotal,
+        setResult: setResult as Dispatch<SetStateAction<SearchSongProps[]>>,
       });
       loaderSongs = _loaderSongs;
     });
   } else if (loaderType === "detail") {
+    // 专辑详情使用专辑搜索
     startTransition(() => {
-      const { loaderSongs: _loaderSongs } = fetchSongByAlbumId({
-        albumId: searchValue,
-        page,
-        setResult,
-        toEnd,
-        setTotal,
+      const { loaderAlbums: _loaderSongs } = fetchAlbumsByKeyword({
+        searchValue,
+        setResult: setResult as Dispatch<SetStateAction<SearchAlbumsProps[]>>,
       });
       loaderSongs = _loaderSongs;
     });
   } else if (loaderType === "artists") {
+    // 艺术家详情使用艺术家搜索
     startTransition(() => {
-      const { loaderSongs: _loaderSongs } = fetchSongByArtistId({
-        artistId: searchValue,
-        page,
-        setResult,
-        toEnd,
-        setTotal,
+      const { loaderArtists: _loaderSongs } = fetchArtistsByKeyword({
+        searchValue,
+        setResult: setResult as Dispatch<SetStateAction<SearchArtistProps[]>>,
       });
       loaderSongs = _loaderSongs;
     });
   } else if (loaderType === "playlists") {
+    // 播放列表详情使用播放列表搜索
     startTransition(() => {
-      const { loaderData: _loaderSongs } = fetchPlaylistById({
-        id: searchValue,
-        page,
-        setResult,
-        toEnd,
-        setTotal,
+      const { loaderPlaylists: _loaderSongs } = fetchPlaylistsByKeyword({
+        searchValue,
+        setResult: setResult as Dispatch<SetStateAction<SearchPlaylistProps[]>>,
       });
       loaderSongs = _loaderSongs;
     });
   }
 
-  const handleScroll = throttle(async (event: Event) => {
-    const target = event.target as HTMLDivElement; // 确保类型安全
-    const { scrollTop, scrollHeight, clientHeight } = target;
-
-    if ((page + 1) * 20 >= total) {
-      setToEnd(true);
-    }
-    // 判断是否接近底部
-    if (scrollHeight - scrollTop - clientHeight <= 50 && !toEnd) {
-      setPage((prevPage) => prevPage + 1);
-    }
-  }, 250);
-
   useEffect(() => {
     // 重置状态
-    setPage(0);
     setResult([]);
-    setToEnd(false);
+    setLoading(false);
 
     // 创建新的 AbortController
     const controller = new AbortController();
     const { signal } = controller;
+    
     startTransition(() => {
-      // 使用新的控制器请求数据
       loaderSongs({ signal });
     });
-    // 检查容器高度，自动加载更多数据
-    checkAndLoadMore({ containerRef: tableContainerRef, toEnd, setPage });
 
     // 清理：仅在组件卸载时取消请求
     return () => {
@@ -113,25 +88,10 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
     };
   }, [searchValue]);
 
-  useEffect(() => {
-    // 创建新的 AbortController
-    const controller = new AbortController();
-    const { signal } = controller;
-    startTransition(() => {
-      loaderSongs({ signal });
-    });
-    // 清理：仅在组件卸载时取消请求
-    return () => {
-      if (toEnd) {
-        controller.abort();
-      }
-    };
-  }, [page]);
   return (
     <div
       ref={tableContainerRef}
-      className="flex items-center flex-col h-full overflow-auto"
-      onScroll={handleScroll}>
+      className="flex items-center flex-col h-full overflow-auto">
       <Table>
         <TableCaption></TableCaption>
         <TableHeader>
@@ -145,32 +105,35 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {result.map((song: SearchSongProps, index) => (
-            <TableRow key={index}>
-              <TableCell className="font-medium truncate max-w-40">
-                {song.name}
-              </TableCell>
-              <TableCell className="md:table-cell hidden truncate">
-                {song.album.name}
-              </TableCell>
-              <TableCell className="md:table-cell hidden text-center">
-                {song.artists
-                  .map((item: { name: string }) => item.name)
-                  .join(",")}
-              </TableCell>
-              <TableCell className="text-center flex items-center justify-start">
-                {formatTime(song.duration)}
-                <MusicDropAction songInfo={{ ...song }} />
-              </TableCell>
-            </TableRow>
-          ))}
+          {result.map((item: ResultType) => {
+            // 类型守卫判断
+            if ('duration' in item) { // 是歌曲类型
+              const song = item as SearchSongProps;
+              return (
+                <TableRow key={song.id}>
+                  <TableCell className="font-medium truncate max-w-40">
+                    {song.name}
+                  </TableCell>
+                  <TableCell className="md:table-cell hidden truncate">
+                    {song.album.name}
+                  </TableCell>
+                  <TableCell className="md:table-cell hidden text-center">
+                    {song.artists[0]?.name}
+                  </TableCell>
+                  <TableCell className="text-center flex items-center justify-start">
+                    {formatTime(song.duration)}
+                    <MusicDropAction songInfo={song} />
+                  </TableCell>
+                </TableRow>
+              );
+            }
+            return null;
+          })}
         </TableBody>
       </Table>
-      {toEnd ? <div className="font-semibold">下面没有数据了</div> : <></>}
-      {result.length === 0 ? (
+      {loading && <div className="font-semibold">加载中...</div>}
+      {!loading && result.length === 0 && (
         <div className="font-semibold">暂无数据</div>
-      ) : (
-        <></>
       )}
     </div>
   );

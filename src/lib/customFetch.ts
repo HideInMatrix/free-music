@@ -17,6 +17,7 @@ interface ApiResponse {
   error?: string;
   status?: number;
   success?: boolean;
+  code:number;
 }
 
 const apiClient = (method: HttpMethod) => {
@@ -46,6 +47,7 @@ const apiClient = (method: HttpMethod) => {
 
     if (!response.ok) {
       return {
+        code : -1,
         error: result.message || "Request failed",
         status: response.status,
       };

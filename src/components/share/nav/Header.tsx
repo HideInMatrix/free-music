@@ -5,7 +5,7 @@ import Favicon from "/icons/favicon.ico";
 
 import "./over-drawer.css";
 
-import { SearchCommand } from "../SearchCommand";
+import { SearchCommand } from "./SearchCommand";
 import SearchKeyword from "./SearchKeyword";
 import BackButton from "./BackButton";
 

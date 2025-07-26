@@ -1,4 +1,5 @@
 import { Song } from "@/entity/interface/song";
+
 import { useSongStore } from "@/store/useSongStore";
 import { useCopyToClipboard } from "@/utils/clipboard";
 
@@ -11,9 +12,9 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong, defaultSongList, setSongList } =
     useSongStore();
   const { copy } = useCopyToClipboard()
+  
   const updateSongListFn = ({ type }: { type: "add" | "del" }) => {
     const index = defaultSongList.findIndex((item) => item.id === songInfo.id);
-    // 如果找到了歌曲
 
     if (type === "del" && index > -1) {
       // 更新歌曲列表
@@ -24,7 +25,7 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
       setSongList(updatedSongList);
 
       // 如果删除的是当前播放的歌曲，选择新的歌曲来播放
-      if (defaultSong.id === songInfo.id) {
+      if (defaultSong?.id === songInfo.id) {
         if (updatedSongList.length > 0) {
           // 如果还有剩余歌曲，选择下一首歌曲（如果存在），否则选择最后一首歌曲
           const nextIndex =
@@ -37,7 +38,7 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
       }
     } else if (type === "add" && index == -1) {
       const currentSongIndex = defaultSongList.findIndex(
-        (item) => item.id === defaultSong.id
+        (item) => item.id === defaultSong?.id
       );
 
       // 如果当前播放歌曲存在于列表中
@@ -52,11 +53,11 @@ const MusicDropActionFn = ({ songInfo }: Props) => {
         // 如果当前播放的歌曲不在列表中，则直接添加到列表末尾
         setSongList([...defaultSongList, songInfo]);
       }
-      if (defaultSong.id !== songInfo.id) {
+      if (defaultSong?.id !== songInfo.id) {
         setCurrentSong(songInfo);
       }
     } else if (type === "add") {
-      if (defaultSong.id !== songInfo.id) {
+      if (defaultSong?.id !== songInfo.id) {
         // console.log("action render", songInfo);
         setCurrentSong(songInfo);
       }
