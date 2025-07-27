@@ -21,12 +21,7 @@ export const YtPlayerProvider = ({ children }: Props) => {
     setPlaying,
     setVolume,
     setMuted,
-    setSrc,
-    setLoop,
-    setPip,
-    setControls,
-    setPlayed,
-    setDuration,
+
   } = usePlayerStore((state) => state);
 
   const handlePlayPause = () => setPlaying(!playing);
@@ -53,7 +48,7 @@ export const YtPlayerProvider = ({ children }: Props) => {
 
   useEffect(() => {
     setPlaying(true)
-  },[defaultSong.url])
+  },[defaultSong?.url])
 
   const value = {
     src,
@@ -74,7 +69,7 @@ export const YtPlayerProvider = ({ children }: Props) => {
     <YtPlayerContext.Provider value={value}>
       <ReactPlayer
         style={{display:'none'}}
-        src={defaultSong.url}
+        src={defaultSong?.url}
         playing={playing}
         volume={volume}
         muted={muted}

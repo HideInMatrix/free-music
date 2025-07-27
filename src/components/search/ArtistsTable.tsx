@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { SearchArtistProps } from "@/entity/interface/song";
 import { fetchArtistsByKeyword } from "@/hooks/fetchSongsByYtmusic";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
@@ -20,7 +20,6 @@ const ArtistsTable = ({ searchValue }: Props) => {
   const [result, setResult] = useState<SearchArtistProps[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   let loaderData: (arg0: { signal: AbortSignal }) => void;
 

@@ -14,12 +14,12 @@ const MusicItem = ({ songInfo }: Props) => {
   const { defaultSong, setCurrentSong } = useSongStore();
   const musicItemRef = useRef(null);
   const handleClick = () => {
-    if (defaultSong.id !== songInfo.id) {
+    if (defaultSong?.id !== songInfo.id) {
       setCurrentSong(songInfo);
     }
   };
   useEffect(() => {
-    if (defaultSong.id == songInfo.id) {
+    if (defaultSong?.id == songInfo.id) {
       const musicItemDom = musicItemRef.current
         ? (musicItemRef.current as HTMLDivElement)
         : null;
@@ -35,7 +35,7 @@ const MusicItem = ({ songInfo }: Props) => {
         onClick={handleClick}
         className={cn(
           "flex px-2 items-center p-1 rounded-md",
-          defaultSong.id == songInfo.id ? "bg-blue-500" : ""
+          defaultSong?.id == songInfo.id ? "bg-blue-500" : ""
         )}>
         <div className="w-8 h-8">
           <Avatar className="w-8 h-8">

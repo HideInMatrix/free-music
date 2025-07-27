@@ -60,7 +60,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
   // 处理歌曲结束后的逻辑
   const handleSongEnd = () => {
     const index = defaultSongList.findIndex(
-      (item) => item.id == defaultSong.id
+      (item) => item.id == defaultSong?.id
     );
 
     if (defaultMode == AudioMode.CIRCULATION) {

@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchPlaylistProps } from "@/entity/interface/song";
-import { startTransition, useEffect, useRef, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { fetchPlaylistsByKeyword } from "@/hooks/fetchSongsByYtmusic";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +19,6 @@ type Props = {
 const PlaylistsTable = ({ searchValue }: Props) => {
   const [result, setResult] = useState<SearchPlaylistProps[]>([]);
   const [loading, setLoading] = useState(false);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   let loaderData: (arg0: { signal: AbortSignal }) => void;
