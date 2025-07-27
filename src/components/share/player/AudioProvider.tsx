@@ -115,7 +115,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         defaultSong &&
         <ReactPlayer
           ref={setPlayerRef}
-
+          style={{ display: 'none' }}
           crossOrigin="anonymous"
           src={defaultSong.url}
           playing={playing}
