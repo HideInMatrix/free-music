@@ -20,7 +20,7 @@ export function Home() {
                 setLoading(false);
             }
         };
-        
+
         loadData();
     }, []);
 
@@ -33,19 +33,23 @@ export function Home() {
             {data.map((section, index) => (
                 <div key={index} className="space-y-4">
                     <h2 className="text-2xl font-bold tracking-tight">{section.title}</h2>
-                    
+
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                         {section.contents.map((item, idx) => (
                             <div key={idx} className="flex flex-col gap-2">
                                 <div className="aspect-square relative overflow-hidden rounded-md">
-                                    <img 
-                                        src={item.thumbnails[0].url}
-                                        alt={item.name}
-                                        width={item.thumbnails[0].width}
-                                        height={item.thumbnails[0].height}
-                                        loading="lazy"
-                                        className="object-cover w-full h-full hover:scale-105 transition-all"
-                                    />
+                                    {
+                                        item.thumbnails.length > 0 ?
+                                            <img
+                                                src={item.thumbnails[0].url}
+                                                alt={item.name}
+                                                width={item.thumbnails[0].width}
+                                                height={item.thumbnails[0].height}
+                                                loading="lazy"
+                                                className="object-cover w-full h-full hover:scale-105 transition-all"
+                                            />
+                                            : <div className=" w-full h-full hover:scale-105 transition-all"></div>
+                                    }
                                 </div>
                                 <div className="space-y-1">
                                     <h3 className="font-medium leading-none truncate">{item.name}</h3>
@@ -54,7 +58,7 @@ export function Home() {
                             </div>
                         ))}
                     </div>
-                    
+
                     {index < data.length - 1 && <Separator className="mt-6" />}
                 </div>
             ))}
