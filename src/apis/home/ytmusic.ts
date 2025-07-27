@@ -3,7 +3,7 @@ import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistPr
 import { adaptYTMusicSong, adaptYTMusicArtist, adaptYTMusicAlbum, adaptYTMusicPlaylist } from "@/lib/adapter/ytmusic";
 import { getRequest } from "@/lib/customFetch";
 
-const backendURL = import.meta.env.VITE_BACKEND_PRE_URL;
+const backendURL = import.meta.env.VITE_BACKEND_PRE_URL || '';
 
 // 获取首页推荐数据
 export const fetchHomeRecommend = async (options?: { signal: AbortSignal }): Promise<HomeData[]> => {
