@@ -39,7 +39,7 @@ export function Home() {
                             <div key={idx} className="flex flex-col gap-2">
                                 <div className="aspect-square relative overflow-hidden rounded-md">
                                     {
-                                        item.thumbnails.length > 0 ?
+                                        item?.thumbnails.length > 0 ?
                                             <img
                                                 src={item.thumbnails[0].url}
                                                 alt={item.name}
@@ -52,8 +52,8 @@ export function Home() {
                                     }
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="font-medium leading-none truncate">{item.name}</h3>
-                                    <p className="text-sm text-muted-foreground truncate">{item.artist.name}</p>
+                                    <h3 className="font-medium leading-none truncate">{item?.name}</h3>
+                                    <p className="text-sm text-muted-foreground truncate">{item?.artist?.name}</p>
                                 </div>
                             </div>
                         ))}
