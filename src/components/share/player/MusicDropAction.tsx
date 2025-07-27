@@ -73,14 +73,14 @@ const MusicDropAction = ({ songInfo }: Props) => {
               </div>
             </DropdownMenuItem>
           </StopPropagation>
-          <StopPropagation>
+          {/* <StopPropagation>
             <DropdownMenuItem onClick={handleDownload}>
               <div className="flex items-center">
                 <CloudDownload strokeWidth={1} className="w-4 h-4 mr-1" />
                 下载
               </div>
             </DropdownMenuItem>
-          </StopPropagation>
+          </StopPropagation> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <StopPropagation>
