@@ -1,11 +1,13 @@
 import { useSongStore } from "@/store/useSongStore";
 // import { useAudio } from "./AudioProvider";
 import { useEffect, useState } from "react";
-import {motion} from "motion/react"
+import { motion } from "motion/react"
+import { useAudio } from "./AudioProvider";
 
 const MusicInfo = () => {
   // console.log("music info render");
 
+  const { setIsOpen } = useAudio();
   const { defaultSong } = useSongStore();
   const [showAnimation, setShowAnimation] = useState(false);
   // const { audioRef } = useAudio();
@@ -21,6 +23,11 @@ const MusicInfo = () => {
       document.head.appendChild(newMetaDescription);
     }
   }, [defaultSong?.name]); // 空数组作为依赖项，确保只在组件挂载时执行一次
+
+  const handleClickImg = () => {
+    setShowAnimation(!showAnimation)
+    setIsOpen(true)
+  }
   return (
     <div className="flex overflow-hidden flex-auto">
       <div className="items-center max-w-full flex">
@@ -31,7 +38,7 @@ const MusicInfo = () => {
             width={64}
             height={64}
             loading="lazy"
-            onClick={() => setShowAnimation(!showAnimation)}
+            onClick={() => handleClickImg()}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="arco-avatar-image"></motion.img>

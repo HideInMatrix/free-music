@@ -10,6 +10,8 @@ import ReactPlayer from 'react-player';
 
 import { useSongStore } from "@/store/useSongStore";
 import { usePlayerStore } from "@/store/playerStore";
+import PlayerDrawer from './PlayerDrawer';
+
 
 interface AudioContextProps {
   audioRef: React.RefObject<HTMLAudioElement>;
@@ -22,6 +24,7 @@ interface AudioContextProps {
   loop: boolean;
   controls: boolean;
   buffered: number; // 添加缓冲进度状态
+  setIsOpen: (value: boolean) => void; // 显式定义参数类型
   setVolume: (value: number) => void; // 显式定义参数类型
   setMuted: (value: boolean) => void; // 显式定义参数类型
   setMusicStatus: React.Dispatch<React.SetStateAction<boolean>>; // 显式定义参数类型和返回类型
@@ -54,6 +57,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const [volume, setVolume] = useState(1);
   const [muted, setMuted] = useState(false);
   const [buffered, setBuffered] = useState(0); // 添加缓冲进度状态
+  const [isOpen, setIsOpen] = useState(false);
 
   const {
     loop,
@@ -103,6 +107,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     duration,
     musicStatus,
     buffered,
+    setIsOpen,
     setMusicStatus,
     handleMusicStatus,
     setVolume,
@@ -111,26 +116,28 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AudioContext.Provider value={value}>
-      {
-        defaultSong &&
-        <ReactPlayer
-          ref={setPlayerRef}
-          style={{ display: 'none' }}
-          crossOrigin="anonymous"
-          src={defaultSong.url}
-          playing={playing}
-          volume={volume}
-          muted={muted}
-          controls={controls}
-          loop={loop}
-          pip={true}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          onDurationChange={handleDurationChange}
-          onProgress={handleProgress}
-          onTimeUpdate={handleTimeUpdate}
-        />
-      }
-      {children}</AudioContext.Provider>
+      <PlayerDrawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        {defaultSong && (
+          <ReactPlayer
+            ref={setPlayerRef}
+            className="!w-full"
+            crossOrigin="anonymous"
+            src={defaultSong.url}
+            playing={playing}
+            volume={volume}
+            muted={muted}
+            controls={controls}
+            loop={loop}
+            pip={true}
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            onDurationChange={handleDurationChange}
+            onProgress={handleProgress}
+            onTimeUpdate={handleTimeUpdate}
+          />
+        )}
+      </PlayerDrawer>
+      {children}
+    </AudioContext.Provider>
   );
 };
