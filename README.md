@@ -13,7 +13,7 @@
 
 除了下载安装包使用，你还可以将本项目部署到 Vercel 或你的服务器上。下面是部署到 Vercel 的方法。
 
-本项目的 Demo (https://freemusic.micromatrix.org) 就是部署在 Vercel 上的网站。
+本项目的 Demo (https://music.micromatrix.org) 就是部署在 Vercel 上的网站。
 
 [![Powered by Vercel](https://www.datocms-assets.com/31049/1618983297-powered-by-vercel.svg)](https://vercel.com/?utm_source=ohmusic&utm_campaign=oss)
 
