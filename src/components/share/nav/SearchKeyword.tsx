@@ -56,7 +56,7 @@ const SearchKeyword = () => {
           value={inputValue}
           name="searchValue"
           placeholder="关键字"
-          className={`focus-visible:ring-0 focus-visible:ring-offset-0 border-white ${pathname.startsWith("/search/") ? "w-50" : "w-20"}`}
+          className={`focus-visible:ring-0 focus-visible:ring-offset-0 border-white min-w-20`}
         />
       </div>
     </>
