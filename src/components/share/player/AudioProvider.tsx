@@ -120,7 +120,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         {defaultSong && (
           <ReactPlayer
             ref={setPlayerRef}
-            className="!w-full"
+            style={{width: '100%', height: '60vh'}}
             crossOrigin="anonymous"
             src={defaultSong.url}
             playing={playing}
