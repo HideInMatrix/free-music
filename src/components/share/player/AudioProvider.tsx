@@ -3,6 +3,7 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -113,6 +114,11 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     setVolume,
     setMuted,
   };
+
+  useEffect(() => {
+    setDuration(0);
+    setCurrentTime(0);
+  },[defaultSong?.url])
 
   return (
     <AudioContext.Provider value={value}>

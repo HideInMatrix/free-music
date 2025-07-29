@@ -9,9 +9,7 @@ const MusicProcess = () => {
   // const [budderedPercent, setBudderedPercent] = useState(0);
 
   useEffect(() => {
-    if (currentTime > 1) {
-      setProcess((currentTime / duration) * 100);
-    }
+    setProcess((currentTime / duration) * 100);
   }, [currentTime, duration]);
 
   const handleValueChange = (value: number[]) => {
@@ -35,11 +33,6 @@ const MusicProcess = () => {
             step={0.1}
             max={100}
           />
-          {/* <ProgressBar
-            currentTime={currentTime}
-            duration={duration}
-            bufferedTime={buffered}
-          /> */}
         </div>
         <span className="w-10">{formatTime(duration)}</span>
       </div>
