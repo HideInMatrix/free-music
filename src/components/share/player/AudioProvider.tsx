@@ -25,12 +25,12 @@ interface AudioContextProps {
   loop: boolean;
   controls: boolean;
   buffered: number; // 添加缓冲进度状态
+  isEnded: boolean; // 添加歌曲结束状态
   setIsOpen: (value: boolean) => void; // 显式定义参数类型
   setVolume: (value: number) => void; // 显式定义参数类型
   setMuted: (value: boolean) => void; // 显式定义参数类型
   setMusicStatus: React.Dispatch<React.SetStateAction<boolean>>; // 显式定义参数类型和返回类型
   handleMusicStatus: (value: boolean) => void; // 如果没有参数且没有返回值，可以这样定义
-
 }
 
 const AudioContext = createContext<AudioContextProps | undefined>(undefined);
@@ -59,6 +59,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const [muted, setMuted] = useState(false);
   const [buffered, setBuffered] = useState(0); // 添加缓冲进度状态
   const [isOpen, setIsOpen] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
 
   const {
     loop,
@@ -69,6 +70,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     setMusicStatus(value);
     if (value) {
       setPlaying(true);
+      setIsEnded(false);
     } else {
       setPlaying(false);
     }
@@ -97,6 +99,10 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     setCurrentTime(player.currentTime);
   }
 
+  const handleEnded = () => {
+    setIsEnded(true)
+  }
+
   const value = {
     playing,
     volume,
@@ -108,6 +114,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
     duration,
     musicStatus,
     buffered,
+    isEnded,
     setIsOpen,
     setMusicStatus,
     handleMusicStatus,
@@ -118,7 +125,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     setDuration(0);
     setCurrentTime(0);
-  },[defaultSong?.url])
+  }, [defaultSong?.url])
 
   return (
     <AudioContext.Provider value={value}>
@@ -126,7 +133,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
         {defaultSong && (
           <ReactPlayer
             ref={setPlayerRef}
-            style={{width: '100%', height: '60vh'}}
+            style={{ width: '100%', height: '60vh' }}
             crossOrigin="anonymous"
             src={defaultSong.url}
             playing={playing}
@@ -140,6 +147,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
             onDurationChange={handleDurationChange}
             onProgress={handleProgress}
             onTimeUpdate={handleTimeUpdate}
+            onEnded={handleEnded}
           />
         )}
       </PlayerDrawer>

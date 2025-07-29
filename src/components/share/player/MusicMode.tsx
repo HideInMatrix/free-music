@@ -16,7 +16,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     defaultMode,
     setMusicMode,
   } = useSongStore();
-  const { audioRef, handleMusicStatus } = useAudio();
+  const { audioRef, handleMusicStatus, isEnded } = useAudio();
   // console.log("music mode render");
 
   const getRandomSong = (defaultSongList: unknown[], currentIndex: number) => {
@@ -33,7 +33,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     const randomIndex = Math.floor(Math.random() * filteredList.length);
     return filteredList[randomIndex];
   };
-  
+
   const rendPlayMode = () => {
     let component = <></>;
 
@@ -56,7 +56,7 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     }
     return component;
   };
-  
+
   // 处理歌曲结束后的逻辑
   const handleSongEnd = () => {
     const index = defaultSongList.findIndex(
@@ -85,34 +85,17 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
     } else {
       handleMusicStatus(false);
     }
+    handleMusicStatus(true);
   };
-  
+
   useEffect(() => {
-    const currentAudioRef = audioRef.current;
-    if (currentAudioRef) {
-      // 使用我们提取的函数来处理歌曲结束事件
-      currentAudioRef.onended = handleSongEnd;
-      currentAudioRef.onerror = (_e) => {
-        console.error("音频加载错误:", _e);
-        // 可以在这里添加错误处理逻辑
-        handleSongEnd();
-      };
+    const player = audioRef.current;
+
+    if (player) {
+      handleSongEnd()
     }
 
-    return () => {
-      if (currentAudioRef) {
-        currentAudioRef.onended = null;
-        currentAudioRef.onerror = null;
-      }
-    };
-  }, [
-    defaultMode,
-    defaultSongList,
-    defaultSong,
-    setCurrentSong,
-    handleMusicStatus,
-    audioRef,
-  ]);
+  }, [isEnded]);
 
   const actionPlayMode = () => {
     if (defaultMode === AudioMode.CIRCULATION) {
