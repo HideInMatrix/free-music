@@ -1,5 +1,5 @@
 import { AlbumData, ArtistData, HomeData, PlaylistData, SongData } from "@/entity/interface/ytmusic";
-import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps, Song } from "@/entity/interface/song";
+import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps } from "@/entity/interface/song";
 import { adaptYTMusicSong, adaptYTMusicArtist, adaptYTMusicAlbum, adaptYTMusicPlaylist } from "@/lib/adapter/ytmusic";
 import { getRequest } from "@/lib/customFetch";
 

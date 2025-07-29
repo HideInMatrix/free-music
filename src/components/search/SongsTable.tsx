@@ -14,7 +14,6 @@ import { Dispatch, SetStateAction, startTransition, useEffect, useRef, useState 
 import { 
   fetchSongsByKeyword,
   fetchArtistsByKeyword,
-  fetchAlbumsByKeyword,
   fetchPlaylistsByKeyword, 
   fetchAlbumDetailSongs
 } from "@/hooks/fetchSongsByYtmusic";
