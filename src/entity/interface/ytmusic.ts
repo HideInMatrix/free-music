@@ -57,6 +57,7 @@ export interface AlbumData {
     artist: Artist;
     year: number;
     thumbnails: Thumbnail[];
+    songs?: SongData[];
 }
 
 // 播放列表数据接口

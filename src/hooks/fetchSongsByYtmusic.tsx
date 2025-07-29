@@ -1,4 +1,4 @@
-import { searchSongs, searchArtists, searchAlbums, searchPlaylists } from "@/apis/home/ytmusic";
+import { searchSongs, searchArtists, searchAlbums, searchPlaylists, getAlbumsDetailById } from "@/apis/home/ytmusic";
 import { SearchSongProps, SearchArtistProps, SearchAlbumsProps, SearchPlaylistProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
@@ -138,3 +138,38 @@ export const fetchPlaylistsByKeyword = ({
 
   return { loaderPlaylists, loading };
 };
+
+// 获取专辑详情歌曲列表 Hook
+export const fetchAlbumDetailSongs = ({
+  albumId,
+  setResult,
+}: {
+  albumId: string;
+  setResult: Dispatch<SetStateAction<SearchSongProps[]>>;
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const loaderAlbumSongs = useCallback(
+    debounce(async ({ signal }: { signal: AbortSignal }) => {
+      if (loading || !albumId) return;
+      setLoading(true);
+
+      try {
+        const { songs } = await getAlbumsDetailById(albumId, { signal });
+        setResult(songs);
+      } catch (error: unknown) {
+        if ((error as { name: string }).name === "AbortError") {
+          console.log("Request was aborted");
+        } else {
+          console.error(error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }, 250),
+    [albumId]
+  );
+
+  return { loaderAlbumSongs, loading };
+};
+

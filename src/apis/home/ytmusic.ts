@@ -1,5 +1,5 @@
 import { AlbumData, ArtistData, HomeData, PlaylistData, SongData } from "@/entity/interface/ytmusic";
-import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps } from "@/entity/interface/song";
+import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps, Song } from "@/entity/interface/song";
 import { adaptYTMusicSong, adaptYTMusicArtist, adaptYTMusicAlbum, adaptYTMusicPlaylist } from "@/lib/adapter/ytmusic";
 import { getRequest } from "@/lib/customFetch";
 
@@ -81,4 +81,27 @@ export const searchPlaylists = async (
         return (resp.data as PlaylistData[]).map(adaptYTMusicPlaylist);
     }
     throw new Error('Failed to search playlists');
+}
+
+// 获取专辑详情(包含歌曲列表)
+export const getAlbumsDetailById = async (
+    albumId: string,
+    options?: { signal: AbortSignal }
+): Promise<{
+    albumInfo: SearchAlbumsProps;
+    songs: SearchSongProps[];
+}> => {
+    const resp = await getRequest(
+        `${backendURL}/v1/ytmusic/album/${albumId}`,
+        undefined,
+        { signal: options?.signal }
+    );
+    if (resp.code === 0) {
+        const albumData = resp.data as AlbumData;
+        return {
+            albumInfo: adaptYTMusicAlbum(albumData),
+            songs: albumData.songs?.map(adaptYTMusicSong) || []
+        };
+    }
+    throw new Error('Failed to fetch album details');
 }

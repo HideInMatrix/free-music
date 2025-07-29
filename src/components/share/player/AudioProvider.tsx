@@ -67,10 +67,9 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   } = usePlayerStore((state) => state);
 
   const handleMusicStatus = useCallback((value: boolean) => {
-    setMusicStatus(value);
+    setMusicStatus(value);    
     if (value) {
       setPlaying(true);
-      setIsEnded(false);
     } else {
       setPlaying(false);
     }
