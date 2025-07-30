@@ -14,8 +14,9 @@ import { Dispatch, SetStateAction, startTransition, useEffect, useRef, useState 
 import { 
   fetchSongsByKeyword,
   fetchArtistsByKeyword,
+  fetchAlbumsByKeyword,
   fetchPlaylistsByKeyword, 
-  fetchAlbumDetailSongs
+  fetchPlaylistDetailSongs
 } from "@/hooks/fetchSongsByYtmusic";
 
 type Props = {
@@ -43,9 +44,9 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
   } else if (loaderType === "detail") {
     // 专辑详情使用专辑搜索
     startTransition(() => {
-      const { loaderAlbumSongs: _loaderSongs } = fetchAlbumDetailSongs({
-        albumId: searchValue,
-        setResult: setResult as Dispatch<SetStateAction<SearchSongProps[]>>,
+      const { loaderAlbums: _loaderSongs } = fetchAlbumsByKeyword({
+        searchValue,
+        setResult: setResult as Dispatch<SetStateAction<SearchAlbumsProps[]>>,
       });
       loaderSongs = _loaderSongs;
     });
@@ -61,9 +62,9 @@ const SongsTable = ({ searchValue, loaderType }: Props) => {
   } else if (loaderType === "playlists") {
     // 播放列表详情使用播放列表搜索
     startTransition(() => {
-      const { loaderPlaylists: _loaderSongs } = fetchPlaylistsByKeyword({
-        searchValue,
-        setResult: setResult as Dispatch<SetStateAction<SearchPlaylistProps[]>>,
+      const { loaderPlaylistSongs: _loaderSongs } = fetchPlaylistDetailSongs({
+        playlistId: searchValue,
+        setResult: setResult as Dispatch<SetStateAction<SearchSongProps[]>>,
       });
       loaderSongs = _loaderSongs;
     });

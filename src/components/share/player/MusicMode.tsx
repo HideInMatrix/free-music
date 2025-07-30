@@ -89,8 +89,6 @@ const MusicMode = ({ ...props }: MusicModeProps) => {
   };
 
   useEffect(() => {
-    console.log("结束标志为",isEnded);
-    
     const player = audioRef.current;
     if (player && isEnded) {
       handleSongEnd()

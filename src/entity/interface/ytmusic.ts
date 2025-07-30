@@ -68,3 +68,19 @@ export interface PlaylistData {
     artist: Artist;
     thumbnails: Thumbnail[];
 }
+
+export interface VideoData {
+    type: string;
+    videoId: string;
+    name: string;
+    artist: {
+        name: string;
+        artistId: string;
+    };
+    duration: number;
+    thumbnails: {
+        url: string;
+        width: number;
+        height: number;
+    }[];
+}

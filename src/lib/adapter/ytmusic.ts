@@ -1,4 +1,4 @@
-import { SongData, ArtistData, AlbumData, PlaylistData } from "@/entity/interface/ytmusic";
+import { SongData, ArtistData, AlbumData, PlaylistData, VideoData } from "@/entity/interface/ytmusic";
 import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps } from "@/entity/interface/song";
 
 // YTMusic歌曲数据转换为通用歌曲格式
@@ -55,3 +55,23 @@ export const adaptYTMusicPlaylist = (playlist: PlaylistData): SearchPlaylistProp
     songCount: 0 // YTMusic API 没有提供歌曲数量
   };
 };
+
+
+export const adapteYTMusicVideo = (video: VideoData): SearchSongProps => {
+  return {
+    id: video.videoId,
+    name: video.name,
+    artists: [{
+      id: video.artist.artistId || '',
+      name: video.artist.name,
+      image: video.thumbnails.map(t => t.url)
+    }],
+    duration: video.duration,
+    album: {
+      id: '',
+      name: ''
+    },
+    url: `https://music.youtube.com/watch?v=${video.videoId}`,
+    image: video.thumbnails[0]?.url || ''
+  };
+}

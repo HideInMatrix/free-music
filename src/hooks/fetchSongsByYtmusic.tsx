@@ -1,4 +1,4 @@
-import { searchSongs, searchArtists, searchAlbums, searchPlaylists, getAlbumsDetailById } from "@/apis/home/ytmusic";
+import { searchSongs, searchArtists, searchAlbums, searchPlaylists, getAlbumsDetailById, getPlaylistDetailById } from "@/apis/home/ytmusic";
 import { SearchSongProps, SearchArtistProps, SearchAlbumsProps, SearchPlaylistProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
@@ -109,15 +109,15 @@ export const fetchAlbumsByKeyword = ({
 export const fetchPlaylistsByKeyword = ({
   searchValue,
   setResult,
+  setLoading
 }: {
   searchValue: string;
   setResult: Dispatch<SetStateAction<SearchPlaylistProps[]>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }) => {
-  const [loading, setLoading] = useState(false);
-
   const loaderPlaylists = useCallback(
     debounce(async ({ signal }: { signal: AbortSignal }) => {
-      if (loading || !searchValue) return;
+      if (!searchValue) return;
       setLoading(true);
 
       try {
@@ -136,7 +136,7 @@ export const fetchPlaylistsByKeyword = ({
     [searchValue]
   );
 
-  return { loaderPlaylists, loading };
+  return { loaderPlaylists };
 };
 
 // 获取专辑详情歌曲列表 Hook
@@ -172,4 +172,38 @@ export const fetchAlbumDetailSongs = ({
 
   return { loaderAlbumSongs, loading };
 };
+
+// 获取播放列表详情歌曲列表 Hook
+export const fetchPlaylistDetailSongs = ({
+  playlistId,
+  setResult,
+}: {
+  playlistId: string;
+  setResult: Dispatch<SetStateAction<SearchSongProps[]>>;
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const loaderPlaylistSongs = useCallback(
+    debounce(async ({ signal }: { signal: AbortSignal }) => {
+      if (loading || !playlistId) return;
+      setLoading(true);
+      try {
+        const songs = await getPlaylistDetailById(playlistId, { signal });        
+        setResult(songs);
+      } catch (error: unknown) {
+        if ((error as { name: string }).name === "AbortError") {
+          console.log("Request was aborted");
+        } else {
+          console.error(error);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }, 250),
+    [playlistId]
+  );
+
+  return { loaderPlaylistSongs, loading };
+};
+
 

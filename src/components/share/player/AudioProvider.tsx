@@ -83,6 +83,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
   const handleDurationChange = () => {
     const player = audioRef.current;
     if (!player) return;
+    setIsEnded(false); // 重置结束状态
     setDuration(player.duration);
   }
 
@@ -133,6 +134,7 @@ export const AudioProvider = ({ children }: { children: ReactNode }) => {
           <ReactPlayer
             ref={setPlayerRef}
             style={{ width: '100%', height: '60vh' }}
+            playsInline={true}
             crossOrigin="anonymous"
             src={defaultSong.url}
             playing={playing}

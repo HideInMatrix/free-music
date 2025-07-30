@@ -11,6 +11,7 @@ import { SearchPlaylistProps } from "@/entity/interface/song";
 import { startTransition, useEffect, useState } from "react";
 import { fetchPlaylistsByKeyword } from "@/hooks/fetchSongsByYtmusic";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../loading";
 
 type Props = {
   searchValue: string;
@@ -27,7 +28,8 @@ const PlaylistsTable = ({ searchValue }: Props) => {
     const { loaderPlaylists: _loaderData } = fetchPlaylistsByKeyword({
       searchValue,
       setResult,
-    });
+      setLoading
+    });    
     loaderData = _loaderData;
   });
 
@@ -60,7 +62,7 @@ const PlaylistsTable = ({ searchValue }: Props) => {
           <TableRow>
             <TableHead className="truncate ">名称</TableHead>
             <TableHead className="md:table-cell max-w-20 text-center">
-              歌曲数
+              封面
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -73,13 +75,17 @@ const PlaylistsTable = ({ searchValue }: Props) => {
                 {playlist.name}
               </TableCell>
               <TableCell className="md:table-cell text-center truncate max-w-20">
-                {playlist.songCount}
+                <img src={playlist.image} alt="cover" />
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      {loading && <div className="font-semibold">加载中...</div>}
+      {loading && (
+        <div className="flex items-center justify-center h-full">
+          <Loading  visible={loading} message="Loading" />
+        </div>
+      )}
       {!loading && result.length === 0 && (
         <div className="font-semibold">暂无数据</div>
       )}
