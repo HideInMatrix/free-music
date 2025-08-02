@@ -1,6 +1,4 @@
-import { fetchSongsByAlbumId } from "@/apis/albums/jio-savvn";
-import { fetchSongsByArtists } from "@/apis/artists/jio-savvn";
-import { fetchSongs } from "@/apis/songs/jio-savvn";
+import { fetchSongsByAlbumId,fetchSongsByArtists,fetchSongs } from "@/apis/jio-savvn/index";
 import { SearchSongProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";

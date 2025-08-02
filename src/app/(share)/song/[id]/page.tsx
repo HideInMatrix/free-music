@@ -1,4 +1,4 @@
-import { fetchSongById } from "@/apis/songs/jio-savvn";
+import { fetchSongById } from "@/apis/jio-savvn/index";
 import { useParams } from "react-router-dom";
 import { useSongStore } from "@/store/useSongStore";
 import { useEffect } from "react";

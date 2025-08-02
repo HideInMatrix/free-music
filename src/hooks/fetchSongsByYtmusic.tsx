@@ -1,4 +1,4 @@
-import { searchSongs, searchArtists, searchAlbums, searchPlaylists, getAlbumsDetailById, getPlaylistDetailById } from "@/apis/home/ytmusic";
+import { searchSongs, searchArtists, searchAlbums, searchPlaylists, getAlbumsDetailById, getPlaylistDetailById } from "@/apis/ytmusic/ytmusic";
 import { SearchSongProps, SearchArtistProps, SearchAlbumsProps, SearchPlaylistProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";

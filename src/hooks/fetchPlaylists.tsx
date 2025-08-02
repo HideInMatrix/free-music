@@ -1,7 +1,7 @@
 import {
   fetchPlaylists,
   fetchSongsByPlaylistId,
-} from "@/apis/playlists/jio-savvn";
+} from "@/apis/jio-savvn/index";
 import { SearchPlaylistProps, SearchSongProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 

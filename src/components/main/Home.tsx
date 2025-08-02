@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import { HomeData } from "@/entity/interface/ytmusic";
-import { fetchHomeRecommend } from "@/apis/home/ytmusic";
+import { fetchHomeRecommend } from "@/apis/ytmusic/ytmusic";
 import { useState, useEffect } from "react";
 import { Loading } from "../loading";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +41,7 @@ export function Home() {
         }else if(item.type === "PLAYLIST"){
             navigate(`/playlists/${item.playlistId}`)
         }else if(item.type === "SONG"){
-            setCurrentSong({name:item.name,url:item.videoId,album:item.album,duration:item.duration,image:item.thumbnails[item.thumbnails.length - 1].url});
+            setCurrentSong({name:item.name,url:`${item.videoId}`,album:item.album,duration:item.duration,image:item.thumbnails[item.thumbnails.length - 1].url});
         }
     }
 

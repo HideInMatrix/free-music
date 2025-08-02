@@ -1,4 +1,4 @@
-import { fetchAlbums, fetchAlbumsByArtistIdFn } from "@/apis/albums/jio-savvn";
+import { fetchAlbums, fetchAlbumsByArtistIdFn } from "@/apis/jio-savvn/index";
 import { SearchAlbumsProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 

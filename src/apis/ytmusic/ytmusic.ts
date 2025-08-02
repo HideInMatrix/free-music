@@ -112,7 +112,7 @@ export const getPlaylistDetailById = async (
   options?: { signal: AbortSignal }
 ): Promise<SearchSongProps[]> => {
   const resp = await getRequest(
-    `${backendURL}/v1/ytmusic/playlist/${playlistId}/videos`,
+    `${backendURL}/v1/ytmusic/playlist/${playlistId}`,
     undefined,
     { signal: options?.signal }
   );

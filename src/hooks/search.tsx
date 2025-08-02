@@ -5,10 +5,7 @@ import {
   SearchPlaylistProps,
   SearchSongProps,
 } from "@/entity/interface/song";
-import { fetchPlaylists } from "@/apis/playlists/jio-savvn";
-import { fetchArtists } from "@/apis/artists/jio-savvn";
-import { fetchSongs } from "@/apis/songs/jio-savvn";
-import { fetchAlbums } from "@/apis/albums/jio-savvn";
+import { fetchPlaylists,fetchArtists,fetchSongs,fetchAlbums } from "@/apis/jio-savvn/index";
 
 export const useFetchSongs = async (value: string, signal: AbortSignal) => {
   let songs: SearchSongProps[] = [];

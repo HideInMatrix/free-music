@@ -1,4 +1,4 @@
-import { fetchArtistsById } from "@/apis/artists/jio-savvn";
+import { fetchArtistsById } from "@/apis/jio-savvn/index";
 import SongsTable from "@/components/search/SongsTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { startTransition, useEffect, useState } from "react";
