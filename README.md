@@ -2,6 +2,10 @@
 
 免费的听歌网站(开发中)
 
+## 音乐API
+[音乐API项目](https://github.com/HideInMatrix/free-music-api)
+本仓库只是示例，来自于网络公开的接口，并过滤掉所有VIP/收费/试听歌曲。仅供学习参考使用，请不要用于任何商业用途，合理合法使用。
+
 ## ✨ 特性 
 
 - 使用React开发，nextjs分支使用Next.js 14版本开发(后期不维护了)。
@@ -27,5 +31,9 @@
 
 
 ## ☑️ Todo
+1. 优化现有的youtue音源
+2. 对接BiliBili音源
 
 迎提 Issue 和 Pull request。
+
+本项目仅供学习参考使用，基于 MIT 协议开源；请在符合法律法规的情况下合理使用本项目，禁止用于商业目的使用。
