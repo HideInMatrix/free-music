@@ -5,13 +5,17 @@ import { useState, useEffect } from "react";
 import { Loading } from "../loading";
 import { useNavigate } from "react-router-dom";
 import { useSongStore } from "@/store/useSongStore";
+import {useSearchSongs} from "@/hooks/test"
 
 export function Home() {
     const [data, setData] = useState<HomeData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-     const { setCurrentSong } = useSongStore();
+    const { setCurrentSong } = useSongStore();
+    const {data:_data,loading:_loading} = useSearchSongs("晴天");
+    console.log(_data,_loading);
+    
 
 
     useEffect(() => {

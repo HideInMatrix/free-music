@@ -1,3 +1,5 @@
+import { MusicSource } from "../enum";
+
 export interface Artist {
   id: string;
   name: string;
@@ -27,6 +29,9 @@ export interface SearchSongProps {
   album: Album;
   url: string;
   image: string;
+  source?: MusicSource      
+  sourceId?: string         // 音源内原始ID
+  raw?: unknown             // 保留底层Raw数据便于Debug
 }
 
 export interface SearchAlbumsProps {

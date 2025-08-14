@@ -241,7 +241,7 @@ export const fetchPlaylists = async ({
   limit = 5,
 }: {
   value: string;
-  options?: { signal: AbortSignal };
+  options?: { signal?: AbortSignal };
   page?: number;
   limit?: number;
 }): Promise<{ data: SearchPlaylistProps[]; total: number }> => {
@@ -273,7 +273,7 @@ export const fetchSongsByPlaylistId = async ({
   limit = 5,
 }: {
   value: string;
-  options?: { signal: AbortSignal };
+  options?: { signal?: AbortSignal };
   page?: number;
   limit?: number;
 }): Promise<{ data: SearchSongProps[]; total: number }> => {
@@ -368,4 +368,64 @@ export const fetchSongById = async ({id}: {id:string}) => {
     }
   }
   return null;
+}
+
+// ================= Provider 兼容包装（保持向后兼容，不破坏现有导出） =================
+
+export const searchSongs = async (
+  keyword: string,
+  options?: { signal?: AbortSignal }
+): Promise<SearchSongProps[]> => {
+  const resp = await fetchSongs({ value: keyword, options })
+  return resp.data
+}
+
+export const searchAlbums = async (
+  keyword: string,
+  options?: { signal?: AbortSignal }
+): Promise<SearchAlbumsProps[]> => {
+  const resp = await fetchAlbums({ value: keyword, options })
+  return resp.data
+}
+
+export const searchArtists = async (
+  keyword: string,
+  options?: { signal?: AbortSignal }
+): Promise<SearchArtistProps[]> => {
+  const resp = await fetchArtists({ value: keyword, options })
+  return resp.data
+}
+
+export const searchPlaylists = async (
+  keyword: string,
+  options?: { signal?: AbortSignal }
+): Promise<SearchPlaylistProps[]> => {
+  const resp = await fetchPlaylists({ value: keyword, options })
+  return resp.data
+}
+
+export const getAlbumDetail = async (
+  albumId: string,
+  options?: { signal?: AbortSignal }
+): Promise<{ albumInfo: SearchAlbumsProps; songs: SearchSongProps[] }> => {
+  const resp = await fetchSongsByAlbumId({ id: albumId, options })
+  const songs = resp.data
+  const first = songs[0]
+  const albumInfo: SearchAlbumsProps = {
+    id: albumId,
+    name: (first as any)?.album?.name || "",
+    artists: first?.artists || [],
+    playCount: 0,
+    year: 0,
+    image: first?.image || "",
+  }
+  return { albumInfo, songs }
+}
+
+export const getPlaylistDetail = async (
+  playlistId: string,
+  options?: { signal?: AbortSignal }
+): Promise<SearchSongProps[]> => {
+  const resp = await fetchSongsByPlaylistId({ value: playlistId, options })
+  return resp.data
 }
