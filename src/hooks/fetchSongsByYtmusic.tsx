@@ -1,4 +1,4 @@
-import { searchSongs, searchArtists, searchAlbums, searchPlaylists, getAlbumsDetailById, getPlaylistDetailById } from "@/apis/ytmusic/ytmusic";
+import { getActivePlugin } from "@/store/useSourceStore";
 import { SearchSongProps, SearchArtistProps, SearchAlbumsProps, SearchPlaylistProps } from "@/entity/interface/song";
 import { debounce } from "@/lib/utils";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
@@ -19,8 +19,9 @@ export const fetchSongsByKeyword = ({
       setLoading(true);
 
       try {
-        const data = await searchSongs(searchValue, { signal });
-        setResult(data);
+        const plugin = getActivePlugin();
+        const res = await plugin?.searchSongs?.(searchValue, { signal });
+        setResult(res?.data ?? []);
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -53,8 +54,9 @@ export const fetchArtistsByKeyword = ({
       setLoading(true);
 
       try {
-        const data = await searchArtists(searchValue, { signal });
-        setResult(data);
+        const plugin = getActivePlugin();
+        const res = await plugin?.searchArtists?.(searchValue, { signal });
+        setResult(res?.data ?? []);
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -87,8 +89,9 @@ export const fetchAlbumsByKeyword = ({
       setLoading(true);
 
       try {
-        const data = await searchAlbums(searchValue, { signal });
-        setResult(data);
+        const plugin = getActivePlugin();
+        const res = await plugin?.searchAlbums?.(searchValue, { signal });
+        setResult(res?.data ?? []);
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -121,8 +124,9 @@ export const fetchPlaylistsByKeyword = ({
       setLoading(true);
 
       try {
-        const data = await searchPlaylists(searchValue, { signal });
-        setResult(data);
+        const plugin = getActivePlugin();
+        const res = await plugin?.searchPlaylists?.(searchValue, { signal });
+        setResult(res?.data ?? []);
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -155,8 +159,9 @@ export const fetchAlbumDetailSongs = ({
       setLoading(true);
 
       try {
-        const { songs } = await getAlbumsDetailById(albumId, { signal });
-        setResult(songs);
+        const plugin = getActivePlugin();
+        const res = await plugin?.getAlbumSongs?.(albumId, { signal });
+        setResult(res?.data ?? []);
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");
@@ -188,8 +193,9 @@ export const fetchPlaylistDetailSongs = ({
       if (loading || !playlistId) return;
       setLoading(true);
       try {
-        const songs = await getPlaylistDetailById(playlistId, { signal });        
-        setResult(songs);
+        const plugin = getActivePlugin();
+        const res = await plugin?.getPlaylistSongs?.(playlistId, { signal });
+        setResult(res?.data ?? []);
       } catch (error: unknown) {
         if ((error as { name: string }).name === "AbortError") {
           console.log("Request was aborted");

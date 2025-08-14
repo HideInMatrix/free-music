@@ -1,4 +1,4 @@
-import { fetchArtistsById } from "@/apis/jio-savvn/index";
+import { getActivePlugin } from "@/store/useSourceStore";
 import SongsTable from "@/components/search/SongsTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { startTransition, useEffect, useState } from "react";
@@ -22,11 +22,10 @@ export default function DetailPage() {
     const controller = new AbortController();
     const { signal } = controller;
     startTransition(() => {
-      fetchArtistsById({ id: artistsId, options: { signal } }).then(
-        (result) => {
-          setArtistsInfo(result);
-        }
-      );
+      const plugin = getActivePlugin();
+      plugin?.getArtistDetail?.(artistsId, { signal }).then((result) => {
+        setArtistsInfo(result ?? null);
+      });
     });
     return () => {
       if (controller) {
