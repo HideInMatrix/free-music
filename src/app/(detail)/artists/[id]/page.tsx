@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { getActivePlugin } from "@/store/useSourceStore";
+>>>>>>> 63143fa (feat: add plugin mode)
 import SongsTable from "@/components/search/SongsTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,11 +13,36 @@ import { useParams } from "react-router-dom";
 export default function DetailPage() {
   const params = useParams();
   const artistsId = params.id || "0";
+<<<<<<< HEAD
   const { data: artistInfo } = useGetArtisDetail(artistsId);
   const { data: songs, loading: artisSongLoading } = useGetArtisSongs(artistsId);
   const { data: albums, loading: albumsLoading } = useGetArtisAlbums(artistsId);
 
 
+=======
+  const [artistInfo, setArtistsInfo] = useState<{
+    id: string;
+    name: string;
+    image: string;
+    topSongs: SearchSongProps[];
+  } | null>();
+  useEffect(() => {
+    // 创建新的 AbortController
+    const controller = new AbortController();
+    const { signal } = controller;
+    startTransition(() => {
+      const plugin = getActivePlugin();
+      plugin?.getArtistDetail?.(artistsId, { signal }).then((result) => {
+        setArtistsInfo(result ?? null);
+      });
+    });
+    return () => {
+      if (controller) {
+        controller.abort();
+      }
+    };
+  }, []);
+>>>>>>> 63143fa (feat: add plugin mode)
   return (
     <div className="flex flex-col p-2 h-full">
       <div className="mb-2 flex items-center gap-2">
