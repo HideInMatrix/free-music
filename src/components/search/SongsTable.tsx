@@ -10,83 +10,22 @@ import {
 } from "@/components/ui/table";
 import { SearchSongProps, SearchAlbumsProps, SearchArtistProps, SearchPlaylistProps } from "@/entity/interface/song";
 import { formatTime } from "@/lib/utils";
-import { Dispatch, SetStateAction, startTransition, useEffect, useRef, useState } from "react";
-import { 
-  fetchSongsByKeyword,
-  fetchArtistsByKeyword,
-  fetchPlaylistDetailSongs,
-  fetchAlbumDetailSongs
-} from "@/hooks/fetchSongsByYtmusic";
+import { useRef } from "react";
 
-type Props = {
-  searchValue: string;
-  loaderType: "search" | "detail" | "artists" | "playlists";
-};
+
 
 type ResultType = SearchSongProps | SearchAlbumsProps | SearchArtistProps | SearchPlaylistProps;
 
-const SongsTable = ({ searchValue, loaderType }: Props) => {
-  const [result, setResult] = useState<ResultType[]>([]);
-  const [loading, setLoading] = useState(false);
-  const tableContainerRef = useRef<HTMLDivElement>(null);
+type Props = {
+  loading:boolean,
+  result: ResultType[];
+};
 
-  let loaderSongs: (arg0: { signal: AbortSignal }) => void;
+
+
+const SongsTable = ({ loading,result}: Props) => {
   
-  if (loaderType === "search") {
-    startTransition(() => {
-      const { loaderSongs: _loaderSongs } = fetchSongsByKeyword({
-        searchValue,
-        setResult: setResult as Dispatch<SetStateAction<SearchSongProps[]>>,
-      });
-      loaderSongs = _loaderSongs;
-    });
-  } else if (loaderType === "detail") {
-    // 专辑详情使用专辑搜索
-    startTransition(() => {
-      const { loaderAlbumSongs: _loaderSongs } = fetchAlbumDetailSongs({
-        albumId: searchValue,
-        setResult: setResult as Dispatch<SetStateAction<SearchSongProps[]>>,
-      });
-      loaderSongs = _loaderSongs;
-    });
-  } else if (loaderType === "artists") {
-    // 艺术家详情使用艺术家搜索
-    startTransition(() => {
-      const { loaderArtists: _loaderSongs } = fetchArtistsByKeyword({
-        searchValue,
-        setResult: setResult as Dispatch<SetStateAction<SearchArtistProps[]>>,
-      });
-      loaderSongs = _loaderSongs;
-    });
-  } else if (loaderType === "playlists") {
-    // 播放列表详情使用播放列表搜索
-    startTransition(() => {
-      const { loaderPlaylistSongs: _loaderSongs } = fetchPlaylistDetailSongs({
-        playlistId: searchValue,
-        setResult: setResult as Dispatch<SetStateAction<SearchSongProps[]>>,
-      });
-      loaderSongs = _loaderSongs;
-    });
-  }
-
-  useEffect(() => {
-    // 重置状态
-    setResult([]);
-    setLoading(false);
-
-    // 创建新的 AbortController
-    const controller = new AbortController();
-    const { signal } = controller;
-    
-    startTransition(() => {
-      loaderSongs({ signal });
-    });
-
-    // 清理：仅在组件卸载时取消请求
-    return () => {
-      controller.abort();
-    };
-  }, [searchValue]);
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div

@@ -1,36 +1,17 @@
 import { Separator } from "@/components/ui/separator"
-import { HomeData } from "@/entity/interface/ytmusic";
-import { fetchHomeRecommend } from "@/apis/ytmusic/ytmusic";
-import { useState, useEffect } from "react";
 import { Loading } from "../loading";
 import { useNavigate } from "react-router-dom";
 import { useSongStore } from "@/store/useSongStore";
+import { useGetHomeRecommend } from "@/hooks/useApiFetch";
 
 export function Home() {
-    const [data, setData] = useState<HomeData[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+
     const navigate = useNavigate();
-     const { setCurrentSong } = useSongStore();
-
-
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const result = await fetchHomeRecommend();
-                setData(result);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : '加载失败');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
-    }, []);
+    const { setCurrentSong } = useSongStore();
+    const {data,loading} = useGetHomeRecommend();
 
     if (loading) return <Loading visible={loading} message="MicroMatrix" />;
-    if (error) return <div className="text-center text-red-500">{error}</div>;
+
     if (!data.length) return <div className="text-center">暂无数据</div>;
 
     const handleDetailClick = (item: {type:string;[key:string]:any}) => {
@@ -52,7 +33,7 @@ export function Home() {
                     <h2 className="text-2xl font-bold tracking-tight">{section.title}</h2>
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                        {section.contents.map((item, idx) => (
+                        {section.contents.map((item:{type:string;[key:string]:any}, idx:number) => (
                             <div key={idx} className="flex flex-col gap-2" onClick={() => handleDetailClick(item)}>
                                 <div className="aspect-square relative overflow-hidden rounded-md">
                                     {

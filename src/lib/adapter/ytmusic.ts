@@ -52,7 +52,8 @@ export const adaptYTMusicPlaylist = (playlist: PlaylistData): SearchPlaylistProp
     id: playlist.playlistId,
     name: playlist.name,
     image: playlist.thumbnails[0]?.url || '',
-    songCount: 0 // YTMusic API 没有提供歌曲数量
+    songCount: 0, // YTMusic API 没有提供歌曲数量
+    artists: [{id:playlist.artist.artistId || '', name: playlist.artist.name,image:[]}]
   };
 };
 

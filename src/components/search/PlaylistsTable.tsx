@@ -8,48 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchPlaylistProps } from "@/entity/interface/song";
-import { startTransition, useEffect, useState } from "react";
-import { fetchPlaylistsByKeyword } from "@/hooks/fetchSongsByYtmusic";
 import { useNavigate } from "react-router-dom";
 import { Loading } from "../loading";
 
 type Props = {
-  searchValue: string;
+  result: SearchPlaylistProps[],
+  loading: boolean; 
 };
 
-const PlaylistsTable = ({ searchValue }: Props) => {
-  const [result, setResult] = useState<SearchPlaylistProps[]>([]);
-  const [loading, setLoading] = useState(false);
+const PlaylistsTable = ({ result,loading }: Props) => {
+
   const navigate = useNavigate();
-
-  let loaderData: (arg0: { signal: AbortSignal }) => void;
-
-  startTransition(() => {
-    const { loaderPlaylists: _loaderData } = fetchPlaylistsByKeyword({
-      searchValue,
-      setResult,
-      setLoading
-    });    
-    loaderData = _loaderData;
-  });
-
-  useEffect(() => {
-    // 重置状态
-    setResult([]);
-    setLoading(false);
-
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    startTransition(() => {
-      loaderData({ signal });
-    });
-
-    return () => {
-      controller.abort();
-    };
-  }, [searchValue]);
-
   const routeToDetail = (id: string) => {
     navigate(`/playlists/${id}`);
   };

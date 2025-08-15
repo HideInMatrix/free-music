@@ -26,7 +26,7 @@ const RecommendItem = ({ songInfo }: { songInfo: SearchSongProps }) => {
 };
 
 const PopularRecommend = () => {
-  const songs = [] as SearchSongProps[]; // 假设这里有一些推荐的歌曲数据
+  const songs = [] as SearchSongProps[];
   return (
     <div className="flex flex-col mb-2">
       <h1 className="font-semibold text-2xl mb-2">单曲推荐</h1>

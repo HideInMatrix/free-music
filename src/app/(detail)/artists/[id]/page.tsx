@@ -1,43 +1,23 @@
-import { fetchArtistsById } from "@/apis/jio-savvn/index";
 import SongsTable from "@/components/search/SongsTable";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { startTransition, useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AlbumsTable from "@/components/search/AlbumsTable";
+import { useGetArtisAlbums, useGetArtisDetail, useGetArtisSongs } from "@/hooks/useApiFetch";
 
 import { useParams } from "react-router-dom";
-import { SearchSongProps } from "@/entity/interface/song";
 
 export default function DetailPage() {
   const params = useParams();
   const artistsId = params.id || "0";
-  const [artistInfo, setArtistsInfo] = useState<{
-    id: string;
-    name: string;
-    image: string;
-    topSongs: SearchSongProps[];
-  } | null>();
-  useEffect(() => {
-    // 创建新的 AbortController
-    const controller = new AbortController();
-    const { signal } = controller;
-    startTransition(() => {
-      fetchArtistsById({ id: artistsId, options: { signal } }).then(
-        (result) => {
-          setArtistsInfo(result);
-        }
-      );
-    });
-    return () => {
-      if (controller) {
-        controller.abort();
-      }
-    };
-  }, []);
+  const { data: artistInfo } = useGetArtisDetail(artistsId);
+  const { data: songs, loading: artisSongLoading } = useGetArtisSongs(artistsId);
+  const { data: albums, loading: albumsLoading } = useGetArtisAlbums(artistsId);
+
+
   return (
     <div className="flex flex-col p-2 h-full">
       <div className="mb-2 flex items-center gap-2">
-        <Avatar className="md:w-40 md:h-40 w-32 h-32">
+        <Avatar className="md:w-40 md:h-40 w-32 h-32 object-cover">
           <AvatarImage src={artistInfo?.image} />
           <AvatarFallback>{artistInfo?.name}</AvatarFallback>
         </Avatar>
@@ -51,12 +31,12 @@ export default function DetailPage() {
           <TabsTrigger value="albums">专辑</TabsTrigger>
         </TabsList>
         <TabsContent value="songs" className="flex-auto min-h-0">
-          <SongsTable searchValue={artistsId} loaderType="artists"></SongsTable>
+          <SongsTable result={songs} loading={artisSongLoading}></SongsTable>
         </TabsContent>
         <TabsContent value="albums" className="flex-auto min-h-0">
           <AlbumsTable
-            searchValue={artistsId}
-            loaderType="artists"></AlbumsTable>
+            result={albums}
+            loading={albumsLoading}></AlbumsTable>
         </TabsContent>
       </Tabs>
     </div>

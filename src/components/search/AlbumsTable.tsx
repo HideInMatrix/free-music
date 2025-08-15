@@ -8,50 +8,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SearchAlbumsProps } from "@/entity/interface/song";
-import { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchAlbumsByKeyword } from "@/hooks/fetchSongsByYtmusic";
 
 type Props = {
-  searchValue: string;
-  loaderType: "search" | "artists";
+  result:SearchAlbumsProps[],
+  loading:boolean
 };
 
-const AlbumsTable = ({ searchValue, loaderType }: Props) => {
-  const [result, setResult] = useState<SearchAlbumsProps[]>([]);
-  const [loading, setLoading] = useState(false);
+const AlbumsTable = ({ result,loading }: Props) => {
+
   const navigate = useNavigate();
-
-  let loaderData: (arg0: { signal: AbortSignal }) => void;
-
-  if (loaderType === "search") {
-    startTransition(() => {
-      const { loaderAlbums } = fetchAlbumsByKeyword({
-        searchValue,
-        setResult,
-      });
-      loaderData = loaderAlbums;
-    });
-  }
-
-  useEffect(() => {
-    // 重置状态
-    setResult([]);
-    setLoading(false);
-
-    const controller = new AbortController();
-    const { signal } = controller;
-
-    if (loaderData) {
-      startTransition(() => {
-        loaderData({ signal });
-      });
-    }
-
-    return () => {
-      controller.abort();
-    };
-  }, [searchValue]);
 
   const routeToDetail = (id: string) => {
     navigate(`/albums/${id}`);

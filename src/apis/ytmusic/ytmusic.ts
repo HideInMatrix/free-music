@@ -112,7 +112,7 @@ export const getPlaylistDetailById = async (
   options?: { signal: AbortSignal }
 ): Promise<SearchSongProps[]> => {
   const resp = await getRequest(
-    `${backendURL}/v1/ytmusic/playlist/${playlistId}`,
+    `${backendURL}/v1/ytmusic/playlist/${playlistId}/videos`,
     undefined,
     { signal: options?.signal }
   );
@@ -122,3 +122,54 @@ export const getPlaylistDetailById = async (
   }
   throw new Error('获取播放列表详情失败');
 };
+
+// /v1/ytmusic/artist/{id}
+export const getArtistDetailById = async (
+  artistId: string,
+  options?: { signal: AbortSignal }
+): Promise<SearchArtistProps> => {
+  const resp = await getRequest(
+    `${backendURL}/v1/ytmusic/artist/${artistId}`,
+    undefined,
+    { signal: options?.signal }
+  );
+
+  if (resp.code === 0) {
+    return adaptYTMusicArtist(resp.data as ArtistData);
+  }
+  throw new Error('获取艺术家详情失败');
+}
+
+// /v1/ytmusic/artist/{id}/songs
+export const getArtistSongsById = async (
+  artistId: string,
+  options?: { signal: AbortSignal }
+): Promise<SearchSongProps[]> => {
+  const resp = await getRequest(
+    `${backendURL}/v1/ytmusic/artist/${artistId}/songs`,
+    undefined,
+    { signal: options?.signal }
+  );
+
+  if (resp.code === 0) {
+    return (resp.data as SongData[]).map(adaptYTMusicSong);
+  }
+  throw new Error('获取艺术家歌曲失败');
+}
+
+// /v1/ytmusic/artist/{id}/albums
+export const getArtistAlbumsById = async (
+  artistId: string,
+  options?: { signal: AbortSignal }
+): Promise<SearchAlbumsProps[]> => {
+  const resp = await getRequest(
+    `${backendURL}/v1/ytmusic/artist/${artistId}/albums`,
+    undefined,
+    { signal: options?.signal }
+  );
+
+  if (resp.code === 0) {
+    return (resp.data as AlbumData[]).map(adaptYTMusicAlbum);
+  }
+  throw new Error('获取艺术家专辑失败');
+}

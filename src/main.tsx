@@ -5,6 +5,8 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "@/router";
 
 import "./globals.css";
+import { setupProviders } from "@/apis/core/bootstrap"
+setupProviders()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

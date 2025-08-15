@@ -4,3 +4,9 @@ export enum AudioMode {
   // INTRO = "intro",
   CIRCULATION = "circulation",
 }
+
+
+export enum MusicSource {
+  YTMusic = "ytmusic",
+  JioSaavn = 'jiosaavn'
+}
