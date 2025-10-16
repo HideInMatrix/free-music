@@ -52,4 +52,4 @@ jobs:
       # Trigger redeploy on dokploy => project webhooks settings
       - name: Trigger dokploy redeploy
         run: |
-          curl -X GET http://dokploy.micromatrix.org:3000/api/deploy/Mum_mkpRNxLTAqJh_EdUW
+          curl -X GET ${{ secrets.DOKPLOY_WEBHOOK_URL }}
