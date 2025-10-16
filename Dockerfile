@@ -11,7 +11,7 @@ RUN corepack enable && corepack prepare pnpm@9.12.0 --activate
 COPY package.json pnpm-lock.yaml* ./
 
 # 安装依赖，利用 Docker 缓存
-RUN pnpm install --frozen-lockfile --offline
+RUN pnpm install
 
 # 复制源码
 COPY . .
