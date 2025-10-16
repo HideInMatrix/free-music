@@ -71,17 +71,20 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server:{
-    proxy:{
-      "/v1":{
+  server: {
+    proxy: {
+      "/v1": {
         target: "https://music-api.micromatrix.org",
         changeOrigin: true,
       },
-      "/ytapi":{
-        target:'',
+      "/ytapi": {
+        target: "",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/ytapi/, ""),
-      }
-    }
-  }
+      },
+    },
+  },
+  preview: {
+    allowedHosts: true,
+  },
 });
